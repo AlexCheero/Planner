@@ -1,51 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace GOAP
 {
-    public class Planner : MonoBehaviour
+    public class Planner
     {
-        public float ActionSearchDistance = 10;
-
-        public Goal[] Goals = { new Goal(EGoal.Goal, 100) };
-        public List<Action> PossibleActions = new List<Action>(); 
-
-        void Start()
-        {
-            FindPossibleActions();
-        }
-
-        void FixedUpdate()
-        {
-            foreach (var goal in Goals)
-                goal.Update();
-        }
-        
-        void Update()
-        {
-
-        }
-
-        private void FindPossibleActions()
-        {
-            PossibleActions.Clear();
-            foreach (var action in GetInternalActions())
-                PossibleActions.Add(action);
-
-            var actionProviders = GameObject.FindGameObjectsWithTag("ActionProvider");
-            foreach (var provider in actionProviders.Where(o => 
-                Vector3.Distance(transform.position, o.transform.position) <= ActionSearchDistance))
-            {
-                RaycastHit rayHit;
-                var hitted = Physics.Raycast(transform.position, provider.transform.position - transform.position, out rayHit,
-                    ActionSearchDistance);
-                if (hitted && !rayHit.collider.gameObject.Equals(provider.gameObject))
-                    continue;
-                PossibleActions.Add(provider.GetComponent<ActionProvider>().ProvidedAction);
-            }
-        }
-
+        //todo try use multithreading to increase speed
         private int[] PlanActions(WorldModel model, int maxDepth)
         {
             var models = new WorldModel[maxDepth + 1];
@@ -98,15 +58,6 @@ namespace GOAP
             }
 
             return bestActionSequence;
-        }
-
-        private Action[] GetInternalActions()
-        {
-            return new Action[]
-            {
-                new Action("Shoot", new Dictionary<EGoal, int>() {{EGoal.Goal, -35}}),
-                new Action("Heal", new Dictionary<EGoal, int>() {{EGoal.Goal, -50}})
-            };
         }
     }
 }
