@@ -24,7 +24,7 @@ namespace GOAP
         
         void Update()
         {
-            ChooseAction().Perform();
+
         }
 
         private void FindPossibleActions()
@@ -44,31 +44,6 @@ namespace GOAP
                     continue;
                 PossibleActions.Add(provider.GetComponent<ActionProvider>().ProvidedAction);
             }
-        }
-
-        private Action ChooseAction()
-        {
-            var bestGoal = Goals[0];
-            for (var i = 1; i < Goals.Length; i++)
-            {
-                if (Goals[i].Value > bestGoal.Value)
-                    bestGoal = Goals[i];
-            }
-
-            var bestAction = PossibleActions[0];
-            var bestDiscontentment = CalculateDiscontentment(bestAction);
-
-            for (var i = 1; i < PossibleActions.Count; i++)
-            {
-                var discontentment = CalculateDiscontentment(PossibleActions[i]);
-                if (discontentment < bestDiscontentment)
-                {
-                    bestDiscontentment = discontentment;
-                    bestAction = PossibleActions[i];
-                }
-            }
-
-            return bestAction;
         }
 
         private int[] PlanActions(WorldModel model, int maxDepth)
@@ -123,21 +98,6 @@ namespace GOAP
             }
 
             return bestActionSequence;
-        }
-
-        private float CalculateDiscontentment(Action action)
-        {
-            var discontentment = 0f;
-
-            foreach (var goal in Goals)
-            {
-                var newGoalValue = goal.Value + action.GetGoalChange(goal);
-                newGoalValue += action.GetDuration() * goal.GetChangeOverTime();
-
-                discontentment += goal.GetDiscontentment(newGoalValue);
-            }
-
-            return discontentment;
         }
 
         private Action[] GetInternalActions()
