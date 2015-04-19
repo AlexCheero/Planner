@@ -71,6 +71,53 @@ namespace GOAP
             return bestAction;
         }
 
+        private Action PlanActions(WorldModel model, int maxDepth)
+        {
+            var models = new WorldModel[maxDepth + 1];
+            var actions = new Action[maxDepth];
+
+            models[0] = model;
+            var currentDepth = 0;
+
+            var bestAction = model.NextAction();
+            var bestDiscontentment = Mathf.Infinity;
+
+            while (currentDepth >= 0)
+            {
+                var currentDiscontentment = models[currentDepth].Discontentment;
+
+                if (currentDepth >= maxDepth)
+                {
+                    if (currentDiscontentment < bestDiscontentment)
+                    {
+                        bestDiscontentment = currentDiscontentment;
+                        bestAction = actions[0];
+                    }
+
+                    currentDepth--;
+                    continue;
+                }
+
+                var nextAction = models[currentDepth].NextAction();
+
+                if (nextAction != null)
+                {
+                    models[currentDepth + 1] = new WorldModel(models[currentDepth]);
+                    actions[currentDepth] = nextAction;
+                    models[currentDepth + 1].ApplyAction(nextAction);
+
+                    currentDepth++;
+
+                }
+                else
+                {
+                    currentDepth--;
+                }
+            }
+
+            return bestAction;
+        }
+
         private float CalculateDiscontentment(Action action)
         {
             var discontentment = 0f;
