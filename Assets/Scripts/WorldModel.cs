@@ -7,7 +7,7 @@ namespace GOAP
     {
         public Goal[] Goals;
         public List<Action> Actions;
-        private ActionBoard _actionBoard;
+        private ActionBoard _actionBoard;//todo move to planner or higher
         private Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
