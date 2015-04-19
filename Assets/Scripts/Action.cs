@@ -11,13 +11,12 @@ namespace GOAP
         private readonly Dictionary<EGoal, int> _goalChanges;
         private string _action;
 
-        public Action()
-        {
-            //stub
-        }
-
+        public int BoardIndex { get; private set; }//todo crutch
+        
         public Action(string actionDescription, Dictionary<EGoal, int> changes)
         {
+            BoardIndex = 0;//todo crutch also
+
             _action = actionDescription;
             _goalChanges = changes;
         }

@@ -71,29 +71,31 @@ namespace GOAP
             return bestAction;
         }
 
-        private Action PlanActions(WorldModel model, int maxDepth)
+        private int[] PlanActions(WorldModel model, int maxDepth)
         {
             var models = new WorldModel[maxDepth + 1];
-            var actions = new Action[maxDepth];
+            var actionSequences = new List<int[]>();
+            var canCreateNewSequence = true;
+            var currentSequenceIndex = 0;
+            var bestActionSequence = new int[0];
 
             models[0] = model;
             var currentDepth = 0;
 
-            var bestAction = model.NextAction();
             var bestDiscontentment = Mathf.Infinity;
 
             while (currentDepth >= 0)
             {
                 var currentDiscontentment = models[currentDepth].Discontentment;
-
                 if (currentDepth >= maxDepth)
                 {
                     if (currentDiscontentment < bestDiscontentment)
                     {
                         bestDiscontentment = currentDiscontentment;
-                        bestAction = actions[0];
+                        bestActionSequence = actionSequences[currentSequenceIndex];
                     }
 
+                    canCreateNewSequence = true;
                     currentDepth--;
                     continue;
                 }
@@ -102,12 +104,17 @@ namespace GOAP
 
                 if (nextAction != null)
                 {
+                    if (canCreateNewSequence)
+                    {
+                        actionSequences.Add((int[])actionSequences[currentSequenceIndex].Clone());
+                        currentSequenceIndex++;
+                        canCreateNewSequence = false;
+                    }
+                    actionSequences[currentSequenceIndex][currentDepth] = nextAction.BoardIndex;
                     models[currentDepth + 1] = new WorldModel(models[currentDepth]);
-                    actions[currentDepth] = nextAction;
                     models[currentDepth + 1].ApplyAction(nextAction);
 
                     currentDepth++;
-
                 }
                 else
                 {
@@ -115,7 +122,7 @@ namespace GOAP
                 }
             }
 
-            return bestAction;
+            return bestActionSequence;
         }
 
         private float CalculateDiscontentment(Action action)
