@@ -13,7 +13,7 @@ namespace GOAP
 
         void Awake()//todo code, to init provider before initing planner in start method, because of null actions
         {
-            ProvidedAction = new Action(Action, new Dictionary<EGoal, int>() { { Goal, Value } });
+            ProvidedAction = new ActionDummy(Action, new Dictionary<EGoal, int>() { { Goal, Value } });
         }
 
         public Action[] GetPossibleActions()

@@ -18,7 +18,7 @@ namespace GOAP
             var resultActions = new List<Action>();
             foreach (var action in AllActions)
             {
-                if (action.CheckConditions(knowledge))
+                if (action.CheckConditions(knowledge) > action.MinMembershipDegree)
                     resultActions.Add(action);
             }
 
