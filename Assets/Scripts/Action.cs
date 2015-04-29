@@ -5,8 +5,6 @@ namespace GOAP
 {
     public abstract class Action
     {
-//        private List<ActionCondition> _requiredConditions;
-//        private List<KnowledgeImpaction> _knowledgeImpactions;
         private readonly Dictionary<EGoal, int> _goalChanges;
         private string _action;
         public byte MinMembershipDegree { get; protected set; }
@@ -38,9 +36,9 @@ namespace GOAP
             return 1;
         }
 
-        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge);
+        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership);
 
-        public abstract byte CheckConditions(Dictionary<string, object> knowledge);
+        public abstract byte GetMembership(Dictionary<string, object> knowledge);
     }
 
     public class ActionDummy : Action
@@ -49,12 +47,12 @@ namespace GOAP
         {
         }
 
-        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge)
+        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
         {
             throw new System.NotImplementedException();
         }
 
-        public override byte CheckConditions(Dictionary<string, object> knowledge)
+        public override byte GetMembership(Dictionary<string, object> knowledge)
         {
             throw new System.NotImplementedException();
         }
@@ -66,21 +64,21 @@ namespace GOAP
         {
         }
 
-        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge)
+        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
         {
             //change knowledge that certanly will be changed and try to predict dynamic knowledge
         }
 
-        public override byte CheckConditions(Dictionary<string, object> knowledge)
+        public override byte GetMembership(Dictionary<string, object> knowledge)
         {
             var enemyVisionLength = 20;//or something like that
-            var positionArray = knowledge["position"] as float[];//with checks and etc.
+            var positionArray = knowledge.GetObjByKeyPath("position") as float[];
             var position = new Vector3(positionArray[0], positionArray[1], positionArray[2]);
-            var enemies = knowledge["enemies"] as Dictionary<string, object>;
+            var enemies = knowledge.GetObjByKeyPath("enemies") as Dictionary<string, object>;
             var sightlessEnemiesCount = 0;
             foreach (var enemy in enemies)
             {
-                var enemyPositionArray = (enemy.Value as Dictionary<string, object>)["position"] as float[];//with checks and etc.
+                var enemyPositionArray = (enemy.Value as Dictionary<string, object>).GetObjByKeyPath("position") as float[];
                 var enemyPosition = new Vector3(enemyPositionArray[0], enemyPositionArray[1], enemyPositionArray[2]);
                 RaycastHit hit;
                 if (Physics.Raycast(enemyPosition, position, out hit, enemyVisionLength) && hit.collider.gameObject.tag == "me")//check only as example

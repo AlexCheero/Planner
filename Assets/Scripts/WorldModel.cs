@@ -6,7 +6,7 @@ namespace GOAP
     public class WorldModel
     {
         public Goal[] Goals;
-        public List<Action> Actions;
+        public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure
         private ActionBoard _actionBoard;//todo move to planner or higher
         private Dictionary<string, object> Knowledge;
 
@@ -17,7 +17,7 @@ namespace GOAP
             Goals = goals;
             Knowledge = knowledge;
             _actionBoard = actionBoard;
-            Actions = _actionBoard.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = actionBoard.GetActionsByKnowledge(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -31,25 +31,27 @@ namespace GOAP
             for (var i = 0; i < Goals.Length; i++)
                 Goals[i] = new Goal(otherGoals[i]);
             Discontentment = otherModel.Discontentment;
-            Actions = new List<Action>(otherModel.Actions);
+            ActionsMembership = new List<Pair<Action, byte>>(otherModel.ActionsMembership);
             Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
         }
 
-        public Action NextAction()
+        public Pair<Action, byte> NextAction()
         {
             throw new NotImplementedException();
         }
 
-        public void ApplyAction(Action action)
+        public void ApplyAction(Pair<Action, byte> action)
         {
             Discontentment = 0;
+            var floatMembership = (action.Second / 255);
             foreach (var goal in Goals)
             {
-                goal.Value += action.GetGoalChange(goal);
+                goal.Value += action.First.GetGoalChange(goal) * floatMembership;
                 Discontentment += goal.GetDiscontentment();
             }
-            action.AffectOnKnowledge(ref Knowledge);
-            Actions = _actionBoard.GetActionsByKnowledge(Knowledge);
+
+            action.First.AffectOnKnowledge(ref Knowledge, action.Second);
+            ActionsMembership = _actionBoard.GetActionsByKnowledge(Knowledge);
         }
     }
 }

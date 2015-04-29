@@ -1,53 +1,46 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GOAP
 {
     public class Planner
     {
-        //todo try use multithreading to increase speed
-        private int[] PlanActions(WorldModel model, int maxDepth)
+        //todo try use multithreading/coroutines to increase speed
+        private void PlanActions(WorldModel model, int maxDepth, out int[] actions, out WorldModel[] models)
         {
-            var models = new WorldModel[maxDepth + 1];
-            var actionSequences = new List<int[]>();
-            var canCreateNewSequence = true;
-            var currentSequenceIndex = 0;
-            var bestActionSequence = new int[0];
+            var modelsSequence = new WorldModel[maxDepth + 1];
+            var actionSequence = new int[maxDepth];
 
-            models[0] = model;
+            var bestActionSequence = new int[0];
+            var bestModelsSequence = new WorldModel[0];
+
+            modelsSequence[0] = model;
             var currentDepth = 0;
 
             var bestDiscontentment = Mathf.Infinity;
 
             while (currentDepth >= 0)
             {
-                var currentDiscontentment = models[currentDepth].Discontentment;
+                var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
                 if (currentDepth >= maxDepth)
                 {
                     if (currentDiscontentment < bestDiscontentment)
                     {
                         bestDiscontentment = currentDiscontentment;
-                        bestActionSequence = actionSequences[currentSequenceIndex];
+                        bestActionSequence = actionSequence;
+                        bestModelsSequence = modelsSequence;
                     }
 
-                    canCreateNewSequence = true;
                     currentDepth--;
                     continue;
                 }
 
-                var nextAction = models[currentDepth].NextAction();
+                var nextAction = modelsSequence[currentDepth].NextAction();
 
-                if (nextAction != null)
+                if (nextAction.First != null)
                 {
-                    if (canCreateNewSequence)
-                    {
-                        actionSequences.Add((int[])actionSequences[currentSequenceIndex].Clone());
-                        currentSequenceIndex++;
-                        canCreateNewSequence = false;
-                    }
-                    actionSequences[currentSequenceIndex][currentDepth] = nextAction.BoardIndex;
-                    models[currentDepth + 1] = new WorldModel(models[currentDepth]);
-                    models[currentDepth + 1].ApplyAction(nextAction);
+                    actionSequence[currentDepth] = nextAction.First.BoardIndex;
+                    modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);
+                    modelsSequence[currentDepth + 1].ApplyAction(nextAction);
 
                     currentDepth++;
                 }
@@ -57,7 +50,8 @@ namespace GOAP
                 }
             }
 
-            return bestActionSequence;
+            actions = bestActionSequence;
+            models = bestModelsSequence;
         }
     }
 }

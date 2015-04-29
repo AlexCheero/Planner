@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GOAP
 {
@@ -13,16 +14,12 @@ namespace GOAP
             AllActions = actions;
         }
 
-        public List<Action> GetActionsByKnowledge(Dictionary<string, object> knowledge)
+        public List<Pair<Action, byte>> GetActionsByKnowledge(Dictionary<string, object> knowledge)
         {
-            var resultActions = new List<Action>();
-            foreach (var action in AllActions)
-            {
-                if (action.CheckConditions(knowledge) > action.MinMembershipDegree)
-                    resultActions.Add(action);
-            }
-
-            return resultActions;
+            return (from action in AllActions
+                let membership = action.GetMembership(knowledge)
+                where membership > action.MinMembershipDegree
+                select new Pair<Action, byte> {First = action, Second = membership}).ToList();
         }
     }
 }
