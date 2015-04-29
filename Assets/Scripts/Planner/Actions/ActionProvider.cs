@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GOAP
 {
+
+    //class-ZALUPA
     public class ActionProvider : MonoBehaviour
     {
         public EGoal Goal;
@@ -13,7 +14,7 @@ namespace GOAP
 
         void Awake()//todo code, to init provider before initing planner in start method, because of null actions
         {
-            ProvidedAction = new ActionDummy(Action, new Dictionary<EGoal, int>() { { Goal, Value } });
+//            ProvidedAction = new Action(Action, new Dictionary<EGoal, int>() { { Goal, Value } });
         }
 
         public Action[] GetPossibleActions()
