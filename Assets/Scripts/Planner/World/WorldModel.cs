@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GOAP
 {
@@ -7,17 +6,17 @@ namespace GOAP
     {
         public Goal[] Goals;
         public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure
-        private ActionBoard _actionBoard;//todo move to planner or higher
+        private Planner _planner;
         private Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, ActionBoard actionBoard)
+        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
         {
             Goals = goals;
             Knowledge = knowledge;
-            _actionBoard = actionBoard;
-            ActionsMembership = actionBoard.GetActionsByKnowledge(Knowledge);
+            _planner = planner;
+            ActionsMembership = _planner.ActionBoard.GetActionsByKnowledge(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -35,11 +34,6 @@ namespace GOAP
             Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
         }
 
-        public Pair<Action, byte> NextAction()
-        {
-            throw new NotImplementedException();
-        }
-
         public void ApplyAction(Pair<Action, byte> action)
         {
             Discontentment = 0;
@@ -51,7 +45,7 @@ namespace GOAP
             }
 
             action.First.AffectOnKnowledge(ref Knowledge, action.Second);
-            ActionsMembership = _actionBoard.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = _planner.ActionBoard.GetActionsByKnowledge(Knowledge);
         }
     }
 }

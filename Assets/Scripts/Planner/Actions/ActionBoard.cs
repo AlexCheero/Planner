@@ -7,11 +7,24 @@ namespace GOAP
 {
     public class ActionBoard
     {
-        public List<Action> AllActions;
+        private List<Action> AllActions;
 
-        public ActionBoard(List<Action> actions)
+        public ActionBoard(Action[] actions)
         {
-            AllActions = actions;
+            AllActions = new List<Action>();
+            foreach (var action in actions)
+                AddActions(actions);
+        }
+
+        public void AddActions(IEnumerable<Action> actions)
+        {
+            //todo init board index somehow
+            if (AllActions == null)
+                AllActions = new List<Action>();
+            foreach (var action in actions)
+            {
+                AllActions.Add(action);
+            }
         }
 
         public List<Pair<Action, byte>> GetActionsByKnowledge(Dictionary<string, object> knowledge)

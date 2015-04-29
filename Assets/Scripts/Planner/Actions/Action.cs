@@ -7,7 +7,7 @@ namespace GOAP
         private readonly Dictionary<EGoal, int> _goalChanges;
         public byte MinMembershipDegree { get; protected set; }
 
-        public int BoardIndex { get; private set; }//todo crutch
+        public int BoardIndex = -1;
         
         public Action(Dictionary<EGoal, int> changes, byte membershipDegree = 0)
         {
