@@ -2,27 +2,27 @@
 using GOAP;
 using UnityEngine;
 
-public class InternalState : MonoBehaviour
+public class GreenActionProvider : MonoBehaviour
 {
 
     public int GoalChange;
 
-    void GetInternalActions()
+    public Action[] GetActions()
     {
-        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalAction(GoalChange) });
+        return new[] { new GreenAction(GoalChange) };
     }
 }
 
-public class InternalAction : Action
+public class GreenAction : Action
 {
-    public InternalAction(int change)
+    public GreenAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }
 
     public override void Perform()
     {
-        Debug.Log("Stay!");
+        Debug.LogError("Green!");
     }
 
     public override int GetDuration(Dictionary<string, object> knowledge)

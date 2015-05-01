@@ -16,7 +16,7 @@ namespace GOAP
             Goals = goals;
             Knowledge = knowledge;
             _planner = planner;
-            ActionsMembership = _planner.ActionBoard.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = _planner.AllActions.GetActionsByKnowledge(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -45,7 +45,7 @@ namespace GOAP
             }
 
             action.First.AffectOnKnowledge(ref Knowledge, action.Second);
-            ActionsMembership = _planner.ActionBoard.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = _planner.AllActions.GetActionsByKnowledge(Knowledge);
         }
     }
 }

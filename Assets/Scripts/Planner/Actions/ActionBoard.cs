@@ -9,21 +9,15 @@ namespace GOAP
     {
         private List<Action> AllActions;
 
-        public ActionBoard(Action[] actions)
-        {
-            AllActions = new List<Action>();
-            foreach (var action in actions)
-                AddActions(actions);
-        }
-
         public void AddActions(IEnumerable<Action> actions)
         {
-            //todo init board index somehow
             if (AllActions == null)
                 AllActions = new List<Action>();
+
             foreach (var action in actions)
             {
                 AllActions.Add(action);
+                action.BoardIndex = AllActions.IndexOf(action);
             }
         }
 

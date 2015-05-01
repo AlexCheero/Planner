@@ -2,32 +2,30 @@
 using GOAP;
 using UnityEngine;
 
-public class InternalState : MonoBehaviour
-{
+public class YellowActionProvider : MonoBehaviour {
 
     public int GoalChange;
 
-    void GetInternalActions()
+    public Action[] GetActions()
     {
-        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalAction(GoalChange) });
+        return new[] { new YellowAction(GoalChange) };
     }
 }
 
-public class InternalAction : Action
-{
-    public InternalAction(int change)
+public class YellowAction : Action {
+    public YellowAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }
 
     public override void Perform()
     {
-        Debug.Log("Stay!");
+        Debug.LogError("Yellow!");
     }
 
     public override int GetDuration(Dictionary<string, object> knowledge)
     {
-        return 0;
+        return 1;
     }
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
@@ -37,6 +35,6 @@ public class InternalAction : Action
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 255;
+        return 125;
     }
 }

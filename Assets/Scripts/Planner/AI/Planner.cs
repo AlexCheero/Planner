@@ -5,7 +5,7 @@ namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
-        public ActionBoard ActionBoard;
+        public ActionBoard AllActions;
         public delegate void PlanningFinishedCallback(WorldModelNode node);
 
         private int _workingPlanRoutines;
@@ -15,7 +15,13 @@ namespace GOAP
 
         void Start()
         {
+            AllActions = new ActionBoard();
             BroadcastMessage("GetInternalActions");
+        }
+
+        private void FindActionsInWorld()
+        {
+            var colliders = Physics.OverlapSphere(transform.position, 5f);
         }
 
         public void Subscribe(PlanningFinishedCallback callback)
