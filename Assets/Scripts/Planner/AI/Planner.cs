@@ -1,9 +1,42 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
+        public ActionBoard AllActions;
+        public int[] Actions;
+        public WorldModel[] Models;
+
+        void Start()
+        {
+            AllActions = new ActionBoard();
+            BroadcastMessage("GetInternalActions");
+            FindActionsInWorld();
+
+            var initialWorldModel = GetInitialWorldModel();
+            PlanActions(initialWorldModel, 5, out Actions, out Models);
+            Debug.Log("");
+        }
+
+        private WorldModel GetInitialWorldModel()
+        {
+            return new WorldModel(new []{new Goal(EGoal.Goal, 20)}, new Dictionary<string, object>(), this);
+        }
+
+        private void FindActionsInWorld()
+        {
+            var colliders = Physics.OverlapSphere(transform.position, 20f).Where(collider => collider.GetComponent<ActionProvider>());
+            foreach (var col in colliders)
+            {
+                var actionProvider = col.GetComponent<ActionProvider>();
+                AllActions.AddActions(actionProvider.GetActions());
+            }
+        }
+
         private void PlanActions(WorldModel model, int maxDepth, out int[] actions, out WorldModel[] models)
         {
             var modelsSequence = new WorldModel[maxDepth + 1];
@@ -35,7 +68,7 @@ namespace GOAP
 
                 var nextAction = modelsSequence[currentDepth].NextAction();
 
-                if (nextAction.First != null)
+                if (nextAction != null)
                 {
                     actionSequence[currentDepth] = nextAction.First.BoardIndex;
                     modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);

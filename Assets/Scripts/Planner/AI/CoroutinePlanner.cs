@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace GOAP
 {
+    //todo try to composite coroutine and common planer
     public class CoroutinePlanner : MonoBehaviour
     {
         public ActionBoard AllActions;

@@ -2,16 +2,6 @@
 using GOAP;
 using UnityEngine;
 
-public class YellowActionProvider : MonoBehaviour {
-
-    public int GoalChange;
-
-    public Action[] GetActions()
-    {
-        return new[] { new YellowAction(GoalChange) };
-    }
-}
-
 public class YellowAction : Action {
     public YellowAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })

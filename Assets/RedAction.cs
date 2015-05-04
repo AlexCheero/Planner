@@ -2,17 +2,6 @@
 using GOAP;
 using UnityEngine;
 
-public class RedActionProvider : MonoBehaviour
-{
-
-    public int GoalChange;
-
-    public Action[] GetActions()
-    {
-        return new[] { new RedAction(GoalChange) };
-    }
-}
-
 public class RedAction : Action
 {
     public RedAction(int change)

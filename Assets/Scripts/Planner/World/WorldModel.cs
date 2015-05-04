@@ -6,18 +6,19 @@ namespace GOAP
     public class WorldModel
     {
         public Goal[] Goals;
+        private int _actionIndex = 0;
         public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure
-        private CoroutinePlanner _planner;
+        public Planner Planner;
         private Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, CoroutinePlanner planner)
+        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
         {
             Goals = goals;
             Knowledge = knowledge;
-            _planner = planner;
-            ActionsMembership = _planner.AllActions.GetActionsByKnowledge(Knowledge);
+            Planner = planner;
+            ActionsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -33,11 +34,17 @@ namespace GOAP
             Discontentment = otherModel.Discontentment;
             ActionsMembership = new List<Pair<Action, byte>>(otherModel.ActionsMembership);
             Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
+            Planner = otherModel.Planner;
         }
 
         public Pair<Action, byte> NextAction()
         {
-            throw new NotImplementedException();
+            if (_actionIndex >= ActionsMembership.Count)
+                return null;
+            
+            var returnValue = ActionsMembership[_actionIndex];
+            _actionIndex++;
+            return returnValue;
         }
 
         public void ApplyAction(Pair<Action, byte> action)
@@ -51,7 +58,7 @@ namespace GOAP
             }
 
             action.First.AffectOnKnowledge(ref Knowledge, action.Second);
-            ActionsMembership = _planner.AllActions.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
         }
     }
 }

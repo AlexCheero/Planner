@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Action: green
   GoalChange: -1
 --- !u!1 &831204535 stripped
 GameObject:
@@ -292,9 +293,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1050472607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a8122d9c91125147bcb9072b7bd015d, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Action: yellow
   GoalChange: -5
 --- !u!1001 &1241306460
 Prefab:
@@ -351,10 +353,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1241306461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db8776de99453e84599df3753e530035, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GoalChange: -3
+  Action: red
+  GoalChange: -2
 --- !u!1 &1551730638
 GameObject:
   m_ObjectHideFlags: 0
