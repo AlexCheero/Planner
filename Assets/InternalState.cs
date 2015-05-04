@@ -9,7 +9,7 @@ public class InternalState : MonoBehaviour
 
     void GetInternalActions()
     {
-        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalAction(GoalChange) });
+        GetComponent<CoroutinePlanner>().AllActions.AddActions(new[] { new InternalAction(GoalChange) });
     }
 }
 

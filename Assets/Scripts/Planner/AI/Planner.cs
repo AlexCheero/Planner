@@ -1,67 +1,56 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
-        public ActionBoard AllActions;
-        public delegate void PlanningFinishedCallback(WorldModelNode node);
-
-        private int _workingPlanRoutines;
-        private float _bestDiscontentment;
-        private WorldModelNode _bestNode;
-        private PlanningFinishedCallback _callback;
-
-        void Start()
+        private void PlanActions(WorldModel model, int maxDepth, out int[] actions, out WorldModel[] models)
         {
-            AllActions = new ActionBoard();
-            BroadcastMessage("GetInternalActions");
-        }
+            var modelsSequence = new WorldModel[maxDepth + 1];
+            var actionSequence = new int[maxDepth];
 
-        private void FindActionsInWorld()
-        {
-            var colliders = Physics.OverlapSphere(transform.position, 5f);
-        }
+            var bestActionSequence = new int[0];
+            var bestModelsSequence = new WorldModel[0];
 
-        public void Subscribe(PlanningFinishedCallback callback)
-        {
-            _callback = callback;
-        }
+            modelsSequence[0] = model;
+            var currentDepth = 0;
 
-        public IEnumerator CoroutinePlanActions(WorldModel model, int maxDepth)
-        {
-            _workingPlanRoutines = 1;
-            _bestDiscontentment = Mathf.Infinity;
-            StartCoroutine(PlanWorldActions(model, maxDepth, 0, new WorldModelNode(model)));
+            var bestDiscontentment = Mathf.Infinity;
 
-            while (_workingPlanRoutines > 0)
-                yield return new WaitForEndOfFrame();
-
-            _callback(_bestNode);
-        }
-        
-        private IEnumerator PlanWorldActions(WorldModel model, int maxDepth, int currentDepth, WorldModelNode parentNode)
-        {
-            if (currentDepth >= maxDepth)
+            while (currentDepth >= 0)
             {
-                if (model.Discontentment < _bestDiscontentment)
+                var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
+                if (currentDepth >= maxDepth)
                 {
-                    _bestDiscontentment = model.Discontentment;
-                    _bestNode = parentNode;
+                    if (currentDiscontentment < bestDiscontentment)
+                    {
+                        bestDiscontentment = currentDiscontentment;
+                        bestActionSequence = actionSequence;
+                        bestModelsSequence = modelsSequence;
+                    }
+
+                    currentDepth--;
+                    continue;
                 }
 
-                yield return null;
-            }
-            foreach (var action in model.ActionsMembership)
-            {
-                var node = new WorldModelNode(model, action.First.BoardIndex, parentNode);
-                var newModel = new WorldModel(model);
-                StartCoroutine(PlanWorldActions(newModel, maxDepth, currentDepth + 1, node));
+                var nextAction = modelsSequence[currentDepth].NextAction();
+
+                if (nextAction.First != null)
+                {
+                    actionSequence[currentDepth] = nextAction.First.BoardIndex;
+                    modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);
+                    modelsSequence[currentDepth + 1].ApplyAction(nextAction);
+
+                    currentDepth++;
+                }
+                else
+                {
+                    currentDepth--;
+                }
             }
 
-            _workingPlanRoutines--;
-            yield return null;
+            actions = bestActionSequence;
+            models = bestModelsSequence;
         }
     }
 }

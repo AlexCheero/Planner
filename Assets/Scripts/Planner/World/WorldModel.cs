@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GOAP
 {
@@ -6,12 +7,12 @@ namespace GOAP
     {
         public Goal[] Goals;
         public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure
-        private Planner _planner;
+        private CoroutinePlanner _planner;
         private Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
+        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, CoroutinePlanner planner)
         {
             Goals = goals;
             Knowledge = knowledge;
@@ -32,6 +33,11 @@ namespace GOAP
             Discontentment = otherModel.Discontentment;
             ActionsMembership = new List<Pair<Action, byte>>(otherModel.ActionsMembership);
             Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
+        }
+
+        public Pair<Action, byte> NextAction()
+        {
+            throw new NotImplementedException();
         }
 
         public void ApplyAction(Pair<Action, byte> action)
