@@ -5,6 +5,7 @@ namespace GOAP
 {
     public class WorldModel
     {
+        //todo choose only few the most important goals
         public Goal[] Goals;
         private int _actionIndex = 0;
         public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure

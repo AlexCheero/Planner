@@ -18,7 +18,9 @@ namespace GOAP
             FindActionsInWorld();
 
             var initialWorldModel = GetInitialWorldModel();
-            PlanActions(initialWorldModel, 5, out Actions, out Models);
+            const float discTestValue = 100;
+            var discontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(discTestValue)).Max();
+            PlanActions(initialWorldModel, 5, discontentment, out Actions, out Models);
             foreach (var action in Actions)
                 AllActions[action].Perform();
         }
@@ -38,7 +40,7 @@ namespace GOAP
             }
         }
 
-        private void PlanActions(WorldModel model, int maxDepth, out int[] actions, out WorldModel[] models)
+        private void PlanActions(WorldModel model, int maxDepth, float maxDiscontentment, out int[] actions, out WorldModel[] models)
         {
             var modelsSequence = new WorldModel[maxDepth + 1];
             var actionSequence = new int[maxDepth];
