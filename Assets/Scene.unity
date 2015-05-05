@@ -126,43 +126,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 11413244, guid: bd95f26b0afb4ac44adf47ac5a55dae4, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bd95f26b0afb4ac44adf47ac5a55dae4, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &375503212 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 110058, guid: bd95f26b0afb4ac44adf47ac5a55dae4, type: 2}
-  m_PrefabInternal: {fileID: 375503211}
---- !u!114 &375503213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 375503212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Action: green
-  GoalChange: -1
---- !u!1 &831204535 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 113348, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-  m_PrefabInternal: {fileID: 1005377214}
---- !u!114 &831204536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 831204535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddc7c95503ea6c1479de2c7237745d06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GoalChange: -10
 --- !u!1001 &1005377214
 Prefab:
   m_ObjectHideFlags: 0
@@ -170,10 +136,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 11476508, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: Cllls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 436670, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
       propertyPath: m_LocalPosition.x
       value: .0557947159
@@ -206,35 +168,27 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: .532675207
+      objectReference: {fileID: 0}
+    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: .0703404546
+      objectReference: {fileID: 0}
+    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: .836132765
+      objectReference: {fileID: 0}
+    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: -.110415146
+      objectReference: {fileID: 0}
     - target: {fileID: 13654204, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 13400000, guid: cf63880488ec29f43a759ecd9c6c5123,
         type: 2}
-    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: .532675147
-      objectReference: {fileID: 0}
-    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: .0703404471
-      objectReference: {fileID: 0}
-    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: .836132646
-      objectReference: {fileID: 0}
-    - target: {fileID: 454696, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: -.110415131
-      objectReference: {fileID: 0}
-    - target: {fileID: 19597056, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: m_StoppingDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11476508, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
-      propertyPath: Cllls.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
   m_IsPrefabParent: 0
@@ -275,29 +229,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 404882, guid: 6a2732113bb1e8944845599fd396f2ba, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 11417400, guid: 6a2732113bb1e8944845599fd396f2ba, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a2732113bb1e8944845599fd396f2ba, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1050472607 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 173170, guid: 6a2732113bb1e8944845599fd396f2ba, type: 2}
-  m_PrefabInternal: {fileID: 1050472606}
---- !u!114 &1050472608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1050472607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Action: yellow
-  GoalChange: -5
 --- !u!1001 &1241306460
 Prefab:
   m_ObjectHideFlags: 0
@@ -335,29 +271,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 449888, guid: b7a95ac667a820142b728faa94e3ed77, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 11478786, guid: b7a95ac667a820142b728faa94e3ed77, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b7a95ac667a820142b728faa94e3ed77, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1241306461 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 163474, guid: b7a95ac667a820142b728faa94e3ed77, type: 2}
-  m_PrefabInternal: {fileID: 1241306460}
---- !u!114 &1241306462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1241306461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Action: red
-  GoalChange: -2
 --- !u!1 &1551730638
 GameObject:
   m_ObjectHideFlags: 0

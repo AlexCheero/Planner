@@ -19,7 +19,8 @@ namespace GOAP
 
             var initialWorldModel = GetInitialWorldModel();
             PlanActions(initialWorldModel, 5, out Actions, out Models);
-            Debug.Log("");
+            foreach (var action in Actions)
+                AllActions[action].Perform();
         }
 
         private WorldModel GetInitialWorldModel()
@@ -58,7 +59,7 @@ namespace GOAP
                     if (currentDiscontentment < bestDiscontentment)
                     {
                         bestDiscontentment = currentDiscontentment;
-                        bestActionSequence = actionSequence;
+                        bestActionSequence = (int[])actionSequence.Clone();
                         bestModelsSequence = modelsSequence;
                     }
 

@@ -9,6 +9,11 @@ namespace GOAP
     {
         private List<Action> AllActions;
 
+        public Action this[int index]
+        {
+            get { return AllActions[index]; }
+        }
+
         public void AddActions(IEnumerable<Action> actions)
         {
             if (AllActions == null)

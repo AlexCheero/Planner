@@ -10,12 +10,12 @@ public class YellowAction : Action {
 
     public override void Perform()
     {
-        Debug.LogError("Yellow!");
+        Debug.Log("Yellow!");
     }
 
     public override int GetDuration(Dictionary<string, object> knowledge)
     {
-        return 1;
+        return 0;
     }
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
@@ -25,6 +25,6 @@ public class YellowAction : Action {
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 125;
+        return 255;
     }
 }

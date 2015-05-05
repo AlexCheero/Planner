@@ -12,6 +12,7 @@ GameObject:
   - 135: {fileID: 13554416}
   - 23: {fileID: 2304086}
   - 114: {fileID: 11428808}
+  - 114: {fileID: 11412186}
   m_Layer: 0
   m_Name: YellowActionProvider
   m_TagString: ActionProvider
@@ -62,6 +63,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173170}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11412186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Action: yellow
+  GoalChange: -2
 --- !u!114 &11428808
 MonoBehaviour:
   m_ObjectHideFlags: 1

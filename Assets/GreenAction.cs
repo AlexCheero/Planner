@@ -2,16 +2,16 @@
 using GOAP;
 using UnityEngine;
 
-public class RedAction : Action
+public class GreenAction : Action
 {
-    public RedAction(int change)
+    public GreenAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }
 
     public override void Perform()
     {
-        Debug.Log("Red!");
+        Debug.Log("Green!");
     }
 
     public override int GetDuration(Dictionary<string, object> knowledge)
