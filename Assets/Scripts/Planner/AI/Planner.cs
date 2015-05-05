@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,7 +24,7 @@ namespace GOAP
 
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(new []{new Goal(EGoal.Goal, 20)}, new Dictionary<string, object>(), this);
+            return new WorldModel(new Goal(EGoal.Goal, 20), new Dictionary<string, object>(), this);
         }
 
         private void FindActionsInWorld()
@@ -53,7 +52,7 @@ namespace GOAP
 
             while (currentDepth >= 0)
             {
-                var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
+                var currentDiscontentment = 0;
                 if (currentDepth >= maxDepth)
                 {
                     if (currentDiscontentment < bestDiscontentment)
