@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -7,6 +6,9 @@ namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
+        public int MaxDepth;
+        public float DiscTestValue;
+
         public ActionBoard AllActions;
         public int[] Actions;
         public WorldModel[] Models;
@@ -18,9 +20,8 @@ namespace GOAP
             FindActionsInWorld();
 
             var initialWorldModel = GetInitialWorldModel();
-            const float discTestValue = 100;
-            var discontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(discTestValue)).Max();
-            PlanActions(initialWorldModel, 5, discontentment, out Actions, out Models);
+            var maxDiscontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
+            PlanActions(initialWorldModel, maxDiscontentment, out Actions, out Models);
             foreach (var action in Actions)
                 AllActions[action].Perform();
         }
@@ -40,10 +41,10 @@ namespace GOAP
             }
         }
 
-        private void PlanActions(WorldModel model, int maxDepth, float maxDiscontentment, out int[] actions, out WorldModel[] models)
+        private void PlanActions(WorldModel model, float maxDiscontentment, out int[] actions, out WorldModel[] models)
         {
-            var modelsSequence = new WorldModel[maxDepth + 1];
-            var actionSequence = new int[maxDepth];
+            var modelsSequence = new WorldModel[MaxDepth + 1];
+            var actionSequence = new int[MaxDepth];
 
             var bestActionSequence = new int[0];
             var bestModelsSequence = new WorldModel[0];
@@ -56,7 +57,7 @@ namespace GOAP
             while (currentDepth >= 0)
             {
                 var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
-                if (currentDepth >= maxDepth)
+                if (currentDepth >= MaxDepth)
                 {
                     if (currentDiscontentment < bestDiscontentment)
                     {
@@ -74,10 +75,12 @@ namespace GOAP
                 if (nextAction != null)
                 {
                     actionSequence[currentDepth] = nextAction.First.BoardIndex;
-                    modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);
-                    modelsSequence[currentDepth + 1].ApplyAction(nextAction);
+                    WorldModel nextModel;
+                    nextModel = modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);
+                    nextModel.ApplyAction(nextAction);
 
-                    currentDepth++;
+                    if (nextModel.Discontentment <= maxDiscontentment)
+                        currentDepth++;
                 }
                 else
                 {
