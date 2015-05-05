@@ -20,11 +20,14 @@ public class YellowAction : Action {
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-
+        knowledge.Remove("greened");
+        if (knowledge.ContainsKey("yellowed"))
+            return;
+        knowledge.Add("yellowed", null);
     }
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 255;
+        return (byte)(knowledge.ContainsKey("greened") ? 255 : 0);
     }
 }

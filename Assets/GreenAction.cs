@@ -21,11 +21,13 @@ public class GreenAction : Action
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-
+        if (knowledge.ContainsKey("greened"))
+            return;
+        knowledge.Add("greened", null);
     }
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 255;
+        return (byte)(knowledge.ContainsKey("stayed") ? 255 : 0);
     }
 }

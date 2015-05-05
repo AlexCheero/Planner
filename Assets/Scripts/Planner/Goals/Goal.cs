@@ -6,7 +6,13 @@ namespace GOAP
     public class Goal
     {
         public EGoal Name;
-        public float Value;
+        private float _value;
+        public float Value
+        {
+            get { return _value; }
+            set { _value = Mathf.Max(0, value); }
+        }
+
         private float _previousValue;
 
         private float _changeSinceLastTime;

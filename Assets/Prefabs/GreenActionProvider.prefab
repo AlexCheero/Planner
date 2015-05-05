@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3338716}
   - 135: {fileID: 13523654}
   - 23: {fileID: 2333650}
-  - 114: {fileID: 11463432}
   - 114: {fileID: 11435904}
   m_Layer: 0
   m_Name: GreenActionProvider
@@ -75,20 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Action: green
-  GoalChange: -1
---- !u!114 &11463432
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b9632092fdbc9548ba3d6fa6a709879, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Action: green
-  GoalChange: -1
+  GoalChange: 0
 --- !u!135 &13523654
 SphereCollider:
   m_ObjectHideFlags: 1

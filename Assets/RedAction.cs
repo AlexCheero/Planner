@@ -26,6 +26,6 @@ public class RedAction : Action
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 255;
+        return (byte)(knowledge.ContainsKey("yellowed") ? 255 : 0);
     }
 }

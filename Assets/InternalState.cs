@@ -32,11 +32,13 @@ public class InternalAction : Action
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-
+        if (knowledge.ContainsKey("stayed"))
+            return;
+        knowledge.Add("stayed", null);
     }
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return 255;
+        return (byte)(knowledge.Count == 0 ? 255 : 0);
     }
 }
