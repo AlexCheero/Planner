@@ -5,7 +5,7 @@ namespace GOAP
 {
     public class Goal
     {
-        public EGoal Name;
+        public readonly EGoal Name;
         private float _value;
         public float Value
         {

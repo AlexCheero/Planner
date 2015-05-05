@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace GOAP
 {
     public class WorldModel
     {
         //todo choose only few the most important goals
-        public Goal[] Goals;
+        public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        public List<Pair<Action, byte>> ActionsMembership;//todo try to change all dictionarys with this structure
+        public List<Pair<Action, byte>> ActionsMembership = new List<Pair<Action, byte>>();//todo try to change all dictionarys with this structure
         public Planner Planner;
         private Dictionary<string, object> Knowledge;
 
@@ -23,6 +24,16 @@ namespace GOAP
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
+        }
+
+        public override int GetHashCode()
+        {
+            var goalsHash = Goals.Length + Goals.Select((goal, i) => (int) ((int) goal.Value * Mathf.Pow(10, i + 1))).Sum();
+            var actionsLengthHash = ActionsMembership.Count;
+            var actionsValuesHash = ActionsMembership.Aggregate(0,
+                (current, action) => current & action.First.BoardIndex * action.Second);
+
+            return goalsHash & actionsLengthHash & actionsValuesHash;
         }
 
         //deep copy constructor
