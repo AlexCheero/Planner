@@ -28,12 +28,8 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            var goalsHash = Goals.Length + Goals.Select((goal, i) => (int) ((int) goal.Value * Mathf.Pow(10, i + 1))).Sum();
-            var actionsLengthHash = ActionsMembership.Count;
-            var actionsValuesHash = ActionsMembership.Aggregate(0,
-                (current, action) => current & action.First.BoardIndex * action.Second);
-
-            return goalsHash & actionsLengthHash & actionsValuesHash;
+            //todo make proper hash function
+            return base.GetHashCode();
         }
 
         //deep copy constructor

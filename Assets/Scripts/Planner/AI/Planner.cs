@@ -22,8 +22,11 @@ namespace GOAP
             var initialWorldModel = GetInitialWorldModel();
             var maxDiscontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
             PlanActions(initialWorldModel, maxDiscontentment, out Actions, out Models);
-            foreach (var action in Actions)
-                AllActions[action].Perform();
+//            foreach (var action in Actions)
+//                AllActions[action].Perform();
+
+            foreach (var worldModel in Models)
+                Debug.Log("hash: " + worldModel.GetHashCode());
         }
 
         private WorldModel GetInitialWorldModel()
