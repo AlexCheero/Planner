@@ -14,6 +14,11 @@ namespace GOAP
             get { return AllActions[index]; }
         }
 
+        public ActionBoard()
+        {
+            AllActions = new List<Action>();
+        }
+
         public void AddActions(IEnumerable<Action> actions)
         {
             if (AllActions == null)
@@ -28,10 +33,14 @@ namespace GOAP
 
         public List<Pair<Action, byte>> GetActionsByKnowledge(Dictionary<string, object> knowledge)
         {
-            return (from action in AllActions
-                let membership = action.GetMembership(knowledge)
-                where membership > action.MinMembershipDegree
-                select new Pair<Action, byte> {First = action, Second = membership}).ToList();
+            var list = new List<Pair<Action, byte>>();
+            foreach (var action in AllActions)
+            {
+                var membership = action.GetMembership(knowledge);
+                if (membership > action.MinMembershipDegree)
+                    list.Add(new Pair<Action, byte>{First = action, Second = membership});
+            }
+            return list;
         }
     }
 }
