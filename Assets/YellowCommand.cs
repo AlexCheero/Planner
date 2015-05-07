@@ -2,16 +2,15 @@
 using GOAP;
 using UnityEngine;
 
-public class RedAction : Action
-{
-    public RedAction(int change)
+public class YellowCommand : Command {
+    public YellowCommand(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }
 
     public override void Perform()
     {
-        Debug.Log("Red!");
+        Debug.Log("Yellow!");
     }
 
     public override int GetDuration(Dictionary<string, object> knowledge)
@@ -21,11 +20,14 @@ public class RedAction : Action
 
     public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-
+        knowledge.Remove("greened");
+        if (knowledge.ContainsKey("yellowed"))
+            return;
+        knowledge.Add("yellowed", null);
     }
 
     public override byte GetMembership(Dictionary<string, object> knowledge)
     {
-        return (byte)(knowledge.ContainsKey("yellowed") ? 255 : 0);
+        return (byte)(knowledge.ContainsKey("greened") ? 255 : 0);
     }
 }

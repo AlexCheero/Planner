@@ -2,9 +2,9 @@
 using GOAP;
 using UnityEngine;
 
-public class GreenAction : Action
+public class GreenCommand : Command
 {
-    public GreenAction(int change)
+    public GreenCommand(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }

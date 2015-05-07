@@ -9,13 +9,13 @@ public class InternalState : MonoBehaviour
 
     void GetInternalActions()
     {
-        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalAction(GoalChange) });
+        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalCommand(GoalChange) });
     }
 }
 
-public class InternalAction : Action
+public class InternalCommand : Command
 {
-    public InternalAction(int change)
+    public InternalCommand(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }

@@ -6,21 +6,21 @@ public class ActionProvider : MonoBehaviour
     public string Action;
     public int GoalChange;
 
-    public Action[] GetActions()
+    public Command[] GetActions()
     {
         switch (Action)
         {
             case "green":
-                return new[] { new GreenAction(GoalChange) };
+                return new[] { new GreenCommand(GoalChange) };
                 break;
             case "red":
-                return new[] { new RedAction(GoalChange),  };
+                return new[] { new RedCommand(GoalChange),  };
                 break;
             case "yellow":
-                return new[] { new YellowAction(GoalChange),  };
+                return new[] { new YellowCommand(GoalChange),  };
                 break;
             default:
-                return new Action[0];
+                return new Command[0];
         }
         
     }

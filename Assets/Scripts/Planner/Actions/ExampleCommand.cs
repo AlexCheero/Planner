@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace GOAP
 {
-    public class ExampleAction : Action
+    public class ExampleCommand : Command
     {
-        public ExampleAction(Dictionary<EGoal, int> changes)
+        public ExampleCommand(Dictionary<EGoal, int> changes)
             : base(changes)
         {
         }

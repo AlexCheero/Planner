@@ -54,7 +54,7 @@ namespace GOAP
 
                 yield return null;
             }
-            foreach (var action in model.ActionsMembership)
+            foreach (var action in model.CommandsMembership)
             {
                 var node = new WorldModelNode(model, action.First.BoardIndex, parentNode);
                 var newModel = new WorldModel(model);

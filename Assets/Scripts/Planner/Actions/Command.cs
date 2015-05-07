@@ -2,7 +2,7 @@
 
 namespace GOAP
 {
-    public abstract class Action
+    public abstract class Command
     {
         //todo think about identical actions with different positions
         private readonly Dictionary<EGoal, int> _goalChanges;
@@ -10,7 +10,7 @@ namespace GOAP
 
         public int BoardIndex = -1;
         
-        public Action(Dictionary<EGoal, int> changes, byte membershipDegree = 77)//77 for 30%
+        public Command(Dictionary<EGoal, int> changes, byte membershipDegree = 77)//77 for 30%
         {
             //todo crutch also, actually whole constructor is crutch
             _goalChanges = changes;
