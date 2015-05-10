@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace GOAP
 {
@@ -12,8 +10,8 @@ namespace GOAP
         private int _actionIndex = 0;
         public List<Pair<Command, byte>> CommandsMembership = new List<Pair<Command, byte>>();//todo try to change all dictionarys with this structure
         public Planner Planner;
-        private Dictionary<string, object> Knowledge;
 
+        private Dictionary<string, object> Knowledge;
         public float Discontentment { get; private set; }
 
         public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
