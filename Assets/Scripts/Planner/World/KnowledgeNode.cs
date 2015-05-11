@@ -1,14 +1,27 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GOAP
 {
     public interface IKnowledge
     {
-        T GetKnowledge<T>(params string[] keyPath);
+        bool Contains(string key);
+        IKnowledge this[string key] { get; set; }
     }
     public class KnowledgeNode : IKnowledge
     {
+        public IKnowledge this[string key]
+        {
+            get { return Knowledge[key]; }
+            set
+            {
+                if (Knowledge.ContainsKey(key))
+                    Knowledge[key] = value;
+                else
+                    Knowledge.Add(key, value);
+            }
+        }
+
         public Dictionary<string, IKnowledge> Knowledge;
         public int Depth;
 
@@ -17,41 +30,88 @@ namespace GOAP
             Knowledge = new Dictionary<string, IKnowledge>();
         }
 
-        public T GetKnowledge<T>(params string[] keyPath)
+        public bool TryGetValue<T>(out T value, params string[] keyPath)
         {
-            if (keyPath.Length <= 0)
+            var knowledgeLeaf = GetKnowledge(keyPath) as KnowledgeLeaf<T>;
+            if (knowledgeLeaf == null)
             {
-                Debug.LogError("trying to get value from node");
-                return default(T);
+                value = default(T);
+                return false;
             }
+
+            value = knowledgeLeaf.Value;
+            return true;
+        }
+
+        public void SetValue<T>(T value, params string[] keyPath)
+        {
+            IKnowledge currentLevelKnowledge = this;
+            for (var i = 0; i < keyPath.Length; i++)
+            {
+                var key = keyPath[i];
+                if (i == keyPath.Length - 1)
+                {
+                    if (currentLevelKnowledge.Contains(key))
+                    {
+                        var knowledgeLeaf = currentLevelKnowledge[key] as KnowledgeLeaf<T>;
+                        if (knowledgeLeaf != null)
+                            knowledgeLeaf.Value = value;
+                        else
+                            currentLevelKnowledge[key] = new KnowledgeLeaf<T>(value);
+                    }
+                    else
+                        currentLevelKnowledge[key] = new KnowledgeLeaf<T>(value);
+                }
+                else
+                {
+                    if (currentLevelKnowledge.Contains(key))
+                        currentLevelKnowledge = currentLevelKnowledge[key];
+                    else
+                    {
+                        currentLevelKnowledge[key] = new KnowledgeNode();
+                        currentLevelKnowledge = currentLevelKnowledge[key];
+                    }
+                }
+            }
+        }
+
+        public bool Contains(string key)
+        {
+            return Knowledge.ContainsKey(key);
+        }
+
+        private IKnowledge GetKnowledge(params string[] keyPath)
+        {
             IKnowledge resultKnowledge = this;
             foreach (var key in keyPath)
             {
-                if (Knowledge.ContainsKey(key))
-                    resultKnowledge = Knowledge[key];
-                else
-                {
-                    Debug.LogError("invalid key path");
-                    return default(T);
-                }
+                if (!resultKnowledge.Contains(key))
+                    return null;
+                resultKnowledge = resultKnowledge[key];
             }
-            var knowledge = (resultKnowledge as KnowledgeLeaf<T>);
-            return knowledge == null ? default(T) : knowledge.GetValue();
+
+            return resultKnowledge;
         }
     }
 
-    public class KnowledgeLeaf<T1> : IKnowledge
+    public class KnowledgeLeaf<T> : IKnowledge
     {
-        public T1 Value;
-        public T2 GetKnowledge<T2>(params string[] keyPath)
+        public T Value { get; set; }
+
+        public KnowledgeLeaf(T value)
         {
-            Debug.LogError("trying to get next depth knowledge from leaf");
-            return default(T2);
+            Value = value;
         }
 
-        public T1 GetValue()
+        public bool Contains(string key)
         {
-            return Value;
+            return false;
+        }
+
+        public IKnowledge this[string key]
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
     }
 }
