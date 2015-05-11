@@ -2,32 +2,21 @@
 using GOAP;
 using UnityEngine;
 
-public class InternalState : MonoBehaviour
+public class RedPlannerAction : PlannerAction
 {
-
-    public int GoalChange;
-
-    void GetInternalActions()
-    {
-        GetComponent<Planner>().AllActions.AddActions(new[] { new InternalPlannerAction(GoalChange) });
-    }
-}
-
-public class InternalPlannerAction : PlannerAction
-{
-    public InternalPlannerAction(int change)
+    public RedPlannerAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
     }
 
     public override string Name
     {
-        get { return "InternalAction"; }
+        get { return "RedAction"; }
     }
 
     public override void Perform()
     {
-        Debug.Log("Stay!");
+        Debug.Log("Red!");
     }
 
     public override int GetDuration(KnowledgeNode knowledge)
@@ -37,11 +26,12 @@ public class InternalPlannerAction : PlannerAction
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
-        knowledge.SetValue(true, "stayed");
+
     }
 
     public override byte GetMembership(KnowledgeNode knowledge)
     {
-        return (byte)(knowledge.Knowledge.Count == 0 ? 255 : 0);
+        bool b;
+        return (byte)(knowledge.TryGetValue(out b, "yellowed") && b ? 255 : 0);
     }
 }

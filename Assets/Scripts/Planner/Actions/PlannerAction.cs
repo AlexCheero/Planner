@@ -2,15 +2,18 @@
 
 namespace GOAP
 {
-    public abstract class Command
+    public abstract class PlannerAction
     {
         //todo think about identical actions with different positions
         private readonly Dictionary<EGoal, int> _goalChanges;
         public byte MinMembershipDegree { get; private set; }
 
+        //todo consider somehow membership of action
+        public abstract string Name { get; }
+
         public int BoardIndex = -1;
         
-        public Command(Dictionary<EGoal, int> changes, byte membershipDegree = 77)//77 for 30%
+        public PlannerAction(Dictionary<EGoal, int> changes, byte membershipDegree = 77)//77 for 30%
         {
             //todo crutch also, actually whole constructor is crutch
             _goalChanges = changes;
@@ -25,10 +28,10 @@ namespace GOAP
 
         public abstract void Perform();
 
-        public abstract int GetDuration(Dictionary<string, object> knowledge);
+        public abstract int GetDuration(KnowledgeNode knowledge);
 
-        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership);
+        public abstract void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership);
 
-        public abstract byte GetMembership(Dictionary<string, object> knowledge);
+        public abstract byte GetMembership(KnowledgeNode knowledge);
     }
 }

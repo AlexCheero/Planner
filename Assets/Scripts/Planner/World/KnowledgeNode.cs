@@ -30,6 +30,21 @@ namespace GOAP
             Knowledge = new Dictionary<string, IKnowledge>();
         }
 
+        //deep copy constructor
+        public KnowledgeNode(KnowledgeNode otherNode)
+        {
+            Knowledge = new Dictionary<string, IKnowledge>();
+            foreach (var otherKnowledge in otherNode.Knowledge)
+            {
+                var key = otherKnowledge.Key;
+                var value = otherKnowledge.Value;
+                if (value is KnowledgeNode)
+                    Knowledge.Add(key, new KnowledgeNode(value as KnowledgeNode));
+                else
+                    Knowledge.Add(key, value);
+            }
+        }
+
         public bool TryGetValue<T>(out T value, params string[] keyPath)
         {
             var knowledgeLeaf = GetKnowledge(keyPath) as KnowledgeLeaf<T>;

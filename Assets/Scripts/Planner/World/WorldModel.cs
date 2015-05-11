@@ -8,18 +8,19 @@ namespace GOAP
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        public List<Pair<Command, byte>> CommandsMembership = new List<Pair<Command, byte>>();//todo try to change all dictionarys with this structure
+        public List<Pair<PlannerAction, byte>> ActionsMembership = new List<Pair<PlannerAction, byte>>();//todo try to change all dictionarys with this structure
         public Planner Planner;
+//        private Dictionary<string, object> Knowledge;
+        private KnowledgeNode Knowledge;
 
-        private Dictionary<string, object> Knowledge;
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
+        public WorldModel(Goal[] goals, KnowledgeNode knowledge, Planner planner)
         {
             Goals = goals;
             Knowledge = knowledge;
             Planner = planner;
-            CommandsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -27,11 +28,12 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            var allKeys = new StringBuilder();
-            foreach (var key in Knowledge.Keys)
-                allKeys.Append(key);
             //todo make proper hash function
-            return allKeys.ToString().GetHashCode();
+            var allActions = new StringBuilder();
+            foreach (var action in ActionsMembership)
+                allActions.Append(action.First.Name);
+
+            return allActions.ToString().GetHashCode(); ;
         }
 
         //deep copy constructor
@@ -42,22 +44,22 @@ namespace GOAP
             for (var i = 0; i < Goals.Length; i++)
                 Goals[i] = new Goal(otherGoals[i]);
             Discontentment = otherModel.Discontentment;
-            CommandsMembership = new List<Pair<Command, byte>>(otherModel.CommandsMembership);
-            Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
+            ActionsMembership = new List<Pair<PlannerAction, byte>>(otherModel.ActionsMembership);
+            Knowledge = new KnowledgeNode(otherModel.Knowledge);
             Planner = otherModel.Planner;
         }
 
-        public Pair<Command, byte> NextAction()
+        public Pair<PlannerAction, byte> NextAction()
         {
-            if (_actionIndex >= CommandsMembership.Count)
+            if (_actionIndex >= ActionsMembership.Count)
                 return null;
             
-            var returnValue = CommandsMembership[_actionIndex];
+            var returnValue = ActionsMembership[_actionIndex];
             _actionIndex++;
             return returnValue;
         }
 
-        public void ApplyAction(Pair<Command, byte> action)
+        public void ApplyAction(Pair<PlannerAction, byte> action)
         {
             Discontentment = 0;
             var floatMembership = (action.Second / 255);
@@ -68,7 +70,7 @@ namespace GOAP
             }
 
             action.First.AffectOnKnowledge(ref Knowledge, action.Second);
-            CommandsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
+            ActionsMembership = Planner.AllActions.GetActionsByKnowledge(Knowledge);
         }
     }
 }
