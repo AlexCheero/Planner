@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace GOAP
@@ -46,15 +44,15 @@ namespace GOAP
         private void FindActionsInWorld()
         {
             var colliders = Physics.OverlapSphere(transform.position, 20f).Where(collider => collider.GetComponent<ActionProvider>());
-            foreach (var col in colliders)
-            {
-                var actionProvider = col.GetComponent<ActionProvider>();
+            foreach (var actionProvider in colliders.Select(col => col.GetComponent<ActionProvider>()))
                 AllActions.AddActions(actionProvider.GetActions());
-            }
         }
 
         private void PlanActions(WorldModel model, float maxDiscontentment, out int[] actions, out WorldModel[] models)
         {
+            var table = new TranspositionTable();
+            table.Add(model, 0);
+
             var modelsSequence = new WorldModel[MaxDepth + 1];
             var actionSequence = new int[MaxDepth];
 
@@ -87,17 +85,19 @@ namespace GOAP
                 if (nextAction != null)
                 {
                     actionSequence[currentDepth] = nextAction.First.BoardIndex;
-                    WorldModel nextModel;
-                    nextModel = modelsSequence[currentDepth + 1] = new WorldModel(modelsSequence[currentDepth]);
+                    var nextDepth = currentDepth + 1;
+                    var nextModel = modelsSequence[nextDepth] = new WorldModel(modelsSequence[currentDepth]);
                     nextModel.ApplyAction(nextAction);
 
-                    if (nextModel.Discontentment <= maxDiscontentment)
+                    //todo check logick
+                    if (!table.Has(nextModel) && nextModel.Discontentment <= maxDiscontentment)
                         currentDepth++;
+
+                    table.Add(nextModel, nextDepth);
+
                 }
                 else
-                {
                     currentDepth--;
-                }
             }
 
             actions = bestActionSequence;

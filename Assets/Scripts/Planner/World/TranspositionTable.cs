@@ -5,17 +5,17 @@ namespace GOAP
 {
     public class TranspositionTable
     {
-        public Dictionary<int, WorldModelEntry> Entries;
+        private Dictionary<int, WorldModelEntry> _entries;
 
-        public TranspositionTable(int size)
+        public TranspositionTable()
         {
-            Entries = new Dictionary<int, WorldModelEntry>();
+            _entries = new Dictionary<int, WorldModelEntry>();
         }
 
         public bool Has(WorldModel model)
         {
             var hash = model.GetHashCode();
-            return Entries.ContainsKey(hash) && Entries[hash].Model == model;
+            return _entries.ContainsKey(hash) && _entries[hash].Model == model;
         }
 
         public void Add(WorldModel model, int depth)
@@ -23,7 +23,7 @@ namespace GOAP
             //todo dont shure if everything is passing how it should i.e. by reference or by value
             var hash = model.GetHashCode();
             WorldModelEntry entryByHash;
-            if (Entries.TryGetValue(hash, out entryByHash))
+            if (_entries.TryGetValue(hash, out entryByHash))
             {
                 if (entryByHash.Model == model)
                     entryByHash.Depth = Mathf.Min(depth, entryByHash.Depth);
@@ -34,7 +34,7 @@ namespace GOAP
                 }
             }
             else
-                Entries.Add(hash, new WorldModelEntry(model, depth));
+                _entries.Add(hash, new WorldModelEntry(model, depth));
         }
     }
 
