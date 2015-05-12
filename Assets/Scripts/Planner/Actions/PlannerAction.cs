@@ -26,6 +26,11 @@ namespace GOAP
             return _goalChanges.ContainsKey(name) ? _goalChanges[name] : 0;
         }
 
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
         public abstract void Perform();
 
         public abstract int GetDuration(KnowledgeNode knowledge);

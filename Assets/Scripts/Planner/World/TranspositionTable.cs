@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace GOAP
 {
@@ -19,11 +20,21 @@ namespace GOAP
 
         public void Add(WorldModel model, int depth)
         {
+            //todo dont shure if everything is passing how it should i.e. by reference or by value
             var hash = model.GetHashCode();
-            if (Entries.ContainsKey(hash) && Entries[hash].Model == model)
+            WorldModelEntry entryByHash;
+            if (Entries.TryGetValue(hash, out entryByHash))
             {
-                
+                if (entryByHash.Model == model)
+                    entryByHash.Depth = Mathf.Min(depth, entryByHash.Depth);
+                else if (depth < entryByHash.Depth)
+                {
+                    entryByHash.Model = model;
+                    entryByHash.Depth = depth;
+                }
             }
+            else
+                Entries.Add(hash, new WorldModelEntry(model, depth));
         }
     }
 

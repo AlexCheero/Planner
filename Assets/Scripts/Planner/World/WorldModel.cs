@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace GOAP
 {
     public class WorldModel
     {
+        //todo override ==
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        public List<Pair<PlannerAction, byte>> ActionsMembership = new List<Pair<PlannerAction, byte>>();//todo try to change all dictionarys with this structure
+        //todo try to change all dictionarys with this structure
+        public List<Pair<PlannerAction, byte>> ActionsMembership = new List<Pair<PlannerAction, byte>>();
         public Planner Planner;
-//        private Dictionary<string, object> Knowledge;
         private KnowledgeNode Knowledge;
 
         public float Discontentment { get; private set; }
@@ -28,12 +29,16 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            //todo make proper hash function
-            var allActions = new StringBuilder();
-            foreach (var action in ActionsMembership)
-                allActions.Append(action.First.Name);
-
-            return allActions.ToString().GetHashCode(); ;
+            //todo try to get hash by knowledge
+//            something like this
+//            var allActions = new StringBuilder();
+//            foreach (var action in ActionsMembership)
+//                allActions.Append(action.First.Name);
+//
+//            return allActions.ToString().GetHashCode();
+            
+//            or this
+            return ActionsMembership.Sum(action => action.First.GetHashCode()*action.Second);
         }
 
         //deep copy constructor
