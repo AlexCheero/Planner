@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GreenPlannerAction : PlannerAction
 {
+    public Vector3 TargetPosition;
+    public string TargetName;
+
     public GreenPlannerAction(int change)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
     {
@@ -11,12 +14,14 @@ public class GreenPlannerAction : PlannerAction
 
     public override string Name
     {
-        get { return "GreenAction"; }
+        get { return TargetName + "GreenAction"; }
     }
 
     public override void Perform()
     {
         Debug.Log("Green!");
+
+        //move to position, do green thing
     }
 
     public override int GetDuration(KnowledgeNode knowledge)

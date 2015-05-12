@@ -11,13 +11,13 @@ public class ActionProvider : MonoBehaviour
         switch (Action)
         {
             case "green":
-                return new[] { new GreenPlannerAction(GoalChange) };
+                return new PlannerAction[] { new GreenPlannerAction(GoalChange) };
                 break;
             case "red":
-                return new[] { new RedPlannerAction(GoalChange),  };
+                return new PlannerAction[] { new RedPlannerAction(GoalChange) };
                 break;
             case "yellow":
-                return new[] { new YellowPlannerAction(GoalChange),  };
+                return new PlannerAction[] { new YellowPlannerAction(GoalChange) };
                 break;
             default:
                 return new PlannerAction[0];
