@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace GOAP
@@ -9,31 +10,19 @@ namespace GOAP
         public float DiscTestValue;
 
         public ActionBoard AllActions;
-        public int[] Actions;
-        public WorldModel[] Models;
 
         void Start()
         {
-//            AllActions = new ActionBoard();
-//            var wm1 = GetInitialWorldModel();
-//            var wm2 = new WorldModel(wm1);
-//            wm2.ApplyAction(new Pair<PlannerAction, byte>{First = new GreenPlannerAction(0), Second = 255});
-//
-//            Debug.Log("hash1: " + wm1.GetHashCode());
-//            Debug.Log("hash2: " + wm2.GetHashCode());
-
             AllActions = new ActionBoard();
             BroadcastMessage("GetInternalActions");
             FindActionsInWorld();
 
-            var initialWorldModel = GetInitialWorldModel();
-            var maxDiscontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
-            PlanActions(initialWorldModel, maxDiscontentment, out Actions, out Models);
-            foreach (var action in Actions)
-                AllActions[action].Perform();
+            StartCoroutine(PlanActions());
+        }
 
-            foreach (var worldModel in Models)
-                Debug.Log("hash: " + worldModel.GetHashCode());
+        void Update()
+        {
+            
         }
 
         private WorldModel GetInitialWorldModel()
@@ -48,8 +37,10 @@ namespace GOAP
                 AllActions.AddActions(actionProvider.GetActions());
         }
 
-        private void PlanActions(WorldModel model, float maxDiscontentment, out int[] actions, out WorldModel[] models)
+        private IEnumerator PlanActions()
         {
+            var model = GetInitialWorldModel();
+            var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
             var table = new TranspositionTable();
             table.Add(model, 0);
 
@@ -100,8 +91,10 @@ namespace GOAP
                     currentDepth--;
             }
 
-            actions = bestActionSequence;
-            models = bestModelsSequence;
+            foreach (var action in bestActionSequence)
+                AllActions[action].Perform();
+
+            yield return 0;
         }
     }
 }
