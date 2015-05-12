@@ -29,7 +29,6 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            //todo try to get hash by knowledge
 //            something like this
 //            var allActions = new StringBuilder();
 //            foreach (var action in ActionsMembership)
@@ -38,7 +37,8 @@ namespace GOAP
 //            return allActions.ToString().GetHashCode();
             
 //            or this
-            return ActionsMembership.Sum(action => action.First.GetHashCode()*action.Second);
+            return ActionsMembership.Sum(action => action.First.GetHashCode()*action.Second / 255);
+//            or you can take hashes from all knowledge values, but if values will be reference type all will be fucked up
         }
 
         //deep copy constructor
