@@ -16,25 +16,26 @@ namespace GOAP
 
         void Start()
         {
-            AllActions = new ActionBoard();
-            var wm1 = GetInitialWorldModel();
-            var wm2 = new WorldModel(wm1);
-            wm2.ApplyAction(new Pair<PlannerAction, byte>{First = new GreenPlannerAction(0), Second = 255});
-
-            Debug.Log("hash1: " + wm1.GetHashCode());
-            Debug.Log("hash2: " + wm2.GetHashCode());
-
-//            BroadcastMessage("GetInternalActions");
-//            FindActionsInWorld();
+//            AllActions = new ActionBoard();
+//            var wm1 = GetInitialWorldModel();
+//            var wm2 = new WorldModel(wm1);
+//            wm2.ApplyAction(new Pair<PlannerAction, byte>{First = new GreenPlannerAction(0), Second = 255});
 //
-//            var initialWorldModel = GetInitialWorldModel();
-//            var maxDiscontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
-//            PlanActions(initialWorldModel, maxDiscontentment, out Actions, out Models);
-//            foreach (var action in Actions)
-//                AllActions[action].Perform();
+//            Debug.Log("hash1: " + wm1.GetHashCode());
+//            Debug.Log("hash2: " + wm2.GetHashCode());
 
-//            foreach (var worldModel in Models)
-//                Debug.Log("hash: " + worldModel.GetHashCode());
+            AllActions = new ActionBoard();
+            BroadcastMessage("GetInternalActions");
+            FindActionsInWorld();
+
+            var initialWorldModel = GetInitialWorldModel();
+            var maxDiscontentment = initialWorldModel.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
+            PlanActions(initialWorldModel, maxDiscontentment, out Actions, out Models);
+            foreach (var action in Actions)
+                AllActions[action].Perform();
+
+            foreach (var worldModel in Models)
+                Debug.Log("hash: " + worldModel.GetHashCode());
         }
 
         private WorldModel GetInitialWorldModel()
