@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace GOAP
@@ -7,7 +6,12 @@ namespace GOAP
     {
         public HashSet<EActionType> AllActions;
 
-        public List<PlannerAction> GetActions(KnowledgeNode knowledge)
+        public ActionFactory()
+        {
+            AllActions = new HashSet<EActionType>();
+        }
+
+        public List<PlannerAction> GetAvailableActions(KnowledgeNode knowledge)
         {
             var resultActions = new List<PlannerAction>();
             foreach (var actionType in AllActions)
@@ -23,41 +27,49 @@ namespace GOAP
             switch (type)
             {
                 case EActionType.Internal:
-                    return checkInternalActions(knowledge);
+                    return CheckInternalActions(knowledge);
                 case EActionType.Green:
-                    return checkInternalActions(knowledge);
+                    return CheckInternalActions(knowledge);
                 case EActionType.Yellow:
-                    return checkInternalActions(knowledge);
+                    return CheckInternalActions(knowledge);
                 case EActionType.Red:
-                    return checkInternalActions(knowledge);
+                    return CheckInternalActions(knowledge);
                 default:
                     return new PlannerAction[0];
             }
         }
 
         #region Action checking
-        private InternalPlannerAction[] checkInternalActions(KnowledgeNode knowledge)
+        //todo probably should realize this with dictionary of delegates
+        private PlannerAction[] CheckInternalActions(KnowledgeNode knowledge)
         {
-            //check knowledge, return actions
-            throw new NotImplementedException();
+            return knowledge.Knowledge.Count > 0
+                ? new PlannerAction[] {new InternalPlannerAction(0)}
+                : new PlannerAction[0];
         }
 
-        private GreenPlannerAction[] checkGreenlActions(KnowledgeNode knowledge)
+        private PlannerAction[] CheckGreenlActions(KnowledgeNode knowledge)
         {
-            //check knowledge, return actions
-            throw new NotImplementedException();
+            bool b;
+            return knowledge.TryGetValue(out b, "stayed") && b
+                ? new PlannerAction[] {new GreenPlannerAction(0)}
+                : new PlannerAction[0];
         }
 
-        private YellowPlannerAction[] checkYellowActions(KnowledgeNode knowledge)
+        private PlannerAction[] CheckYellowActions(KnowledgeNode knowledge)
         {
-            //check knowledge, return actions
-            throw new NotImplementedException();
+            bool b;
+            return knowledge.TryGetValue(out b, "greened") && b
+                ? new PlannerAction[] {new YellowPlannerAction(0)}
+                : new PlannerAction[0];
         }
 
-        private RedPlannerAction[] checkRedActions(KnowledgeNode knowledge)
+        private PlannerAction[] CheckRedActions(KnowledgeNode knowledge)
         {
-            //check knowledge, return actions
-            throw new NotImplementedException();
+            bool b;
+            return knowledge.TryGetValue(out b, "yellowed") && b
+                ? new PlannerAction[] {new RedPlannerAction(0)}
+                : new PlannerAction[0];
         }
         #endregion
     }
