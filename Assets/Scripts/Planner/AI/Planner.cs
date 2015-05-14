@@ -32,9 +32,9 @@ namespace GOAP
 
         private void FindActionsInWorld()
         {
-            var colliders = Physics.OverlapSphere(transform.position, 20f).Where(collider => collider.GetComponent<ActionProvider>());
-            foreach (var actionProvider in colliders.Select(col => col.GetComponent<ActionProvider>()))
-                AllActions.AddActions(actionProvider.GetActions());
+//            var colliders = Physics.OverlapSphere(transform.position, 20f).Where(collider => collider.GetComponent<ActionProvider>());
+//            foreach (var actionProvider in colliders.Select(col => col.GetComponent<ActionProvider>()))
+//                AllActions.AddActions(actionProvider.GetActions());
         }
 
         private IEnumerator PlanActions()
@@ -75,7 +75,7 @@ namespace GOAP
 
                 if (nextAction != null)
                 {
-                    actionSequence[currentDepth] = nextAction.First;
+                    actionSequence[currentDepth] = nextAction;
                     var nextDepth = currentDepth + 1;
                     var nextModel = modelsSequence[nextDepth] = new WorldModel(modelsSequence[currentDepth]);
                     nextModel.ApplyAction(nextAction);

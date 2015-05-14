@@ -6,16 +6,21 @@ namespace GOAP
     {
         //todo think about identical actions with different positions
         private readonly Dictionary<EGoal, int> _goalChanges;
-        public byte MinMembershipDegree { get; private set; }
 
         //todo consider somehow membership of action
         public abstract string Name { get; }
 
-        public PlannerAction(Dictionary<EGoal, int> changes, byte membershipDegree = 77)//77 for 30%
+        public byte ActionEfficiency { get; private set; }
+        public int Duration { get; private set; }
+        public byte MinMembershipDegree { get; private set; }
+
+        protected PlannerAction(Dictionary<EGoal, int> changes, byte efficiency, int duration, byte membershipDegree = 77)//77 for 30%
         {
             //todo crutch also, actually whole constructor is crutch
             _goalChanges = changes;
             MinMembershipDegree = membershipDegree;
+            ActionEfficiency = efficiency;
+            Duration = duration;
         }
 
         public int GetGoalChange(Goal goal)
@@ -32,12 +37,8 @@ namespace GOAP
 
         public abstract void Perform();
 
-        public abstract int GetDuration(KnowledgeNode knowledge);
-
         public abstract void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership);
 
-        public abstract byte GetMembership(KnowledgeNode knowledge);
-
-        public abstract List<PlannerAction> FactoryMethod(KnowledgeNode knowledge);
+        public abstract IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge);
     }
 }

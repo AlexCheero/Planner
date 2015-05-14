@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InternalPlannerAction : PlannerAction
 {
-    public InternalPlannerAction(int change)
-        : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
+    private InternalPlannerAction(byte efficiency, int duration)
+        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
     }
 
@@ -19,25 +19,15 @@ public class InternalPlannerAction : PlannerAction
         Debug.Log("Stay!");
     }
 
-    public override int GetDuration(KnowledgeNode knowledge)
-    {
-        return 0;
-    }
-
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
         knowledge.SetValue(true, "stayed");
     }
 
-    public override byte GetMembership(KnowledgeNode knowledge)
-    {
-        return (byte)(knowledge.Knowledge.Count == 0 ? 255 : 0);
-    }
-
-    public override List<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
+    public override IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
     {
         return knowledge.Knowledge.Count > 0
-                ? new List<PlannerAction> { new InternalPlannerAction(0) }
+                ? new List<PlannerAction> { new InternalPlannerAction(255, 0) }
                 : new List<PlannerAction>();
     }
 }

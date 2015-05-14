@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RedPlannerAction : PlannerAction
 {
-    public RedPlannerAction(int change)
-        : base(new Dictionary<EGoal, int> { { EGoal.Goal, change } })
+    private RedPlannerAction(byte efficiency, int duration)
+        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
     }
 
@@ -19,27 +19,16 @@ public class RedPlannerAction : PlannerAction
         Debug.Log("Red!");
     }
 
-    public override int GetDuration(KnowledgeNode knowledge)
-    {
-        return 0;
-    }
-
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
 
     }
 
-    public override byte GetMembership(KnowledgeNode knowledge)
-    {
-        bool b;
-        return (byte)(knowledge.TryGetValue(out b, "yellowed") && b ? 255 : 0);
-    }
-
-    public override List<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
+    public override IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
     {
         bool b;
         return knowledge.TryGetValue(out b, "yellowed") && b
-            ? new List<PlannerAction> { new RedPlannerAction(0) }
+            ? new List<PlannerAction> { new RedPlannerAction(255, 0) }
             : new List<PlannerAction>();
     }
 }
