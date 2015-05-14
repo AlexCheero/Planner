@@ -2,83 +2,33 @@ using System.Collections.Generic;
 
 namespace GOAP
 {
+    public delegate List<PlannerAction> ActionsCheck(KnowledgeNode knowledge);
+
     public class ActionFactory
     {
-        public HashSet<EActionType> AllActions;
+        private Dictionary<EActionType, ActionsCheck> _conditions;
 
         public ActionFactory()
         {
-            AllActions = new HashSet<EActionType>();
+            _conditions = new Dictionary<EActionType, ActionsCheck>();
         }
 
-        public List<PlannerAction> GetAvailableActions(KnowledgeNode knowledge)
+        public void AddAction(EActionType type, ActionsCheck check)
         {
-            var resultActions = new List<PlannerAction>();
-            foreach (var actionType in AllActions)
-                foreach (var action in GenerateActionsByType(actionType, knowledge))
-                    resultActions.Add(action);
-
-            return resultActions;
+            _conditions.Add(type, check);
         }
 
-        
-        private PlannerAction[] GenerateActionsByType(EActionType type, KnowledgeNode knowledge)
+        public bool Contains(EActionType type)
         {
-            switch (type)
-            {
-                case EActionType.Internal:
-                    return CheckInternalActions(knowledge);
-                case EActionType.Green:
-                    return CheckInternalActions(knowledge);
-                case EActionType.Yellow:
-                    return CheckInternalActions(knowledge);
-                case EActionType.Red:
-                    return CheckInternalActions(knowledge);
-                default:
-                    return new PlannerAction[0];
-            }
+            return _conditions.ContainsKey(type);
         }
 
-        #region Action checking
-        //todo probably should realize this with dictionary of delegates
-        private PlannerAction[] CheckInternalActions(KnowledgeNode knowledge)
+        public List<PlannerAction> GetActionsByKnowledge(KnowledgeNode knowledge)
         {
-            return knowledge.Knowledge.Count > 0
-                ? new PlannerAction[] {new InternalPlannerAction(0)}
-                : new PlannerAction[0];
+            var result = new List<PlannerAction>();
+            foreach (var condition in _conditions.Values)
+                result.AddRange(condition(knowledge));
+            return result;
         }
-
-        private PlannerAction[] CheckGreenlActions(KnowledgeNode knowledge)
-        {
-            bool b;
-            return knowledge.TryGetValue(out b, "stayed") && b
-                ? new PlannerAction[] {new GreenPlannerAction(0)}
-                : new PlannerAction[0];
-        }
-
-        private PlannerAction[] CheckYellowActions(KnowledgeNode knowledge)
-        {
-            bool b;
-            return knowledge.TryGetValue(out b, "greened") && b
-                ? new PlannerAction[] {new YellowPlannerAction(0)}
-                : new PlannerAction[0];
-        }
-
-        private PlannerAction[] CheckRedActions(KnowledgeNode knowledge)
-        {
-            bool b;
-            return knowledge.TryGetValue(out b, "yellowed") && b
-                ? new PlannerAction[] {new RedPlannerAction(0)}
-                : new PlannerAction[0];
-        }
-        #endregion
-    }
-
-    public enum EActionType
-    {
-        Internal,
-        Green,
-        Yellow,
-        Red
     }
 }
