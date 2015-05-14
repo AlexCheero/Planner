@@ -39,4 +39,12 @@ public class GreenPlannerAction : PlannerAction
         bool b;
         return (byte)(knowledge.TryGetValue(out b, "stayed") && b ? 255 : 0);
     }
+
+    public override List<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
+    {
+        bool b;
+        return knowledge.TryGetValue(out b, "stayed") && b
+            ? new List<PlannerAction> { new GreenPlannerAction(0) }
+            : new List<PlannerAction>();
+    }
 }

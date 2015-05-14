@@ -1,39 +1,33 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GOAP
 {
     public class ActionBoard
     {
-        private List<PlannerAction> AllActions;
-
-        public PlannerAction this[int index]
-        {
-            get { return AllActions[index]; }
-        }
+        private HashSet<PlannerAction> _allActions;
 
         public ActionBoard()
         {
-            AllActions = new List<PlannerAction>();
+            _allActions = new HashSet<PlannerAction>();
         }
 
         public void AddActions(IEnumerable<PlannerAction> actions)
         {
-            if (AllActions == null)
-                AllActions = new List<PlannerAction>();
+            if (_allActions == null)
+                _allActions = new HashSet<PlannerAction>();
 
             foreach (var action in actions)
-            {
-                AllActions.Add(action);
-                action.BoardIndex = AllActions.IndexOf(action);
-            }
+                _allActions.Add(action);
         }
 
+        //todo deprecated
         public List<Pair<PlannerAction, byte>> GetActionsByKnowledge(KnowledgeNode knowledge)
         {
             var list = new List<Pair<PlannerAction, byte>>();
-            foreach (var action in AllActions)
+            foreach (var action in _allActions)
             {
                 var membership = action.GetMembership(knowledge);
                 if (membership > action.MinMembershipDegree)
@@ -41,5 +35,14 @@ namespace GOAP
             }
             return list;
         }
+
+        public List<PlannerAction> GetActions/*ByKnowledge*/(KnowledgeNode knowledge)
+        {
+            var resultList = new List<PlannerAction>();
+            foreach (var action in _allActions)
+                resultList.AddRange(action.FactoryMethod(knowledge));
+
+            return resultList;
+        } 
     }
 }

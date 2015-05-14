@@ -33,4 +33,11 @@ public class InternalPlannerAction : PlannerAction
     {
         return (byte)(knowledge.Knowledge.Count == 0 ? 255 : 0);
     }
+
+    public override List<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
+    {
+        return knowledge.Knowledge.Count > 0
+                ? new List<PlannerAction> { new InternalPlannerAction(0) }
+                : new List<PlannerAction>();
+    }
 }

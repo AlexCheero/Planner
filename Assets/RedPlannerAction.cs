@@ -34,4 +34,12 @@ public class RedPlannerAction : PlannerAction
         bool b;
         return (byte)(knowledge.TryGetValue(out b, "yellowed") && b ? 255 : 0);
     }
+
+    public override List<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
+    {
+        bool b;
+        return knowledge.TryGetValue(out b, "yellowed") && b
+            ? new List<PlannerAction> { new RedPlannerAction(0) }
+            : new List<PlannerAction>();
+    }
 }

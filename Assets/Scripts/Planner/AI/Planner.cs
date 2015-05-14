@@ -45,9 +45,9 @@ namespace GOAP
             table.Add(model, 0);
 
             var modelsSequence = new WorldModel[MaxDepth + 1];
-            var actionSequence = new int[MaxDepth];
+            var actionSequence = new PlannerAction[MaxDepth];
 
-            var bestActionSequence = new int[0];
+            var bestActionSequence = new PlannerAction[0];
             var bestModelsSequence = new WorldModel[0];
 
             modelsSequence[0] = model;
@@ -63,7 +63,7 @@ namespace GOAP
                     if (currentDiscontentment < bestDiscontentment)
                     {
                         bestDiscontentment = currentDiscontentment;
-                        bestActionSequence = (int[])actionSequence.Clone();
+                        bestActionSequence = (PlannerAction[])actionSequence.Clone();
                         bestModelsSequence = modelsSequence;
                     }
 
@@ -75,7 +75,7 @@ namespace GOAP
 
                 if (nextAction != null)
                 {
-                    actionSequence[currentDepth] = nextAction.First.BoardIndex;
+                    actionSequence[currentDepth] = nextAction.First;
                     var nextDepth = currentDepth + 1;
                     var nextModel = modelsSequence[nextDepth] = new WorldModel(modelsSequence[currentDepth]);
                     nextModel.ApplyAction(nextAction);
@@ -92,7 +92,7 @@ namespace GOAP
             }
 
             foreach (var action in bestActionSequence)
-                AllActions[action].Perform();
+                action.Perform();
 
             yield return 0;
         }
