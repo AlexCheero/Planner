@@ -35,6 +35,7 @@ namespace GOAP
             var knowledge = new KnowledgeNode();
             
             //chechk internal state of player to get internal knowledge
+            knowledge.SetValue(false, "stayed");
 
             var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
             foreach (var coll in colliders)
@@ -42,11 +43,13 @@ namespace GOAP
                 switch (coll.gameObject.name)
                 {
                     case "GreenActionProvider":
-                        //add knowledge
+                        knowledge.SetValue(coll.transform.position, "green", "position");
                         break;
                     case "YellowActionProvider":
+                        knowledge.SetValue(coll.transform.position, "yellow", "position");
                         break;
                     case "RedActionProvider":
+                        knowledge.SetValue(coll.transform.position, "red", "position");
                         break;
                 }
             }

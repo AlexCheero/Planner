@@ -16,7 +16,7 @@ public class InternalPlannerAction : PlannerAction
 
     public override void Perform()
     {
-        Debug.Log("Stay!");
+        Debug.Log("Internal!");
     }
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
