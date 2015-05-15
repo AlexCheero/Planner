@@ -29,10 +29,21 @@ namespace GOAP
 
         public static bool operator ==(WorldModel wm1, WorldModel wm2)
         {
-            //todo write propper equality function
-            var result = true;
-            
-            return result;
+            if (wm1 == null)
+                return wm2 == null;
+            if (wm2 == null)
+                return false;
+            //equality check should always be in one planning, because at different planning Goals can be different
+            for (var i = 0; i < wm1.Goals.Length; i++)
+            {
+                if (wm1.Goals[i] == wm2.Goals[i])
+                    continue;
+                return false;
+            }
+
+            //todo check actions
+
+            return wm1.Discontentment == wm2.Discontentment;
         }
 
         public static bool operator !=(WorldModel wm1, WorldModel wm2)
