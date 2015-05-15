@@ -98,8 +98,9 @@ namespace GOAP
         private IKnowledge GetKnowledge(params string[] keyPath)
         {
             IKnowledge resultKnowledge = this;
-            foreach (var key in keyPath)
+            for (var i = 0; i < keyPath.Length; i++)
             {
+                var key = keyPath[i];
                 if (!resultKnowledge.Contains(key))
                     return null;
                 resultKnowledge = resultKnowledge[key];

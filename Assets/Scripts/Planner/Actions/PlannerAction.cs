@@ -7,7 +7,6 @@ namespace GOAP
         //todo think about identical actions with different positions
         private readonly Dictionary<EGoal, int> _goalChanges;
 
-        //todo consider somehow membership of action
         public abstract string Name { get; }
 
         public byte ActionEfficiency { get; private set; }

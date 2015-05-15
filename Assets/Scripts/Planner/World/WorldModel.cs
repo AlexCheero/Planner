@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace GOAP
 {
     public class WorldModel
     {
-        //todo override ==
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
@@ -22,8 +20,24 @@ namespace GOAP
             Planner = planner;
             Actions = Planner.ActionBoard.GetActions(Knowledge);
             Discontentment = 0;
-            foreach (var goal in Goals)
+            for (var i = 0; i < Goals.Length; i++)
+            {
+                var goal = Goals[i];
                 Discontentment += goal.GetDiscontentment();
+            }
+        }
+
+        public static bool operator ==(WorldModel wm1, WorldModel wm2)
+        {
+            //todo write propper equality function
+            var result = true;
+            
+            return result;
+        }
+
+        public static bool operator !=(WorldModel wm1, WorldModel wm2)
+        {
+            return !(wm1 == wm2);
         }
 
         public override int GetHashCode()
@@ -36,7 +50,14 @@ namespace GOAP
 //            return allActions.ToString().GetHashCode();
             
 //            or this
-            return Actions.Sum(action => action.GetHashCode()/**action.ActionEfficiency*/ / 255);
+            var hash = 0;
+            for (var i = 0; i < Actions.Count; i++)
+            {
+                var action = Actions[i];
+                hash += action.GetHashCode() /**action.ActionEfficiency / 255*/;
+            }
+
+            return hash;
 //            or you can take hashes from all knowledge values, but if values will be reference type all will be fucked up
         }
 
@@ -67,9 +88,10 @@ namespace GOAP
         {
             Discontentment = 0;
             var floatMembership = 1f;//(action.ActionEfficiency / 255);
-            foreach (var goal in Goals)
+            for (var i = 0; i < Goals.Length; i++)
             {
-                goal.Value += action.GetGoalChange(goal) * floatMembership;
+                var goal = Goals[i];
+                goal.Value += action.GetGoalChange(goal)*floatMembership;
                 Discontentment += goal.GetDiscontentment();
             }
 

@@ -38,8 +38,9 @@ namespace GOAP
             knowledge.SetValue(false, "stayed");
 
             var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
-            foreach (var coll in colliders)
+            for (var i = 0; i < colliders.Length; i++)
             {
+                var coll = colliders[i];
                 switch (coll.gameObject.name)
                 {
                     case "GreenActionProvider":
@@ -53,7 +54,7 @@ namespace GOAP
                         break;
                 }
             }
-            
+
             return knowledge;
         }
 
@@ -116,8 +117,11 @@ namespace GOAP
                     currentDepth--;
             }
 
-            foreach (var action in bestActionSequence)
+            for (var i = 0; i < bestActionSequence.Length; i++)
+            {
+                var action = bestActionSequence[i];
                 action.Perform();
+            }
 
             yield return 0;
         }
