@@ -9,7 +9,6 @@ namespace GOAP
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        //todo try to change all dictionarys with this structure
         public List<PlannerAction> Actions = new List<PlannerAction>();
         public Planner Planner;
         private KnowledgeNode Knowledge;
@@ -21,7 +20,7 @@ namespace GOAP
             Goals = goals;
             Knowledge = knowledge;
             Planner = planner;
-            Actions = Planner.AllActions.GetActionsByKnowledge(Knowledge);
+            Actions = Planner.ActionBoard.GetActions(Knowledge);
             Discontentment = 0;
             foreach (var goal in Goals)
                 Discontentment += goal.GetDiscontentment();
@@ -75,7 +74,7 @@ namespace GOAP
             }
 
             action.AffectOnKnowledge(ref Knowledge, /*action.ActionEfficiency*/255);
-            Actions = Planner.AllActions.GetActionsByKnowledge(Knowledge);
+            Actions = Planner.ActionBoard.GetActions(Knowledge);
         }
     }
 }

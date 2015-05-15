@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RedPlannerAction : PlannerAction
 {
-    private RedPlannerAction(byte efficiency, int duration)
+    public RedPlannerAction(byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
     }
@@ -22,13 +22,5 @@ public class RedPlannerAction : PlannerAction
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
 
-    }
-
-    public override IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
-    {
-        bool b;
-        return knowledge.TryGetValue(out b, "yellowed") && b
-            ? new List<PlannerAction> { new RedPlannerAction(255, 0) }
-            : new List<PlannerAction>();
     }
 }

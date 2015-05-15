@@ -7,7 +7,7 @@ public class GreenPlannerAction : PlannerAction
     public Vector3 TargetPosition;
     public string TargetName;
 
-    private GreenPlannerAction(byte efficiency, int duration)
+    public GreenPlannerAction(byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
     }
@@ -27,13 +27,5 @@ public class GreenPlannerAction : PlannerAction
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
         knowledge.SetValue(true, "greened");
-    }
-
-    public override IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
-    {
-        bool b;
-        return knowledge.TryGetValue(out b, "stayed") && b
-            ? new List<PlannerAction> { new GreenPlannerAction(255, 0) }
-            : new List<PlannerAction>();
     }
 }

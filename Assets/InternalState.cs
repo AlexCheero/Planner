@@ -1,12 +1,6 @@
-﻿using GOAP;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class InternalState : MonoBehaviour
 {
-    public int GoalChange;
 
-    void GetInternalActions()
-    {
-
-    }
 }

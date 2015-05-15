@@ -6,16 +6,16 @@ namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
+        public float SearchRadius;
         public int MaxDepth;
         public float DiscTestValue;
 
-        public ActionBoard AllActions;
+        public AbstractActionBoard ActionBoard;
 
         void Start()
         {
-            AllActions = new ActionBoard();
-            BroadcastMessage("GetInternalActions");
-            FindActionsInWorld();
+            ActionBoard = new ActionBoard();
+            GetKnowledge();
 
             StartCoroutine(PlanActions());
         }
@@ -27,14 +27,36 @@ namespace GOAP
 
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(new []{new Goal(EGoal.Goal, 20)}, new KnowledgeNode(), this);
+            return new WorldModel(GetGoals(), GetKnowledge(), this);
         }
 
-        private void FindActionsInWorld()
+        private KnowledgeNode GetKnowledge()
         {
-//            var colliders = Physics.OverlapSphere(transform.position, 20f).Where(collider => collider.GetComponent<ActionProvider>());
-//            foreach (var actionProvider in colliders.Select(col => col.GetComponent<ActionProvider>()))
-//                AllActions.AddActions(actionProvider.GetActions());
+            var knowledge = new KnowledgeNode();
+            
+            //chechk internal state of player to get internal knowledge
+
+            var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
+            foreach (var coll in colliders)
+            {
+                switch (coll.gameObject.name)
+                {
+                    case "GreenActionProvider":
+                        //add knowledge
+                        break;
+                    case "YellowActionProvider":
+                        break;
+                    case "RedActionProvider":
+                        break;
+                }
+            }
+            
+            return knowledge;
+        }
+
+        private Goal[] GetGoals()
+        {
+            return new[] {new Goal(EGoal.Goal, 20)};
         }
 
         private IEnumerator PlanActions()

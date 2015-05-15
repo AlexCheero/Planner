@@ -38,7 +38,5 @@ namespace GOAP
         public abstract void Perform();
 
         public abstract void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership);
-
-        public abstract IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge);
     }
 }

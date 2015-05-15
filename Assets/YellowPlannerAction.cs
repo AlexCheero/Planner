@@ -3,7 +3,7 @@ using GOAP;
 using UnityEngine;
 
 public class YellowPlannerAction : PlannerAction {
-    private YellowPlannerAction(byte efficiency, int duration)
+    public YellowPlannerAction(byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
     }
@@ -22,13 +22,5 @@ public class YellowPlannerAction : PlannerAction {
     {
         knowledge.SetValue(false, "greened");
         knowledge.SetValue(true, "yellowed");
-    }
-
-    public override IEnumerable<PlannerAction> FactoryMethod(KnowledgeNode knowledge)
-    {
-        bool b;
-        return knowledge.TryGetValue(out b, "greened") && b
-            ? new List<PlannerAction> { new YellowPlannerAction(255, 0) }
-            : new List<PlannerAction>();
     }
 }
