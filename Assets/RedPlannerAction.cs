@@ -5,7 +5,7 @@ using UnityEngine;
 public class RedPlannerAction : PlannerAction
 {
     public RedPlannerAction(byte efficiency, int duration)
-        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 10 } }, efficiency, duration)
+        : base(new Dictionary<EGoal, int> { { EGoal.Goal, -10 } }, efficiency, duration)
     {
     }
 

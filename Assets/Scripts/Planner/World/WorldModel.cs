@@ -29,10 +29,6 @@ namespace GOAP
 
         public static bool operator ==(WorldModel wm1, WorldModel wm2)
         {
-            if (wm1 == null)
-                return wm2 == null;
-            if (wm2 == null)
-                return false;
             //equality check should always be in one planning, because at different planning Goals can be different
             for (var i = 0; i < wm1.Goals.Length; i++)
             {
@@ -67,9 +63,11 @@ namespace GOAP
                 var action = Actions[i];
                 hash += action.GetHashCode() /**action.ActionEfficiency / 255*/;
             }
+            hash += Discontentment.GetHashCode();
 
             return hash;
 //            or you can take hashes from all knowledge values, but if values will be reference type all will be fucked up
+//            also you have to take in account the discontentement value
         }
 
         //deep copy constructor
