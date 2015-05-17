@@ -10,6 +10,8 @@ namespace GOAP
         public int MaxDepth;
         public float DiscTestValue;
 
+        private bool works = false;
+
         public AbstractActionBoard ActionBoard;
 
         void Start()
@@ -17,12 +19,14 @@ namespace GOAP
             ActionBoard = new ActionBoard();
             GetKnowledge();
 
-            StartCoroutine(PlanActions());
+//            StartCoroutine(PlanActions());
         }
 
         void Update()
         {
-            
+            Debug.Log("update");
+            if (!works)
+                StartCoroutine(PlanActions());
         }
 
         private WorldModel GetInitialWorldModel()
@@ -65,6 +69,10 @@ namespace GOAP
 
         private IEnumerator PlanActions()
         {
+            //think about how to quantize time for planning
+            works = true;
+            Debug.Log("coroutine");
+            //todo check how coroutine works
             var model = GetInitialWorldModel();
             var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
             var table = new TranspositionTable();
@@ -117,13 +125,19 @@ namespace GOAP
                     currentDepth--;
             }
 
-            for (var i = 0; i < bestActionSequence.Length; i++)
-            {
-                var action = bestActionSequence[i];
-                action.Perform();
-            }
+//            for (var i = 0; i < bestActionSequence.Length; i++)
+//            {
+//                var action = bestActionSequence[i];
+//                action.Perform();
+//            }
 
+            works = false;
             yield return 0;
         }
+    }
+
+    public class StateMachine : MonoBehaviour
+    {
+        
     }
 }
