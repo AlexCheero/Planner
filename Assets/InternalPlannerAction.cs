@@ -14,9 +14,10 @@ public class InternalPlannerAction : PlannerAction
         get { return "InternalAction"; }
     }
 
-    public override void Perform()
+    public override bool Perform(StateMachine machine)
     {
         Debug.Log("Internal!");
+        return true;
     }
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)

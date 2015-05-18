@@ -2,25 +2,32 @@
 using GOAP;
 using UnityEngine;
 
-public class YellowPlannerAction : PlannerAction {
-    public YellowPlannerAction(byte efficiency, int duration)
+public class YellowPlannerAction : PlannerAction 
+{
+    public Vector3 TargetPosition;
+    public string TargetName = "";
+
+    public YellowPlannerAction(Vector3 position, byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
+        TargetPosition = position;
     }
 
     public override string Name
     {
-        get { return "YellowAction"; }
+        get { return TargetName + "YellowAction"; }
     }
 
-    public override void Perform()
+    public override bool Perform(StateMachine machine)
     {
-        Debug.Log("Yellow!");
+        var navAgent = machine.GetComponent<NavMeshAgent>();
+        navAgent.SetDestination(TargetPosition);
+
+        return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
     }
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
     {
-        knowledge.SetValue(false, "greened");
         knowledge.SetValue(true, "yellowed");
     }
 }

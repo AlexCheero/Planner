@@ -5,11 +5,12 @@ using UnityEngine;
 public class GreenPlannerAction : PlannerAction
 {
     public Vector3 TargetPosition;
-    public string TargetName;
+    public string TargetName = "";
 
-    public GreenPlannerAction(byte efficiency, int duration)
+    public GreenPlannerAction(Vector3 position, byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
     {
+        TargetPosition = position;
     }
 
     public override string Name
@@ -17,11 +18,12 @@ public class GreenPlannerAction : PlannerAction
         get { return TargetName + "GreenAction"; }
     }
 
-    public override void Perform()
+    public override bool Perform(StateMachine machine)
     {
-        Debug.Log("Green!");
+        var navAgent = machine.GetComponent<NavMeshAgent>();
+        navAgent.SetDestination(TargetPosition);
 
-        //move to position, do green thing
+        return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
     }
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)

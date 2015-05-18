@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GOAP
 {
@@ -10,23 +11,28 @@ namespace GOAP
         public int MaxDepth;
         public float DiscTestValue;
 
-        private bool works = false;
-
         public AbstractActionBoard ActionBoard;
+
+        private StateMachine _machine;
 
         void Start()
         {
             ActionBoard = new ActionBoard();
             GetKnowledge();
 
-//            StartCoroutine(PlanActions());
+            StartCoroutine(PlanActions());
+
+            _machine = GetComponent<StateMachine>();
         }
 
+        private bool _done = false;
         void Update()
         {
-            Debug.Log("update");
-            if (!works)
-                StartCoroutine(PlanActions());
+            if (_bestActionSequence == null || _bestActionSequence.Length == 0 || _done)
+                return;
+
+            _machine.ActionSequence = _bestActionSequence;
+            _done = true;
         }
 
         private WorldModel GetInitialWorldModel()
@@ -67,12 +73,11 @@ namespace GOAP
             return new[] {new Goal(EGoal.Goal, 20)};
         }
 
+        private PlannerAction[] _bestActionSequence;
+        private WorldModel[] _bestModelsSequence;
         private IEnumerator PlanActions()
         {
-            //think about how to quantize time for planning
-            works = true;
-            Debug.Log("coroutine");
-            //todo check how coroutine works
+            //todo think about how to quantize time for planning
             var model = GetInitialWorldModel();
             var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
             var table = new TranspositionTable();
@@ -81,8 +86,8 @@ namespace GOAP
             var modelsSequence = new WorldModel[MaxDepth + 1];
             var actionSequence = new PlannerAction[MaxDepth];
 
-            var bestActionSequence = new PlannerAction[0];
-            var bestModelsSequence = new WorldModel[0];
+            _bestActionSequence = new PlannerAction[0];
+            _bestModelsSequence = new WorldModel[0];
 
             modelsSequence[0] = model;
             var currentDepth = 0;
@@ -97,8 +102,8 @@ namespace GOAP
                     if (currentDiscontentment < bestDiscontentment)
                     {
                         bestDiscontentment = currentDiscontentment;
-                        bestActionSequence = (PlannerAction[])actionSequence.Clone();
-                        bestModelsSequence = modelsSequence;
+                        _bestActionSequence = (PlannerAction[])actionSequence.Clone();
+                        _bestModelsSequence = modelsSequence;
                     }
 
                     currentDepth--;
@@ -125,19 +130,7 @@ namespace GOAP
                     currentDepth--;
             }
 
-//            for (var i = 0; i < bestActionSequence.Length; i++)
-//            {
-//                var action = bestActionSequence[i];
-//                action.Perform();
-//            }
-
-            works = false;
             yield return 0;
         }
-    }
-
-    public class StateMachine : MonoBehaviour
-    {
-        
     }
 }

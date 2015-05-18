@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class RedPlannerAction : PlannerAction
 {
-    public RedPlannerAction(byte efficiency, int duration)
+    public Vector3 TargetPosition;
+    public string TargetName = "";
+
+    public RedPlannerAction(Vector3 position, byte efficiency, int duration)
         : base(new Dictionary<EGoal, int> { { EGoal.Goal, -10 } }, efficiency, duration)
     {
+        TargetPosition = position;
     }
 
     public override string Name
     {
-        get { return "RedAction"; }
+        get { return TargetName + "RedAction"; }
     }
 
-    public override void Perform()
+    public override bool Perform(StateMachine machine)
     {
-        Debug.Log("Red!");
+        var navAgent = machine.GetComponent<NavMeshAgent>();
+        navAgent.SetDestination(TargetPosition);
+
+        return false;
     }
 
     public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)

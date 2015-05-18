@@ -34,7 +34,7 @@ namespace GOAP
             return Name.GetHashCode();
         }
 
-        public abstract void Perform();
+        public abstract bool Perform(StateMachine machine);
 
         public abstract void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership);
     }

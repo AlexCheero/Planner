@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GOAP
 {
@@ -13,9 +14,10 @@ namespace GOAP
 
         public IEnumerable<PlannerAction> GetActions(KnowledgeNode knowledge)
         {
-            bool b;
-            return knowledge.TryGetValue(out b, "yellowed") && b
-                ? new[] {new RedPlannerAction(255, 0)}
+            bool stayed;
+            Vector3 position;
+            return knowledge.TryGetValue(out stayed, "yellowed") && stayed && knowledge.TryGetValue(out position, "red", "position")
+                ? new[] { new RedPlannerAction(position, 255, 0) }
                 : new PlannerAction[0];
         }
     }
