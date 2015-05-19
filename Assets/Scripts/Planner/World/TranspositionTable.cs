@@ -15,7 +15,7 @@ namespace GOAP
         public bool Has(WorldModel model)
         {
             var hash = model.GetHashCode();
-            return _entries.ContainsKey(hash) && _entries[hash].Model == model;
+            return _entries.ContainsKey(hash) && _entries[hash].Model.Equals(model);
         }
 
         public void Add(WorldModel model, int depth)
@@ -25,7 +25,7 @@ namespace GOAP
             WorldModelEntry entryByHash;
             if (_entries.TryGetValue(hash, out entryByHash))
             {
-                if (entryByHash.Model == model)
+                if (entryByHash.Model.Equals(model))
                     entryByHash.Depth = Mathf.Min(depth, entryByHash.Depth);
                 else if (depth < entryByHash.Depth)
                 {

@@ -9,7 +9,7 @@ namespace GOAP
         private int _actionIndex = 0;
         public List<PlannerAction> Actions = new List<PlannerAction>();
         public Planner Planner;
-        private KnowledgeNode Knowledge;
+        public KnowledgeNode Knowledge;
 
         public float Discontentment { get; private set; }
 
@@ -27,32 +27,17 @@ namespace GOAP
             }
         }
 
-        public static bool operator ==(WorldModel wm1, WorldModel wm2)
+        public bool Equals(WorldModel otherModel)
         {
-            if ((object) wm1 == null)
-                return (object) wm2 == null;
-            if ((object) wm2 == null)
+            //todo make approximate equality method
+            if (otherModel == null)
                 return false;
-            if (wm1.Goals.Length != wm2.Goals.Length || wm1.Actions.Count != wm2.Actions.Count)
+            if (Goals.Length != otherModel.Goals.Length || Actions.Count != otherModel.Actions.Count)
                 return false;
-            //equality check should always be in one planning, because at different planning Goals can be different
-//            for (var i = 0; i < wm1.Goals.Length; i++)
-//            {
-//                if (wm1.Goals[i].Value == wm2.Goals[i].Value)
-//                    continue;
-//                return false;
-//            }
-//
-//            //todo check actions
-//            if (wm1.Actions.Count != wm2.Actions.Count)
-//                return false;
-//
-//            return wm1.Discontentment == wm2.Discontentment;
-        }
+            if (!Knowledge.Equals(otherModel.Knowledge))
+                return false;
 
-        public static bool operator !=(WorldModel wm1, WorldModel wm2)
-        {
-            return !(wm1 == wm2);
+            return Discontentment == otherModel.Discontentment;
         }
 
         public override int GetHashCode()

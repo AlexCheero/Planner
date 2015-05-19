@@ -3,13 +3,10 @@ using System.Collections.Generic;
 
 namespace GOAP
 {
-    public interface IKnowledge
-    {
-        bool Contains(string key);
-        IKnowledge this[string key] { get; set; }
-    }
     public class KnowledgeNode : IKnowledge
     {
+        public List<string[]> KnowlegePaths { get; private set; }
+
         public IKnowledge this[string key]
         {
             get { return Knowledge[key]; }
@@ -22,12 +19,23 @@ namespace GOAP
             }
         }
 
+        public bool Equals(IKnowledge otherKnowledge)
+        {
+            //todo complete
+            for (int i = 0; i < KnowlegePaths.Count; i++)
+            {
+
+            }
+            return false;
+        }
+
         public Dictionary<string, IKnowledge> Knowledge;
         public int Depth;
 
         public KnowledgeNode()
         {
             Knowledge = new Dictionary<string, IKnowledge>();
+            KnowlegePaths = new List<string[]>();
         }
 
         //deep copy constructor
@@ -43,6 +51,7 @@ namespace GOAP
                 else
                     Knowledge.Add(key, value);
             }
+            KnowlegePaths = new List<string[]>(otherNode.KnowlegePaths);
         }
 
         public bool TryGetValue<T>(out T value, params string[] keyPath)
@@ -95,7 +104,7 @@ namespace GOAP
             return Knowledge.ContainsKey(key);
         }
 
-        private IKnowledge GetKnowledge(params string[] keyPath)
+        public IKnowledge GetKnowledge(params string[] keyPath)
         {
             IKnowledge resultKnowledge = this;
             for (var i = 0; i < keyPath.Length; i++)
@@ -107,27 +116,6 @@ namespace GOAP
             }
 
             return resultKnowledge;
-        }
-    }
-
-    public class KnowledgeLeaf<T> : IKnowledge
-    {
-        public T Value { get; set; }
-
-        public KnowledgeLeaf(T value)
-        {
-            Value = value;
-        }
-
-        public bool Contains(string key)
-        {
-            return false;
-        }
-
-        public IKnowledge this[string key]
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
         }
     }
 }
