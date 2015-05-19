@@ -21,7 +21,7 @@ namespace GOAP
                 _factories.Add(GetFactory(action));
         }
 
-        public List<PlannerAction> GetActions(KnowledgeNode knowledge)
+        public List<PlannerAction> GetActions(Dictionary<string, object> knowledge)
         {
             var resultList = new List<PlannerAction>();
             foreach (var factory in _factories)

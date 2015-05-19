@@ -4,6 +4,6 @@ namespace GOAP
 {
     public interface IActionFactory
     {
-        IEnumerable<PlannerAction> GetActions(KnowledgeNode knowledge);
+        IEnumerable<PlannerAction> GetActions(Dictionary<string, object> knowledge);
     }
 }

@@ -9,11 +9,12 @@ namespace GOAP
         private int _actionIndex = 0;
         public List<PlannerAction> Actions = new List<PlannerAction>();
         public Planner Planner;
-        public KnowledgeNode Knowledge;
+//        public KnowledgeNode Knowledge;
+        public Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, KnowledgeNode knowledge, Planner planner)
+        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
         {
             Goals = goals;
             Knowledge = knowledge;
@@ -72,7 +73,7 @@ namespace GOAP
                 Goals[i] = new Goal(otherGoals[i]);
             Discontentment = otherModel.Discontentment;
             Actions = new List<PlannerAction>(otherModel.Actions);
-            Knowledge = new KnowledgeNode(otherModel.Knowledge);
+            Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
             Planner = otherModel.Planner;
         }
 
@@ -94,7 +95,7 @@ namespace GOAP
             {
                 var goal = Goals[i];
                 goal.Value += action.GetGoalChange(goal) * floatMembership;
-                Discontentment += goal.GetDiscontentment() * action.Duration;
+                Discontentment += goal.GetDiscontentment() /** action.Duration*/;//todo think about how to properly use duration
             }
 
             action.AffectOnKnowledge(ref Knowledge, /*action.ActionEfficiency*/255);

@@ -12,12 +12,12 @@ namespace GOAP
             get { return _instance ?? (_instance = new YellowActionFactory()); }
         }
 
-        public IEnumerable<PlannerAction> GetActions(KnowledgeNode knowledge)
+        public IEnumerable<PlannerAction> GetActions(Dictionary<string, object> knowledge)
         {
-            bool stayed;
-            Vector3 position;
-            return knowledge.TryGetValue(out stayed, "greened") && stayed && knowledge.TryGetValue(out position, "yellow", "position")
-                ? new[] { new YellowPlannerAction(position, 255, 0) }
+            object stayed;
+            object position;
+            return knowledge.TryGetValue("greened ", out stayed) && (bool)stayed && knowledge.TryGetValue("yellow position ", out position)
+                ? new[] { new YellowPlannerAction((Vector3)position, 255, 0) }
                 : new PlannerAction[0];
         }
     }

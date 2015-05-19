@@ -20,8 +20,11 @@ public class InternalPlannerAction : PlannerAction
         return true;
     }
 
-    public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
+    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-        knowledge.SetValue(true, "stayed");
+        if (knowledge.ContainsKey("stayed "))
+            knowledge["stayed "] = true;
+        else
+            knowledge.Add("stayed ", true);
     }
 }

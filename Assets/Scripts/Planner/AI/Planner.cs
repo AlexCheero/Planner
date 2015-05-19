@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
@@ -40,12 +41,12 @@ namespace GOAP
             return new WorldModel(GetGoals(), GetKnowledge(), this);
         }
 
-        private KnowledgeNode GetKnowledge()
+        private Dictionary<string, object> GetKnowledge()
         {
-            var knowledge = new KnowledgeNode();
+            var knowledge = new Dictionary<string, object>();
             
             //chechk internal state of player to get internal knowledge
-            knowledge.SetValue(false, "stayed");
+            knowledge.Add("stayed ", false);
 
             var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
             for (var i = 0; i < colliders.Length; i++)
@@ -54,13 +55,13 @@ namespace GOAP
                 switch (coll.gameObject.name)
                 {
                     case "GreenActionProvider":
-                        knowledge.SetValue(coll.transform.position, "green", "position");
+                        knowledge.Add("green position ", coll.transform.position);
                         break;
                     case "YellowActionProvider":
-                        knowledge.SetValue(coll.transform.position, "yellow", "position");
+                        knowledge.Add("yellow position ", coll.transform.position);
                         break;
                     case "RedActionProvider":
-                        knowledge.SetValue(coll.transform.position, "red", "position");
+                        knowledge.Add("red position ", coll.transform.position);
                         break;
                 }
             }

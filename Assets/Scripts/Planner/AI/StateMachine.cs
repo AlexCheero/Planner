@@ -27,7 +27,7 @@ namespace GOAP
         private int _stateIndex = 0;
         void Update()
         {
-            if (!_haveActions)
+            if (!_haveActions || _stateIndex >= ActionSequence.Length)
                 return;
 
             var done = ActionSequence[_stateIndex].Perform(this);

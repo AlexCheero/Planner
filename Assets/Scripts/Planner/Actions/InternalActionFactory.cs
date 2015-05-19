@@ -11,10 +11,10 @@ namespace GOAP
             get { return _instance ?? (_instance = new InternalActionFactory()); }
         }
 
-        public IEnumerable<PlannerAction> GetActions(KnowledgeNode knowledge)
+        public IEnumerable<PlannerAction> GetActions(Dictionary<string, object> knowledge)
         {
-            bool b;
-            return knowledge.TryGetValue(out b, "stayed") && !b
+            object b;
+            return knowledge.TryGetValue("stayed ", out b) && !(bool)b
                 ? new[] { new InternalPlannerAction(255, 0),  }
                 : new PlannerAction[0];
         }

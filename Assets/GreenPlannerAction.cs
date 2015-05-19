@@ -26,8 +26,11 @@ public class GreenPlannerAction : PlannerAction
         return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
     }
 
-    public override void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership)
+    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
     {
-        knowledge.SetValue(true, "greened");
+        if (knowledge.ContainsKey("greened "))
+            knowledge["greened "] = true;
+        else
+            knowledge.Add("greened ", true);
     }
 }

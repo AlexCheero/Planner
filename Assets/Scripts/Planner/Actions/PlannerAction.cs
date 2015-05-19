@@ -31,6 +31,6 @@ namespace GOAP
 
         public abstract bool Perform(StateMachine machine);
 
-        public abstract void AffectOnKnowledge(ref KnowledgeNode knowledge, float membership);
+        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership);
     }
 }
