@@ -5,7 +5,7 @@ namespace GOAP
 {
     public class Goal
     {
-        public readonly EGoal Name;
+        public readonly EGoal Type;
         private float _value;
         public float Value
         {
@@ -24,15 +24,15 @@ namespace GOAP
         public float BasicRateShare;
         public float DynamicRateShare;
 
-        public Goal(EGoal name, float value)
+        public Goal(EGoal type, float value)
         {
-            Name = name;
+            Type = type;
             _previousValue = Value = value;
         }
 
         public Goal(Goal goal)
         {
-            Name = goal.Name;
+            Type = goal.Type;
             _previousValue = Value = goal.Value;
         }
 

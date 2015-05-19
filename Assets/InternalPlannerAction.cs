@@ -5,7 +5,7 @@ using UnityEngine;
 public class InternalPlannerAction : PlannerAction
 {
     public InternalPlannerAction(byte efficiency, int duration)
-        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, efficiency, duration)
+        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, duration)
     {
     }
 

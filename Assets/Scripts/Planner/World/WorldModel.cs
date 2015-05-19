@@ -29,19 +29,25 @@ namespace GOAP
 
         public static bool operator ==(WorldModel wm1, WorldModel wm2)
         {
+            if ((object) wm1 == null)
+                return (object) wm2 == null;
+            if ((object) wm2 == null)
+                return false;
+            if (wm1.Goals.Length != wm2.Goals.Length || wm1.Actions.Count != wm2.Actions.Count)
+                return false;
             //equality check should always be in one planning, because at different planning Goals can be different
-            for (var i = 0; i < wm1.Goals.Length; i++)
-            {
-                if (wm1.Goals[i].Value == wm2.Goals[i].Value)
-                    continue;
-                return false;
-            }
-
-            //todo check actions
-            if (wm1.Actions.Count != wm2.Actions.Count)
-                return false;
-
-            return wm1.Discontentment == wm2.Discontentment;
+//            for (var i = 0; i < wm1.Goals.Length; i++)
+//            {
+//                if (wm1.Goals[i].Value == wm2.Goals[i].Value)
+//                    continue;
+//                return false;
+//            }
+//
+//            //todo check actions
+//            if (wm1.Actions.Count != wm2.Actions.Count)
+//                return false;
+//
+//            return wm1.Discontentment == wm2.Discontentment;
         }
 
         public static bool operator !=(WorldModel wm1, WorldModel wm2)
@@ -102,8 +108,8 @@ namespace GOAP
             for (var i = 0; i < Goals.Length; i++)
             {
                 var goal = Goals[i];
-                goal.Value += action.GetGoalChange(goal)*floatMembership;
-                Discontentment += goal.GetDiscontentment();
+                goal.Value += action.GetGoalChange(goal) * floatMembership;
+                Discontentment += goal.GetDiscontentment() * action.Duration;
             }
 
             action.AffectOnKnowledge(ref Knowledge, /*action.ActionEfficiency*/255);
