@@ -11,7 +11,7 @@ namespace GOAP
             Value = value;
         }
 
-        public bool Contains(string key)
+        public bool ContainsAtFirstDepth(string key)
         {
             return false;
         }

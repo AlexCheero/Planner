@@ -1,57 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GOAP
 {
     public class KnowledgeNode : IKnowledge
     {
-        public List<string[]> KnowlegePaths { get; private set; }
+        private Dictionary<string, IKnowledge> _knowledge;
 
         public IKnowledge this[string key]
         {
-            get { return Knowledge[key]; }
+            get { return _knowledge[key]; }
             set
             {
-                if (Knowledge.ContainsKey(key))
-                    Knowledge[key] = value;
+                if (_knowledge.ContainsKey(key))
+                    _knowledge[key] = value;
                 else
-                    Knowledge.Add(key, value);
+                    _knowledge.Add(key, value);
             }
         }
 
         public bool Equals(IKnowledge otherKnowledge)
         {
             //todo complete
-            for (int i = 0; i < KnowlegePaths.Count; i++)
-            {
-
-            }
             return false;
         }
 
-        public Dictionary<string, IKnowledge> Knowledge;
-        public int Depth;
-
         public KnowledgeNode()
         {
-            Knowledge = new Dictionary<string, IKnowledge>();
-            KnowlegePaths = new List<string[]>();
+            _knowledge = new Dictionary<string, IKnowledge>();
         }
 
         //deep copy constructor
         public KnowledgeNode(KnowledgeNode otherNode)
         {
-            Knowledge = new Dictionary<string, IKnowledge>();
-            foreach (var otherKnowledge in otherNode.Knowledge)
+            _knowledge = new Dictionary<string, IKnowledge>();
+            foreach (var otherKnowledge in otherNode._knowledge)
             {
                 var key = otherKnowledge.Key;
                 var value = otherKnowledge.Value;
                 if (value is KnowledgeNode)
-                    Knowledge.Add(key, new KnowledgeNode(value as KnowledgeNode));
+                    _knowledge.Add(key, new KnowledgeNode(value as KnowledgeNode));
                 else
-                    Knowledge.Add(key, value);
+                    _knowledge.Add(key, value);
             }
-            KnowlegePaths = new List<string[]>(otherNode.KnowlegePaths);
         }
 
         public bool TryGetValue<T>(out T value, params string[] keyPath)
@@ -75,7 +65,7 @@ namespace GOAP
                 var key = keyPath[i];
                 if (i == keyPath.Length - 1)
                 {
-                    if (currentLevelKnowledge.Contains(key))
+                    if (currentLevelKnowledge.ContainsAtFirstDepth(key))
                     {
                         var knowledgeLeaf = currentLevelKnowledge[key] as KnowledgeLeaf<T>;
                         if (knowledgeLeaf != null)
@@ -88,7 +78,7 @@ namespace GOAP
                 }
                 else
                 {
-                    if (currentLevelKnowledge.Contains(key))
+                    if (currentLevelKnowledge.ContainsAtFirstDepth(key))
                         currentLevelKnowledge = currentLevelKnowledge[key];
                     else
                     {
@@ -99,18 +89,23 @@ namespace GOAP
             }
         }
 
-        public bool Contains(string key)
+        public bool ContainsAtFirstDepth(string key)
         {
-            return Knowledge.ContainsKey(key);
+            return _knowledge.ContainsKey(key);
         }
 
-        public IKnowledge GetKnowledge(params string[] keyPath)
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        private IKnowledge GetKnowledge(params string[] keyPath)
         {
             IKnowledge resultKnowledge = this;
             for (var i = 0; i < keyPath.Length; i++)
             {
                 var key = keyPath[i];
-                if (!resultKnowledge.Contains(key))
+                if (!resultKnowledge.ContainsAtFirstDepth(key))
                     return null;
                 resultKnowledge = resultKnowledge[key];
             }
