@@ -9,7 +9,7 @@ namespace GOAP
         private int _actionIndex = 0;
         public List<PlannerAction> Actions = new List<PlannerAction>();
         public Planner Planner;
-        public KnowledgeNode Knowledge ;
+        public KnowledgeNode Knowledge;
 
         public float Discontentment { get; private set; }
 
