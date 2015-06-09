@@ -42,25 +42,7 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-//            something like this
-//            var allActions = new StringBuilder();
-//            foreach (var action in ActionsMembership)
-//                allActions.Append(action.First.Name);
-//
-//            return allActions.ToString().GetHashCode();
-            
-//            or this
-            var hash = 0;
-            for (var i = 0; i < Actions.Count; i++)
-            {
-                var action = Actions[i];
-                hash += action.GetHashCode() /**action.ActionEfficiency / 255*/;
-            }
-            hash += Discontentment.GetHashCode();
-
-            return hash;
-//            or you can take hashes from all knowledge values, but if values will be reference type all will be fucked up
-//            also you have to take in account the discontentement value
+            return Knowledge.GetHashCode();
         }
 
         //deep copy constructor

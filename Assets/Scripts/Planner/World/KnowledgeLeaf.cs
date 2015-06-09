@@ -2,7 +2,7 @@
 
 namespace GOAP
 {
-    public class KnowledgeLeaf<T> : IKnowledge
+    public class KnowledgeLeaf<T> : IKnowledge where T : struct
     {
         public T Value { get; set; }
 
@@ -25,6 +25,11 @@ namespace GOAP
         public bool Equals(IKnowledge otherKnowledge)
         {
             throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
         }
     }
 }

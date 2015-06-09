@@ -44,7 +44,7 @@ namespace GOAP
             }
         }
 
-        public bool TryGetValue<T>(out T value, params string[] keyPath)
+        public bool TryGetValue<T>(out T value, params string[] keyPath) where T : struct
         {
             var knowledgeLeaf = GetKnowledge(keyPath) as KnowledgeLeaf<T>;
             if (knowledgeLeaf == null)
@@ -57,7 +57,7 @@ namespace GOAP
             return true;
         }
 
-        public void SetValue<T>(T value, params string[] keyPath)
+        public void SetValue<T>(T value, params string[] keyPath) where T : struct
         {
             IKnowledge currentLevelKnowledge = this;
             for (var i = 0; i < keyPath.Length; i++)
@@ -96,7 +96,11 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            var hash = 0;
+            foreach (var knowledge in _knowledge)
+                hash += knowledge.Key.GetHashCode() + knowledge.Value.GetHashCode();
+            
+            return hash;
         }
 
         private IKnowledge GetKnowledge(params string[] keyPath)
