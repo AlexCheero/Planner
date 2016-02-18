@@ -1,15 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GOAP
 {
     public abstract class AbstractActionBoard
     {
+        private static AbstractActionBoard _instance;
+
+        public static AbstractActionBoard Instance
+        {
+            get { return _instance ?? (_instance = new ActionBoard()); }
+        }
+
         private HashSet<EActionType> _actions;
         private HashSet<IActionFactory> _factories;
 
         protected AbstractActionBoard()
         {
             _factories = new HashSet<IActionFactory>();
+            //i think it could be done without set of actions (if actions should contain every value of enum),
+            //using Enum.GetValues, but it throws error
             _actions = new HashSet<EActionType>
             {
                 EActionType.Internal,
@@ -19,13 +29,19 @@ namespace GOAP
             };
             foreach (var action in _actions)
                 _factories.Add(GetFactory(action));
+
+            _instance = this;
         }
 
         public List<PlannerAction> GetActions(Dictionary<string, object> knowledge)
         {
             var resultList = new List<PlannerAction>();
             foreach (var factory in _factories)
-                resultList.AddRange(factory.GetActions(knowledge));
+            {
+                var actions = factory.GetActions(knowledge);
+                if (actions != null)
+                    resultList.AddRange(factory.GetActions(knowledge));
+            }
 
             return resultList;
         }
@@ -35,6 +51,8 @@ namespace GOAP
 
     public class ActionBoard : AbstractActionBoard
     {
+        private ActionBoard() { }
+
         protected override IActionFactory GetFactory(EActionType type)
         {
             //todo try to automate this process somehow

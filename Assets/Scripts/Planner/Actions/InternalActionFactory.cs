@@ -16,7 +16,7 @@ namespace GOAP
             object b;
             return knowledge.TryGetValue("stayed ", out b) && !(bool)b
                 ? new[] { new InternalPlannerAction(255, 0),  }
-                : new PlannerAction[0];
+                : null;
         }
     }
 }

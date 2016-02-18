@@ -38,7 +38,7 @@ namespace GOAP
 
         public float GetDiscontentment(float newValue)
         {
-            return (int)Mathf.Pow(newValue, PriorityPower);
+            return Mathf.Pow(newValue, PriorityPower);
         }
 
         public float GetDiscontentment()

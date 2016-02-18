@@ -12,6 +12,11 @@ namespace GOAP
             _entries = new Dictionary<int, WorldModelEntry>();
         }
 
+        public void Clear()
+        {
+            _entries.Clear();
+        }
+
         public bool Has(WorldModel model)
         {
             var hash = model.GetHashCode();

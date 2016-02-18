@@ -12,24 +12,21 @@ namespace GOAP
         public int MaxDepth;
         public float DiscTestValue;
 
-        public AbstractActionBoard ActionBoard;
-
         private StateMachine _machine;
 
         void Start()
         {
-            ActionBoard = new ActionBoard();
-            GetKnowledge();
-
+//            GetKnowledge();//dont sure if it is needed here, becuase its return value not used here
             StartCoroutine(PlanActions());
-
             _machine = GetComponent<StateMachine>();
+            _table = new TranspositionTable();
         }
 
         private bool _done = false;
         void Update()
         {
-            if (_bestActionSequence == null || _bestActionSequence.Length == 0 || _done)
+            //_done setted only ones, so it plans only one action sequence
+            if (_bestActionSequence.Length == 0 || _done)
                 return;
 
             _machine.ActionSequence = _bestActionSequence;
@@ -45,7 +42,7 @@ namespace GOAP
         {
             var knowledge = new Dictionary<string, object>();
             
-            //chechk internal state of player to get internal knowledge
+            //check internal state of player to get internal knowledge
             knowledge.Add("stayed ", false);
 
             var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
@@ -71,18 +68,20 @@ namespace GOAP
 
         private Goal[] GetGoals()
         {
+            //still the state machine is better to choose only one main goal
             return new[] {new Goal(EGoal.Goal, 20)};
         }
 
         private PlannerAction[] _bestActionSequence;
         private WorldModel[] _bestModelsSequence;
+        private TranspositionTable _table;
         private IEnumerator PlanActions()
         {
             //todo think about how to quantize time for planning
             var model = GetInitialWorldModel();
             var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
-            var table = new TranspositionTable();
-            table.Add(model, 0);
+            _table.Clear();
+            _table.Add(model, 0);
 
             var modelsSequence = new WorldModel[MaxDepth + 1];
             var actionSequence = new PlannerAction[MaxDepth];
@@ -97,41 +96,49 @@ namespace GOAP
 
             while (currentDepth >= 0)
             {
-                var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
-                if (currentDepth >= MaxDepth)
-                {
-                    if (currentDiscontentment < bestDiscontentment)
-                    {
-                        bestDiscontentment = currentDiscontentment;
-                        _bestActionSequence = (PlannerAction[])actionSequence.Clone();
-                        _bestModelsSequence = modelsSequence;
-                    }
-
-                    currentDepth--;
-                    continue;
-                }
-
-                var nextAction = modelsSequence[currentDepth].NextAction();
-
-                if (nextAction != null)
-                {
-                    actionSequence[currentDepth] = nextAction;
-                    var nextDepth = currentDepth + 1;
-                    var nextModel = modelsSequence[nextDepth] = new WorldModel(modelsSequence[currentDepth]);
-                    nextModel.ApplyAction(nextAction);
-
-                    //todo check logick
-                    if (!table.Has(nextModel) && nextModel.Discontentment <= maxDiscontentment)
-                        currentDepth++;
-
-                    table.Add(nextModel, nextDepth);
-
-                }
-                else
-                    currentDepth--;
+                currentDepth = Search(modelsSequence, currentDepth, actionSequence, maxDiscontentment,
+                    ref bestDiscontentment);
             }
 
             yield return 0;
+        }
+
+        //probably this is not a good idea to extract this code out of while loop into method body
+        private int Search(WorldModel[] modelsSequence, int currentDepth, PlannerAction[] actionSequence,
+            float maxDiscontentment, ref float bestDiscontentment)
+        {
+            var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
+            if (currentDepth >= MaxDepth)
+            {
+                if (currentDiscontentment < bestDiscontentment)
+                {
+                    bestDiscontentment = currentDiscontentment;
+                    _bestActionSequence = (PlannerAction[]) actionSequence.Clone();
+                    _bestModelsSequence = modelsSequence;
+                }
+
+                currentDepth--;
+                return currentDepth;
+            }
+
+            var nextAction = modelsSequence[currentDepth].NextAction();
+
+            if (nextAction != null)
+            {
+                actionSequence[currentDepth] = nextAction;
+                var nextDepth = currentDepth + 1;
+                var nextModel = modelsSequence[nextDepth] = new WorldModel(modelsSequence[currentDepth]);
+                nextModel.ApplyAction(nextAction);
+
+                //todo check logick
+                if (!_table.Has(nextModel) && nextModel.Discontentment <= maxDiscontentment)
+                    currentDepth++;
+
+                _table.Add(nextModel, nextDepth);
+            }
+            else
+                currentDepth--;
+            return currentDepth;
         }
     }
 }

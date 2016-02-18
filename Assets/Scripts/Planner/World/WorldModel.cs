@@ -8,7 +8,6 @@ namespace GOAP
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
         public List<PlannerAction> Actions = new List<PlannerAction>();
-        public Planner Planner;
         public Dictionary<string, object> Knowledge;
 
         public float Discontentment { get; private set; }
@@ -17,8 +16,7 @@ namespace GOAP
         {
             Goals = goals;
             Knowledge = knowledge;
-            Planner = planner;
-            Actions = Planner.ActionBoard.GetActions(Knowledge);
+            Actions = AbstractActionBoard.Instance.GetActions(Knowledge);
             Discontentment = 0;
             for (var i = 0; i < Goals.Length; i++)
             {
@@ -60,7 +58,6 @@ namespace GOAP
             Discontentment = otherModel.Discontentment;
             Actions = new List<PlannerAction>(otherModel.Actions);
             Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
-            Planner = otherModel.Planner;
         }
 
         public PlannerAction NextAction()
@@ -85,7 +82,7 @@ namespace GOAP
             }
 
             action.AffectOnKnowledge(ref Knowledge, /*action.ActionEfficiency*/255);
-            Actions = Planner.ActionBoard.GetActions(Knowledge);
+            Actions = AbstractActionBoard.Instance.GetActions(Knowledge);
         }
     }
 }
