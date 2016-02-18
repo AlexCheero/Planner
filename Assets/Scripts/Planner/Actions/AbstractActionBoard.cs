@@ -51,7 +51,8 @@ namespace GOAP
 
     public class ActionBoard : AbstractActionBoard
     {
-        private ActionBoard() { }
+        //this shouldn't be public but if it is more closed i cant use this cunstructor in AbstractActionBoard instance generation
+        public ActionBoard() { }
 
         protected override IActionFactory GetFactory(EActionType type)
         {

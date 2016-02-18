@@ -8,7 +8,7 @@ public class YellowPlannerAction : PlannerAction
     public string TargetName = "";
 
     public YellowPlannerAction(Vector3 position, byte efficiency, int duration)
-        : base(new Dictionary<EGoal, int> { { EGoal.Goal, 0 } }, duration)
+        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration)
     {
         TargetPosition = position;
     }

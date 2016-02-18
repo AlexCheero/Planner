@@ -8,18 +8,24 @@ namespace GOAP
 {
     public class Planner : MonoBehaviour
     {
-        public float SearchRadius;
-        public int MaxDepth;
-        public float DiscTestValue;
+        [SerializeField]
+        private float _searchRadius;
+        [SerializeField]
+        private int _maxDepth;
+        [SerializeField]
+        private float _maxAllowableDiscontentment;
 
         private StateMachine _machine;
 
         void Start()
         {
-//            GetKnowledge();//dont sure if it is needed here, becuase its return value not used here
-            StartCoroutine(PlanActions());
+//            GetInitialKnowledge();//dont sure if it is needed here, becuase its return value not used here
             _machine = GetComponent<StateMachine>();
-            _table = new TranspositionTable();
+            _table = new WMTranspositionTable();
+            _bestActionSequence = new PlannerAction[0];
+
+            //this call should be after everything inited
+            StartCoroutine(PlanActions());
         }
 
         private bool _done = false;
@@ -35,17 +41,17 @@ namespace GOAP
 
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(GetGoals(), GetKnowledge(), this);
+            return new WorldModel(GetGoals(), GetInitialKnowledge(), this);
         }
 
-        private Dictionary<string, object> GetKnowledge()
+        private Dictionary<string, object> GetInitialKnowledge()
         {
             var knowledge = new Dictionary<string, object>();
             
             //check internal state of player to get internal knowledge
             knowledge.Add("stayed ", false);
 
-            var colliders = Physics.OverlapSphere(transform.position, SearchRadius);
+            var colliders = Physics.OverlapSphere(transform.position, _searchRadius);
             for (var i = 0; i < colliders.Length; i++)
             {
                 var coll = colliders[i];
@@ -74,17 +80,17 @@ namespace GOAP
 
         private PlannerAction[] _bestActionSequence;
         private WorldModel[] _bestModelsSequence;
-        private TranspositionTable _table;
+        private WMTranspositionTable _table;
         private IEnumerator PlanActions()
         {
             //todo think about how to quantize time for planning
             var model = GetInitialWorldModel();
-            var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(DiscTestValue)).Max();
+            var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(_maxAllowableDiscontentment)).Max();
             _table.Clear();
             _table.Add(model, 0);
 
-            var modelsSequence = new WorldModel[MaxDepth + 1];
-            var actionSequence = new PlannerAction[MaxDepth];
+            var modelsSequence = new WorldModel[_maxDepth + 1];
+            var actionSequence = new PlannerAction[_maxDepth];
 
             _bestActionSequence = new PlannerAction[0];
             _bestModelsSequence = new WorldModel[0];
@@ -108,7 +114,8 @@ namespace GOAP
             float maxDiscontentment, ref float bestDiscontentment)
         {
             var currentDiscontentment = modelsSequence[currentDepth].Discontentment;
-            if (currentDepth >= MaxDepth)
+            //try to generate plans not for the whole depth, if goal is achieved, than its not necessary to keep searching
+            if (currentDepth >= _maxDepth)
             {
                 if (currentDiscontentment < bestDiscontentment)
                 {

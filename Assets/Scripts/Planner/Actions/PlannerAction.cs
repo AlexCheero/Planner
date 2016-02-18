@@ -4,21 +4,22 @@ namespace GOAP
 {
     public abstract class PlannerAction
     {
-        private readonly Dictionary<EGoal, int> _goalChanges;
+        //probably goal changes can be int
+        private readonly Dictionary<EGoal, float> _goalChanges;
 
         public abstract string Name { get; }
 
         public int Duration { get; private set; }
         public byte MinMembershipDegree { get; private set; }
 
-        protected PlannerAction(Dictionary<EGoal, int> changes, int duration, byte membershipDegree = 77)//77 for 30%
+        protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte membershipDegree = 77)//77 for 30%
         {
             _goalChanges = changes;
             MinMembershipDegree = membershipDegree;
             Duration = duration;
         }
 
-        public int GetGoalChange(Goal goal)
+        public float GetGoalChange(Goal goal)
         {
             var type = goal.Type;
             return _goalChanges.ContainsKey(type) ? _goalChanges[type] : 0;

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace GOAP
 {
-    public class TranspositionTable
+    public class WMTranspositionTable
     {
         private Dictionary<int, WorldModelEntry> _entries;
 
-        public TranspositionTable()
+        public WMTranspositionTable()
         {
             _entries = new Dictionary<int, WorldModelEntry>();
         }
@@ -32,6 +32,7 @@ namespace GOAP
             {
                 if (entryByHash.Model.Equals(model))
                     entryByHash.Depth = Mathf.Min(depth, entryByHash.Depth);
+                //
                 else if (depth < entryByHash.Depth)
                 {
                     entryByHash.Model = model;
