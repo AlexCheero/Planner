@@ -18,7 +18,7 @@ public class RedPlannerAction : PlannerAction
         get { return TargetName + "RedAction"; }
     }
 
-    public override bool Perform(StateMachine machine)
+    public override bool Perform(ActionPerformer machine)
     {
         var navAgent = machine.GetComponent<NavMeshAgent>();
         navAgent.SetDestination(TargetPosition);

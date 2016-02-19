@@ -15,28 +15,40 @@ namespace GOAP
         [SerializeField]
         private float _maxAllowableDiscontentment;
 
-        private StateMachine _machine;
+        private ActionPerformer _actionPerformer;
 
         void Start()
         {
-//            GetInitialKnowledge();//dont sure if it is needed here, becuase its return value not used here
-            _machine = GetComponent<StateMachine>();
+            _actionPerformer = GetComponent<ActionPerformer>();
+            Debug.Log("performer: " + (_actionPerformer != null));
             _table = new WMTranspositionTable();
-            _bestActionSequence = new PlannerAction[0];
 
             //this call should be after everything inited
-            StartCoroutine(PlanActions());
+            PlanActions();
         }
 
-        private bool _done = false;
+        public void PlanActions()
+        {
+            if (_planning)
+            {
+#if UNITY_EDITOR
+                Debug.LogWarning("Try to start planning second time, while first plan isn't created");
+#endif
+                return;
+            }
+            StartCoroutine(PlanActionsCoroutine());
+        }
+
+        private bool _planReady;
         void Update()
         {
-            //_done setted only ones, so it plans only one action sequence
-            if (_bestActionSequence.Length == 0 || _done)
+            if (!_planReady)
                 return;
 
-            _machine.ActionSequence = _bestActionSequence;
-            _done = true;
+//            Debug.Log("_planReady: " + _planReady + ", _bestActionSequence: " + (_bestActionSequence != null ? _bestActionSequence.Length.ToString() : "null"));
+//            Debug.Log("performer: " + (_actionPerformer != null));
+            _actionPerformer.SetActions(_bestActionSequence);
+            _planReady = false;
         }
 
         private WorldModel GetInitialWorldModel()
@@ -81,9 +93,11 @@ namespace GOAP
         private PlannerAction[] _bestActionSequence;
         private WorldModel[] _bestModelsSequence;
         private WMTranspositionTable _table;
-        private IEnumerator PlanActions()
+        private bool _planning;
+        private IEnumerator PlanActionsCoroutine()
         {
             //todo think about how to quantize time for planning
+            _planning = true;
             var model = GetInitialWorldModel();
             var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(_maxAllowableDiscontentment)).Max();
             _table.Clear();
@@ -106,6 +120,7 @@ namespace GOAP
                     ref bestDiscontentment);
             }
 
+            _planReady = true;
             yield return 0;
         }
 

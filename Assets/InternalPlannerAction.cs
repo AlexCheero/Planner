@@ -14,7 +14,7 @@ public class InternalPlannerAction : PlannerAction
         get { return "InternalAction"; }
     }
 
-    public override bool Perform(StateMachine machine)
+    public override bool Perform(ActionPerformer machine)
     {
         Debug.Log("Internal!");
         return true;
