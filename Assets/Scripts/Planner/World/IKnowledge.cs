@@ -2,7 +2,7 @@
 {
     public interface IKnowledge
     {
-        bool Contains(string key);
+        bool ContainsAtFirstDepth(string key);
         IKnowledge this[string key] { get; set; }
         bool Equals(IKnowledge otherKnowledge);
     }

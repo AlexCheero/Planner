@@ -54,7 +54,7 @@ namespace GOAP
             KnowlegePaths = new List<string[]>(otherNode.KnowlegePaths);
         }
 
-        public bool TryGetValue<T>(out T value, params string[] keyPath)
+        public bool TryGetValue<T>(out T value, params string[] keyPath) where  T : struct 
         {
             var knowledgeLeaf = GetKnowledge(keyPath) as KnowledgeLeaf<T>;
             if (knowledgeLeaf == null)
@@ -67,7 +67,7 @@ namespace GOAP
             return true;
         }
 
-        public void SetValue<T>(T value, params string[] keyPath)
+        public void SetValue<T>(T value, params string[] keyPath) where T : struct 
         {
             IKnowledge currentLevelKnowledge = this;
             for (var i = 0; i < keyPath.Length; i++)
@@ -75,7 +75,7 @@ namespace GOAP
                 var key = keyPath[i];
                 if (i == keyPath.Length - 1)
                 {
-                    if (currentLevelKnowledge.Contains(key))
+                    if (currentLevelKnowledge.ContainsAtFirstDepth(key))
                     {
                         var knowledgeLeaf = currentLevelKnowledge[key] as KnowledgeLeaf<T>;
                         if (knowledgeLeaf != null)
@@ -88,7 +88,7 @@ namespace GOAP
                 }
                 else
                 {
-                    if (currentLevelKnowledge.Contains(key))
+                    if (currentLevelKnowledge.ContainsAtFirstDepth(key))
                         currentLevelKnowledge = currentLevelKnowledge[key];
                     else
                     {
@@ -99,7 +99,7 @@ namespace GOAP
             }
         }
 
-        public bool Contains(string key)
+        public bool ContainsAtFirstDepth(string key)
         {
             return _knowledge.ContainsKey(key);
         }
@@ -110,7 +110,7 @@ namespace GOAP
             for (var i = 0; i < keyPath.Length; i++)
             {
                 var key = keyPath[i];
-                if (!resultKnowledge.Contains(key))
+                if (!resultKnowledge.ContainsAtFirstDepth(key))
                     return null;
                 resultKnowledge = resultKnowledge[key];
             }
