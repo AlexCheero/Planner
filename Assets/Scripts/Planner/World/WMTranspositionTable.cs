@@ -32,7 +32,6 @@ namespace GOAP
             {
                 if (entryByHash.Model.Equals(model))
                     entryByHash.Depth = Mathf.Min(depth, entryByHash.Depth);
-                //
                 else if (depth < entryByHash.Depth)
                 {
                     entryByHash.Model = model;
