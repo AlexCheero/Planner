@@ -206,6 +206,18 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11476508, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: _searchRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 11476508, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: _maxDepth
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11476508, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
+      propertyPath: _maxAllowableDiscontentment
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54eb5844754051b40a918a84c33b7c1a, type: 2}
   m_IsPrefabParent: 0
