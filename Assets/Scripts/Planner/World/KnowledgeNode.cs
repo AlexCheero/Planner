@@ -9,13 +9,13 @@ namespace GOAP
 
         public IKnowledge this[string key]
         {
-            get { return Knowledge[key]; }
+            get { return _knowledge[key]; }
             set
             {
-                if (Knowledge.ContainsKey(key))
-                    Knowledge[key] = value;
+                if (_knowledge.ContainsKey(key))
+                    _knowledge[key] = value;
                 else
-                    Knowledge.Add(key, value);
+                    _knowledge.Add(key, value);
             }
         }
 
@@ -29,27 +29,27 @@ namespace GOAP
             return false;
         }
 
-        public Dictionary<string, IKnowledge> Knowledge;
+        private Dictionary<string, IKnowledge> _knowledge;
         public int Depth;
 
         public KnowledgeNode()
         {
-            Knowledge = new Dictionary<string, IKnowledge>();
+            _knowledge = new Dictionary<string, IKnowledge>();
             KnowlegePaths = new List<string[]>();
         }
 
         //deep copy constructor
         public KnowledgeNode(KnowledgeNode otherNode)
         {
-            Knowledge = new Dictionary<string, IKnowledge>();
-            foreach (var otherKnowledge in otherNode.Knowledge)
+            _knowledge = new Dictionary<string, IKnowledge>();
+            foreach (var otherKnowledge in otherNode._knowledge)
             {
                 var key = otherKnowledge.Key;
                 var value = otherKnowledge.Value;
                 if (value is KnowledgeNode)
-                    Knowledge.Add(key, new KnowledgeNode(value as KnowledgeNode));
+                    _knowledge.Add(key, new KnowledgeNode(value as KnowledgeNode));
                 else
-                    Knowledge.Add(key, value);
+                    _knowledge.Add(key, value);
             }
             KnowlegePaths = new List<string[]>(otherNode.KnowlegePaths);
         }
@@ -101,10 +101,10 @@ namespace GOAP
 
         public bool Contains(string key)
         {
-            return Knowledge.ContainsKey(key);
+            return _knowledge.ContainsKey(key);
         }
 
-        public IKnowledge GetKnowledge(params string[] keyPath)
+        private IKnowledge GetKnowledge(params string[] keyPath)
         {
             IKnowledge resultKnowledge = this;
             for (var i = 0; i < keyPath.Length; i++)

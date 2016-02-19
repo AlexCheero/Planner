@@ -40,7 +40,7 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            //in order for this to work all knowledge values must be the reference type
+            //in order for this to work all knowledge values must be the value type
             var hash = 0;
             foreach (var knowledge in _knowledge)
                 hash += knowledge.Key.GetHashCode() + knowledge.Value.GetHashCode();
@@ -73,11 +73,11 @@ namespace GOAP
         public void ApplyAction(PlannerAction action)
         {
             Discontentment = 0;
-            var floatMembership = 1f;//(action.ActionEfficiency / 255);
+            var floatEfficiency = 1f;//(action.ActionEfficiency / 255);
             for (var i = 0; i < Goals.Length; i++)
             {
                 var goal = Goals[i];
-                goal.Value += action.GetGoalChange(goal) * floatMembership;
+                goal.Value += action.GetGoalChange(goal) * floatEfficiency;
                 Discontentment += goal.GetDiscontentment() /** action.Duration*/;//todo think about how to properly use duration
             }
 
