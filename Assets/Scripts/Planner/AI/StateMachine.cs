@@ -18,16 +18,16 @@ namespace GOAP
             _actionSequence = new PlannerAction[0];
         }
 
-        private int _stateIndex = 0;
+        private int _actionIndex = 0;
         void Update()
         {
-            if (ActionSequence.Length == 0 || _stateIndex >= ActionSequence.Length)
+            if (ActionSequence.Length == 0 || _actionIndex >= ActionSequence.Length)
                 return;
 
-            var done = ActionSequence[_stateIndex].Perform(this);
+            var done = ActionSequence[_actionIndex].Perform(this);
 
             if (done)
-                _stateIndex++;
+                _actionIndex++;
         }
     }
 }
