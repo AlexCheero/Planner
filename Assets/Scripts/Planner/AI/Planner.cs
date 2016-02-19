@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
 
 namespace GOAP
 {
@@ -20,7 +19,6 @@ namespace GOAP
         void Start()
         {
             _actionPerformer = GetComponent<ActionPerformer>();
-            Debug.Log("performer: " + (_actionPerformer != null));
             _table = new WMTranspositionTable();
 
             //this call should be after everything inited
@@ -45,8 +43,6 @@ namespace GOAP
             if (!_planReady)
                 return;
 
-//            Debug.Log("_planReady: " + _planReady + ", _bestActionSequence: " + (_bestActionSequence != null ? _bestActionSequence.Length.ToString() : "null"));
-//            Debug.Log("performer: " + (_actionPerformer != null));
             _actionPerformer.SetActions(_bestActionSequence);
             _planReady = false;
         }
@@ -121,6 +117,7 @@ namespace GOAP
             }
 
             _planReady = true;
+            _planning = false;
             yield return 0;
         }
 
