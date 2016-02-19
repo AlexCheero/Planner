@@ -26,7 +26,7 @@ public class YellowPlannerAction : PlannerAction
         return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
     }
 
-    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
+    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
     {
         if (knowledge.ContainsKey("yellowed "))
             knowledge["yellowed "] = true;

@@ -10,12 +10,12 @@ namespace GOAP
         public abstract string Name { get; }
 
         public int Duration { get; private set; }
-        public byte MinMembershipDegree { get; private set; }
+        public byte ActionEfficiency { get; private set; }
 
-        protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte membershipDegree = 77)//77 for 30%
+        protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte actionEfficiency = 77)//77 for 30%
         {
             _goalChanges = changes;
-            MinMembershipDegree = membershipDegree;
+            ActionEfficiency = actionEfficiency;
             Duration = duration;
         }
 
@@ -32,6 +32,6 @@ namespace GOAP
 
         public abstract bool Perform(StateMachine machine);
 
-        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership);
+        public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency);
     }
 }

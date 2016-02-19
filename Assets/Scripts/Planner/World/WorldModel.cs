@@ -7,16 +7,16 @@ namespace GOAP
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        public List<PlannerAction> Actions = new List<PlannerAction>();
-        public Dictionary<string, object> Knowledge;
+        private List<PlannerAction> _actions = new List<PlannerAction>();
+        private Dictionary<string, object> _knowledge;
 
         public float Discontentment { get; private set; }
 
-        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge, Planner planner)
+        public WorldModel(Goal[] goals, Dictionary<string, object> knowledge)
         {
             Goals = goals;
-            Knowledge = knowledge;
-            Actions = AbstractActionBoard.Instance.GetActions(Knowledge);
+            _knowledge = knowledge;
+            _actions = AbstractActionBoard.Instance.GetActions(_knowledge);
             Discontentment = 0;
             for (var i = 0; i < Goals.Length; i++)
             {
@@ -30,9 +30,9 @@ namespace GOAP
             //todo make approximate equality method
             if (otherModel == null)
                 return false;
-            if (Goals.Length != otherModel.Goals.Length || Actions.Count != otherModel.Actions.Count)
+            if (Goals.Length != otherModel.Goals.Length || _actions.Count != otherModel._actions.Count)
                 return false;
-            if (!Knowledge.Equals(otherModel.Knowledge))
+            if (!_knowledge.Equals(otherModel._knowledge))
                 return false;
 
             return Discontentment == otherModel.Discontentment;
@@ -42,7 +42,7 @@ namespace GOAP
         {
             //in order for this to work all knowledge values must be the reference type
             var hash = 0;
-            foreach (var knowledge in Knowledge)
+            foreach (var knowledge in _knowledge)
                 hash += knowledge.Key.GetHashCode() + knowledge.Value.GetHashCode();
 
             return hash;
@@ -56,16 +56,16 @@ namespace GOAP
             for (var i = 0; i < Goals.Length; i++)
                 Goals[i] = new Goal(otherGoals[i]);
             Discontentment = otherModel.Discontentment;
-            Actions = new List<PlannerAction>(otherModel.Actions);
-            Knowledge = new Dictionary<string, object>(otherModel.Knowledge);
+            _actions = new List<PlannerAction>(otherModel._actions);
+            _knowledge = new Dictionary<string, object>(otherModel._knowledge);
         }
 
         public PlannerAction NextAction()
         {
-            if (_actionIndex >= Actions.Count)
+            if (_actionIndex >= _actions.Count)
                 return null;
             
-            var returnValue = Actions[_actionIndex];
+            var returnValue = _actions[_actionIndex];
             _actionIndex++;
             return returnValue;
         }
@@ -81,8 +81,8 @@ namespace GOAP
                 Discontentment += goal.GetDiscontentment() /** action.Duration*/;//todo think about how to properly use duration
             }
 
-            action.AffectOnKnowledge(ref Knowledge, /*action.ActionEfficiency*/255);
-            Actions = AbstractActionBoard.Instance.GetActions(Knowledge);
+            action.AffectOnKnowledge(ref _knowledge, /*action.ActionEfficiency*/255);
+            _actions = AbstractActionBoard.Instance.GetActions(_knowledge);
         }
     }
 }

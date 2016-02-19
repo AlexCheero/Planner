@@ -14,31 +14,32 @@ namespace GOAP
         }
 
         private float _previousValue;
-
         private float _changeSinceLastTime;
         private float _timeSinceLastChange;
 
-        public int PriorityPower = 2;
+        private readonly int _priorityPower;
 
         private float _basicChangeRate;
         public float BasicRateShare;
         public float DynamicRateShare;
 
-        public Goal(EGoal type, float value)
+        public Goal(EGoal type, float value, int priorityPow = 2)
         {
             Type = type;
             _previousValue = Value = value;
+            _priorityPower = priorityPow;
         }
 
         public Goal(Goal goal)
         {
             Type = goal.Type;
             _previousValue = Value = goal.Value;
+            _priorityPower = goal._priorityPower;
         }
 
         public float GetDiscontentment(float newValue)
         {
-            return Mathf.Pow(newValue, PriorityPower);
+            return Mathf.Pow(newValue, _priorityPower);
         }
 
         public float GetDiscontentment()
@@ -57,7 +58,7 @@ namespace GOAP
         public void Update()
         {
             _changeSinceLastTime = Value - _previousValue;
-            _timeSinceLastChange = Time.fixedDeltaTime;
+            _timeSinceLastChange = Time.deltaTime;
             _previousValue = Value;
         }
     }

@@ -26,7 +26,7 @@ public class RedPlannerAction : PlannerAction
         return false;
     }
 
-    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float membership)
+    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
     {
 
     }

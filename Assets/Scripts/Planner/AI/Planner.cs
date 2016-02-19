@@ -41,7 +41,7 @@ namespace GOAP
 
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(GetGoals(), GetInitialKnowledge(), this);
+            return new WorldModel(GetGoals(), GetInitialKnowledge());
         }
 
         private Dictionary<string, object> GetInitialKnowledge()
