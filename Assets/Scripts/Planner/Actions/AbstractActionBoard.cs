@@ -12,23 +12,13 @@ namespace GOAP
             get { return _instance ?? (_instance = new ActionBoard()); }
         }
 
-        private HashSet<EActionType> _actions;
-        private HashSet<IActionFactory> _factories;
+        private List<IActionFactory> _factories;
 
         protected AbstractActionBoard()
         {
-            _factories = new HashSet<IActionFactory>();
-            //i think it could be done without set of actions (if actions should contain every value of enum),
-            //using Enum.GetValues, but it throws error
-            _actions = new HashSet<EActionType>
-            {
-                EActionType.Internal,
-                EActionType.Green,
-                EActionType.Yellow,
-                EActionType.Red
-            };
-            foreach (var action in _actions)
-                _factories.Add(GetFactory(action));
+            _factories = new List<IActionFactory>();
+            foreach (var action in Enum.GetValues(typeof(EActionType)))
+                _factories.Add(GetFactory((EActionType)action));
 
             _instance = this;
         }
