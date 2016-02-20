@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GOAP
 {
-    public class Planner : MonoBehaviour
+    internal class Planner : MonoBehaviour
     {
         [SerializeField]
         private int _maxDepth;

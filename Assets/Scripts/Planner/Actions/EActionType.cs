@@ -1,10 +1,11 @@
+﻿
 namespace GOAP
 {
-    public enum EActionType
-    {
-        Internal,
-        Green,
-        Yellow,
-        Red
-    }
+	public enum EActionType
+	{
+		Internal,
+		Green,
+		Yellow,
+		Red,
+	}
 }
