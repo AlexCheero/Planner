@@ -1,0 +1,13 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<# var properties = new string [] {"Internal", "Green", "Yellow", "Red"}; #>
+
+namespace GOAP
+{
+	internal enum EActionTypeTempl
+	{
+<# foreach (string propertyName in properties) { #>
+		<#= propertyName #>,
+<# } #>
+	}
+}
