@@ -1,4 +1,4 @@
-﻿
+
 namespace GOAP
 {
 	public enum EActionType

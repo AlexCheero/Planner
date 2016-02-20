@@ -80,7 +80,7 @@ public class ActionEditor : EditorWindow
 
     private void OnGenerate()
     {
-        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\Test.txt");
+        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt");
         var newEnumVals = new StringBuilder("{");
 
         for (int i = 0; i < _entriesList.Count; i++)
@@ -93,6 +93,6 @@ public class ActionEditor : EditorWindow
         var pattern = "{.*}";
         var regex = new Regex(pattern);
 
-        File.WriteAllText(@"Assets\Scripts\Planner\Actions\Test.txt", regex.Replace(fileContent, newEnumVals.ToString()));
+        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt", regex.Replace(fileContent, newEnumVals.ToString()));
     }
 }
