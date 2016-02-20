@@ -7,8 +7,8 @@ public class RedPlannerAction : PlannerAction
     public Vector3 TargetPosition;
     public string TargetName = "";
 
-    public RedPlannerAction(Vector3 position, byte efficiency, int duration)
-        : base(new Dictionary<EGoal, float> { { EGoal.Goal, -10 } }, duration)
+    public RedPlannerAction(Vector3 position, int duration, byte efficiency)
+        : base(new Dictionary<EGoal, float> { { EGoal.Goal, -10 } }, duration, efficiency)
     {
         TargetPosition = position;
     }

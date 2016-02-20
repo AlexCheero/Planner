@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InternalPlannerAction : PlannerAction
 {
-    public InternalPlannerAction(byte efficiency, int duration)
-        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration)
+    public InternalPlannerAction(int duration, byte efficiency)
+        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
     {
     }
 

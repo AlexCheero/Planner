@@ -7,8 +7,8 @@ public class GreenPlannerAction : PlannerAction
     public Vector3 TargetPosition;
     public string TargetName = "";
 
-    public GreenPlannerAction(Vector3 position, byte efficiency, int duration)
-        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration)
+    public GreenPlannerAction(Vector3 position, int duration, byte efficiency)
+        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
     {
         TargetPosition = position;
     }
