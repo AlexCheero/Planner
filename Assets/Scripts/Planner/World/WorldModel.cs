@@ -7,7 +7,7 @@ namespace GOAP
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        private List<PlannerAction> _actions = new List<PlannerAction>();
+        private List<PlannerAction> _actions;
         private Dictionary<string, object> _knowledge;
 
         public float Discontentment { get; private set; }

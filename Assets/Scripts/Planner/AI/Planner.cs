@@ -8,8 +8,6 @@ namespace GOAP
     public class Planner : MonoBehaviour
     {
         [SerializeField]
-        private float _searchRadius;
-        [SerializeField]
         private int _maxDepth;
         [SerializeField]
         private float _maxAllowableDiscontentment;
@@ -20,6 +18,7 @@ namespace GOAP
         {
             _actionPerformer = GetComponent<ActionPerformer>();
             _table = new WMTranspositionTable();
+            _knowledgeAssembler = GetComponent<KnowledgeAssembler>();
 
             //this call should be after everything inited
             PlanActions();
@@ -47,37 +46,11 @@ namespace GOAP
             _planReady = false;
         }
 
+        private KnowledgeAssembler _knowledgeAssembler;
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(GetGoals(), GetInitialKnowledge());
-        }
-
-        private Dictionary<string, object> GetInitialKnowledge()
-        {
-            var knowledge = new Dictionary<string, object>();
-            
-            //check internal state of player to get internal knowledge
-            knowledge.Add("stayed ", false);
-
-            var colliders = Physics.OverlapSphere(transform.position, _searchRadius);
-            for (var i = 0; i < colliders.Length; i++)
-            {
-                var coll = colliders[i];
-                switch (coll.gameObject.name)
-                {
-                    case "GreenActionProvider":
-                        knowledge.Add("green position ", coll.transform.position);
-                        break;
-                    case "YellowActionProvider":
-                        knowledge.Add("yellow position ", coll.transform.position);
-                        break;
-                    case "RedActionProvider":
-                        knowledge.Add("red position ", coll.transform.position);
-                        break;
-                }
-            }
-
-            return knowledge;
+            return new WorldModel(GetGoals(),
+                _knowledgeAssembler ? _knowledgeAssembler.GetInitialKnowledge() : new Dictionary<string, object>());
         }
 
         private Goal[] GetGoals()

@@ -183,6 +183,7 @@ GameObject:
   - 114: {fileID: 11476508}
   - 114: {fileID: 11406288}
   - 114: {fileID: 11437596}
+  - 114: {fileID: 11462674}
   m_Layer: 0
   m_Name: AIThirdPersonController
   m_TagString: Untagged
@@ -2447,6 +2448,18 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.2
+--- !u!114 &11462674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53c22d8dad9c33f4ba9dc637a15111ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _searchRadius: 10
 --- !u!114 &11476508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2458,7 +2471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2698e82bcd002c4597b2b5459b3e5d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _searchRadius: 10
   _maxDepth: 5
   _maxAllowableDiscontentment: 100
 --- !u!136 &13654204
