@@ -8,10 +8,12 @@ namespace GOAP
 
         private PlannerAction[] _actionSequence;
         private Planner _planner;
+        private Actor _actor;
 
         void Start()
         {
             _planner = GetComponent<Planner>();
+            _actor = GetComponent<Actor>();
         }
 
         private int _actionIndex = 0;
@@ -20,7 +22,7 @@ namespace GOAP
             if (!_actionsSetted || _actionSequence.Length == 0)
                 return;
 
-            if (_actionSequence[_actionIndex].Perform(this))
+            if (_actionSequence[_actionIndex].Perform(_actor))
                 _actionIndex++;
 
             if (_actionIndex < _actionSequence.Length)

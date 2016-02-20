@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace GOAP
 {
     //this class and method GetInitialKnowledge should be implemented for specific usages
-    public class KnowledgeAssembler : MonoBehaviour
+    public class Actor : MonoBehaviour
     {
         [SerializeField]
         private float _searchRadius;

@@ -30,7 +30,7 @@ namespace GOAP
             return Name.GetHashCode();
         }
 
-        public abstract bool Perform(ActionPerformer machine);
+        public abstract bool Perform(Actor machine);
 
         public abstract void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency);
     }

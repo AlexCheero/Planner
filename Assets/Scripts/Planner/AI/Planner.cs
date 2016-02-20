@@ -18,7 +18,7 @@ namespace GOAP
         {
             _actionPerformer = GetComponent<ActionPerformer>();
             _table = new WMTranspositionTable();
-            _knowledgeAssembler = GetComponent<KnowledgeAssembler>();
+            _actor = GetComponent<Actor>();
 
             //this call should be after everything inited
             PlanActions();
@@ -46,11 +46,11 @@ namespace GOAP
             _planReady = false;
         }
 
-        private KnowledgeAssembler _knowledgeAssembler;
+        private Actor _actor;
         private WorldModel GetInitialWorldModel()
         {
             return new WorldModel(GetGoals(),
-                _knowledgeAssembler ? _knowledgeAssembler.GetInitialKnowledge() : new Dictionary<string, object>());
+                _actor ? _actor.GetInitialKnowledge() : new Dictionary<string, object>());
         }
 
         private Goal[] GetGoals()
