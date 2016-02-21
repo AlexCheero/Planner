@@ -124,21 +124,22 @@ public class ActionEditor : EditorWindow
 
     private const string FactoriesFolderPath = @"Assets\Scripts\Planner\ActionStuff\Factories\";
     private const string TemplatesPath = @"Assets\Scripts\Planner\ActionStuff\Templates\";
-    private const string ActionFactoryTemplate = "ActionFactoryTemplate.cs";
-    private const string PlannerActionTemplate = "PlannerActionTemplate.cs";
-    private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate;
-    private const string ActionTemplatePath = TemplatesPath + PlannerActionTemplate;
+    private const string ActionFactoryTemplate = "ActionFactoryTemplate";
+    private const string PlannerActionTemplate = "PlannerActionTemplate";
+    private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate + ".cs";
+    private const string ActionTemplatePath = TemplatesPath + PlannerActionTemplate + ".cs";
     private const string ActionPostfix = "PlannerAction";
     private const string FactoryPostfix = "ActionFactory";
     private void GenerateFactory(string action)
     {
         var factoryName = action + FactoryPostfix;
-        if (File.Exists(FactoriesFolderPath + factoryName))
+        var fullPathWithExtension = FactoriesFolderPath + factoryName + ".cs";
+        if (File.Exists(fullPathWithExtension))
             return;
 
         var templateContent = File.ReadAllText(FactoryTemplatePath);
         var pattern = ActionFactoryTemplate;
-        ReplaceInFile(pattern, FactoriesFolderPath + factoryName + ".txt", templateContent, factoryName);
+        ReplaceInFile(pattern, fullPathWithExtension, templateContent, factoryName);
     }
 
     private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
