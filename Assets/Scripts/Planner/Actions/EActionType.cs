@@ -6,6 +6,6 @@ namespace GOAP
 		Internal,
 		Green,
 		Yellow,
-		Red,
+		Red
 	}
 }

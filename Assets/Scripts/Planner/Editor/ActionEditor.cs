@@ -78,21 +78,42 @@ public class ActionEditor : EditorWindow
             OnGenerate();
     }
 
+    //simple writing in file
     private void OnGenerate()
     {
-        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt");
-        var newEnumVals = new StringBuilder("{");
+        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.cs");
+        var newEnumVals = new StringBuilder("EActionType\n\t{\n");
 
         for (int i = 0; i < _entriesList.Count; i++)
         {
-            var entry = i < _entriesList.Count - 1 ? "\"" + _entriesList[i] + "\", " : "\"" + _entriesList[i] + "\"";
-            newEnumVals.Append(entry);
+            var entry = i < _entriesList.Count - 1 ? _entriesList[i] + ",\n" : _entriesList[i] + "\n";
+            newEnumVals.Append("\t\t" + entry);
         }
-        newEnumVals.Append("}");
+        newEnumVals.Append("\t}");
 
-        var pattern = "{.*}";
+        var pattern = @"EActionType\s*{(.|\n)*?}";
         var regex = new Regex(pattern);
+//        Debug.Log("reg: " + regex.IsMatch());
 
-        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt", regex.Replace(fileContent, newEnumVals.ToString()));
+        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.cs", regex.Replace(fileContent, newEnumVals.ToString()));
     }
+
+    //text template implementation
+//    private void OnGenerate()
+//    {
+//        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt");
+//        var newEnumVals = new StringBuilder("{");
+//
+//        for (int i = 0; i < _entriesList.Count; i++)
+//        {
+//            var entry = i < _entriesList.Count - 1 ? "\"" + _entriesList[i] + "\", " : "\"" + _entriesList[i] + "\"";
+//            newEnumVals.Append(entry);
+//        }
+//        newEnumVals.Append("}");
+//
+//        var pattern = "{.*}";
+//        var regex = new Regex(pattern);
+//
+//        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt", regex.Replace(fileContent, newEnumVals.ToString()));
+//    }
 }
