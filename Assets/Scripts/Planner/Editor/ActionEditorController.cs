@@ -3,106 +3,51 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityEditor;
-using UnityEngine;
 using GOAP;
+using UnityEditor;
 
 namespace GOAPEditor
 {
-    public class ActionEditor : EditorWindow
+    public class ActionEditorController
     {
-        [MenuItem("Tools/PlannerTools/ActionEditor")]
-        public static void ShowWindow()
+        public List<string> EntriesList;
+        public List<string> EntriesToDelete;
+        public string NewEntry;
+
+        public ActionEditorController()
         {
-            var window = GetWindow(typeof(ActionEditor));
-            ((ActionEditor)window).Init();
+            Reset();
         }
 
-        private string _newEntry;
-        private List<string> _entriesList;
-        private List<string> _entriesToDelete;
-        private Vector2 _scrollPosition;
-
-        void Init()
+        public void Reset()
         {
-            _newEntry = string.Empty;
-            _entriesList = new List<string>();
-            _entriesToDelete = new List<string>();
+            EntriesList = new List<string>();
+            EntriesToDelete = new List<string>();
+            NewEntry = string.Empty;
 
-            foreach (var action in Enum.GetValues(typeof(EActionType)))
-                _entriesList.Add(action.ToString());
+            foreach (var action in Enum.GetValues(typeof (EActionType)))
+                EntriesList.Add(action.ToString());
         }
 
-        void OnGUI()
+        public void RemoveEntry(string entry)
         {
-            EditorGUILayout.BeginVertical();
-
-            DrawEntries();
-            AddEntry();
-            Generate();
-            Reinit();
-
-            EditorGUILayout.EndVertical();
+            EntriesList.Remove(entry);
+            EntriesToDelete.Add(entry);
         }
 
-        private void AddEntry()
+        public void AddEntry()
         {
-            _newEntry = GUILayout.TextField(_newEntry);
-            var add = GUILayout.Button("+");
-            if (add && !string.IsNullOrEmpty(_newEntry) && !_entriesList.Contains(_newEntry))
-            {
-                _entriesList.Add(_newEntry);
-                _newEntry = string.Empty;
-            }
-        }
-
-        private void DrawEntries()
-        {
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
-            for (int i = 0; i < _entriesList.Count; i++)
-                DrawEntry(_entriesList[i]);
-            EditorGUILayout.EndScrollView();
-        }
-
-        private void DrawEntry(string action)
-        {
-            EditorGUILayout.BeginHorizontal();
-
-            GUILayout.Label(action);
-            DeleteButton(action);
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DeleteButton(string action)
-        {
-            var delete = GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20));
-            if (!delete)
-                return;
-            _entriesList.Remove(action);
-            _entriesToDelete.Add(action);
-        }
-
-        private void Generate()
-        {
-            var generate = GUILayout.Button("Generate");
-            if (generate)
-                OnGenerate();
-        }
-
-        private void Reinit()
-        {
-            var reset = GUILayout.Button("Reinit");
-            if (reset)
-                Init();
+            EntriesList.Add(NewEntry);
+            NewEntry = string.Empty;
         }
 
         private const string EnumFilePath = @"Assets\Scripts\Planner\ActionStuff\Actions\EActionType.cs";
-        private void OnGenerate()
+        public void OnGenerate()
         {
             GenerateEnum();
-            foreach (var entry in _entriesList)
+            foreach (var entry in EntriesList)
                 GenerateFactory(entry);
-            foreach (var entry in _entriesList)
+            foreach (var entry in EntriesList)
                 GenerateAction(entry);
 
         }
@@ -112,9 +57,9 @@ namespace GOAPEditor
             var fileContent = File.ReadAllText(EnumFilePath);
             var newEnumVals = new StringBuilder("EActionType\n\t{\n");
 
-            for (int i = 0; i < _entriesList.Count; i++)
+            for (int i = 0; i < EntriesList.Count; i++)
             {
-                var entry = i < _entriesList.Count - 1 ? _entriesList[i] + ",\n" : _entriesList[i] + "\n";
+                var entry = i < EntriesList.Count - 1 ? EntriesList[i] + ",\n" : EntriesList[i] + "\n";
                 newEnumVals.Append("\t\t" + entry);
             }
             newEnumVals.Append("\t}");
