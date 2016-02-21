@@ -123,6 +123,7 @@ public class ActionEditor : EditorWindow
     }
 
     private const string FactoriesFolderPath = @"Assets\Scripts\Planner\ActionStuff\Factories\";
+    private const string ActionsFolderPath = @"Assets\Scripts\GeneratedActions\";
     private const string TemplatesPath = @"Assets\Scripts\Planner\ActionStuff\Templates\";
     private const string ActionFactoryTemplate = "ActionFactoryTemplate";
     private const string PlannerActionTemplate = "PlannerActionTemplate";
@@ -151,6 +152,13 @@ public class ActionEditor : EditorWindow
 
     private void GenerateAction(string action)
     {
-        
+        var actionName = action + ActionPostfix;
+        var fullPathWithExtension = ActionsFolderPath + actionName + ".cs";
+        if (File.Exists(fullPathWithExtension))
+            return;
+
+        var templateContent = File.ReadAllText(ActionTemplatePath);
+        var pattern = PlannerActionTemplate;
+        ReplaceInFile(pattern, fullPathWithExtension, templateContent, actionName);
     }
 }

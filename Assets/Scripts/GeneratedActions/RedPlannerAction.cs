@@ -1,34 +1,36 @@
 ﻿using System.Collections.Generic;
-using GOAP;
 using UnityEngine;
 
-public class RedPlannerAction : PlannerAction
+namespace GOAP
 {
-    public Vector3 TargetPosition;
-    public string TargetName = "";
-
-    public RedPlannerAction(Vector3 position, int duration, byte efficiency)
-        : base(new Dictionary<EGoal, float> { { EGoal.Goal, -10 } }, duration, efficiency)
+    public class RedPlannerAction : PlannerAction
     {
-        TargetPosition = position;
-    }
+        public Vector3 TargetPosition;
+        public string TargetName = "";
+
+        public RedPlannerAction(Vector3 position, int duration, byte efficiency)
+            : base(new Dictionary<EGoal, float> { { EGoal.Goal, -10 } }, duration, efficiency)
+        {
+            TargetPosition = position;
+        }
 
 
-    public override EActionType Type
-    {
-        get { return EActionType.Red; }
-    }
+        public override EActionType Type
+        {
+            get { return EActionType.Red; }
+        }
 
-    public override bool Perform(Actor machine)
-    {
-        var navAgent = machine.GetComponent<NavMeshAgent>();
-        navAgent.SetDestination(TargetPosition);
+        public override bool Perform(Actor machine)
+        {
+            var navAgent = machine.GetComponent<NavMeshAgent>();
+            navAgent.SetDestination(TargetPosition);
 
-        return false;
-    }
+            return false;
+        }
 
-    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
-    {
+        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
+        {
 
+        }
     }
 }

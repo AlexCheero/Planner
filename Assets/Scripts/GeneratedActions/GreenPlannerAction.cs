@@ -1,36 +1,38 @@
 ﻿using System.Collections.Generic;
-using GOAP;
 using UnityEngine;
 
-public class GreenPlannerAction : PlannerAction
+namespace GOAP
 {
-    public Vector3 TargetPosition;
-    public string TargetName = "";
-
-    public GreenPlannerAction(Vector3 position, int duration, byte efficiency)
-        : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
+    public class GreenPlannerAction : PlannerAction
     {
-        TargetPosition = position;
-    }
+        public Vector3 TargetPosition;
+        public string TargetName = "";
 
-    public override EActionType Type
-    {
-        get { return EActionType.Green;}
-    }
+        public GreenPlannerAction(Vector3 position, int duration, byte efficiency)
+            : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
+        {
+            TargetPosition = position;
+        }
 
-    public override bool Perform(Actor machine)
-    {
-        var navAgent = machine.GetComponent<NavMeshAgent>();
-        navAgent.SetDestination(TargetPosition);
+        public override EActionType Type
+        {
+            get { return EActionType.Green; }
+        }
 
-        return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
-    }
+        public override bool Perform(Actor machine)
+        {
+            var navAgent = machine.GetComponent<NavMeshAgent>();
+            navAgent.SetDestination(TargetPosition);
 
-    public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
-    {
-        if (knowledge.ContainsKey("greened "))
-            knowledge["greened "] = true;
-        else
-            knowledge.Add("greened ", true);
+            return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
+        }
+
+        public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
+        {
+            if (knowledge.ContainsKey("greened "))
+                knowledge["greened "] = true;
+            else
+                knowledge.Add("greened ", true);
+        }
     }
 }
