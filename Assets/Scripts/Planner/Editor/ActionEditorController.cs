@@ -41,7 +41,8 @@ namespace GOAPEditor
             NewEntry = string.Empty;
         }
 
-        private const string EnumFilePath = @"Assets\Scripts\Planner\ActionStuff\Actions\EActionType.cs";
+        private const string ActionStuffPath = @"Assets\Scripts\Planner\ActionStuff\";
+        private const string EnumFilePath = ActionStuffPath + @"Actions\EActionType.cs";
         public void OnGenerate()
         {
             DeleteFiles();
@@ -68,9 +69,9 @@ namespace GOAPEditor
             ReplaceInFile(pattern, EnumFilePath, fileContent, newEnumVals.ToString());
         }
 
-        private const string FactoriesFolderPath = @"Assets\Scripts\Planner\ActionStuff\Factories\";
+        private const string FactoriesFolderPath = ActionStuffPath + @"Factories\";
         private const string ActionsFolderPath = @"Assets\Scripts\GeneratedActions\";
-        private const string TemplatesPath = @"Assets\Scripts\Planner\ActionStuff\Templates\";
+        private const string TemplatesPath = ActionStuffPath + @"Templates\";
         private const string ActionFactoryTemplate = "ActionFactoryTemplate";
         private const string PlannerActionTemplate = "PlannerActionTemplate";
         private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate + ".cs";
@@ -87,6 +88,8 @@ namespace GOAPEditor
             var templateContent = File.ReadAllText(FactoryTemplatePath);
             var pattern = ActionFactoryTemplate;
             ReplaceInFile(pattern, fullPathWithExtension, templateContent, factoryName);
+
+            //rewrite ActionBoard
         }
 
         private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
@@ -113,9 +116,7 @@ namespace GOAPEditor
             foreach (var entry in _entriesToDelete)
             {
                 File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".cs");
-                File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".meta");
                 File.Delete(ActionsFolderPath + entry + ActionPostfix + ".cs");
-                File.Delete(ActionsFolderPath + entry + ActionPostfix + ".meta");
             }
             _entriesToDelete.Clear();
             AssetDatabase.Refresh();
