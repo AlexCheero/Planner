@@ -11,7 +11,7 @@ namespace GOAPEditor
     public class ActionEditorController
     {
         public List<string> EntriesList;
-        public List<string> EntriesToDelete;
+        private List<string> _entriesToDelete;
         public string NewEntry;
 
         public ActionEditorController()
@@ -22,7 +22,7 @@ namespace GOAPEditor
         public void Reset()
         {
             EntriesList = new List<string>();
-            EntriesToDelete = new List<string>();
+            _entriesToDelete = new List<string>();
             NewEntry = string.Empty;
 
             foreach (var action in Enum.GetValues(typeof (EActionType)))
@@ -32,7 +32,7 @@ namespace GOAPEditor
         public void RemoveEntry(string entry)
         {
             EntriesList.Remove(entry);
-            EntriesToDelete.Add(entry);
+            _entriesToDelete.Add(entry);
         }
 
         public void AddEntry()
@@ -44,12 +44,12 @@ namespace GOAPEditor
         private const string EnumFilePath = @"Assets\Scripts\Planner\ActionStuff\Actions\EActionType.cs";
         public void OnGenerate()
         {
+            DeleteFiles();
             GenerateEnum();
             foreach (var entry in EntriesList)
                 GenerateFactory(entry);
             foreach (var entry in EntriesList)
                 GenerateAction(entry);
-
         }
 
         private void GenerateEnum()
@@ -106,6 +106,19 @@ namespace GOAPEditor
             var templateContent = File.ReadAllText(ActionTemplatePath);
             var pattern = PlannerActionTemplate;
             ReplaceInFile(pattern, fullPathWithExtension, templateContent, actionName);
+        }
+
+        private void DeleteFiles()
+        {
+            foreach (var entry in _entriesToDelete)
+            {
+                File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".cs");
+                File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".meta");
+                File.Delete(ActionsFolderPath + entry + ActionPostfix + ".cs");
+                File.Delete(ActionsFolderPath + entry + ActionPostfix + ".meta");
+            }
+            _entriesToDelete.Clear();
+            AssetDatabase.Refresh();
         }
     }
 }
