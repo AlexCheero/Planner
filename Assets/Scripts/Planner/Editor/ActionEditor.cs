@@ -18,12 +18,14 @@ public class ActionEditor : EditorWindow
 
     private string _newEntry;
     private List<string> _entriesList;
+    private List<string> _entriesToDelete;
     private Vector2 _scrollPosition;
 
     void Init()
     {
         _newEntry = string.Empty;
         _entriesList = new List<string>();
+        _entriesToDelete = new List<string>();
 
         foreach (var action in Enum.GetValues(typeof (EActionType)))
             _entriesList.Add(action.ToString());
@@ -33,9 +35,11 @@ public class ActionEditor : EditorWindow
     {
         EditorGUILayout.BeginVertical();
         
+        //rewrite this, drag all the gui functions to this method, so unity won't swear
         DrawEntries();
         AddEntry();
         Generate();
+        Reset();
 
         EditorGUILayout.EndVertical();
     }
@@ -64,25 +68,47 @@ public class ActionEditor : EditorWindow
         EditorGUILayout.BeginHorizontal();
 
         GUILayout.Label(action);
-        var delete = GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20));
-        if (delete)
-            _entriesList.Remove(action);
-        
+        DeleteButton(action);
         EditorGUILayout.EndHorizontal();
+    }
+
+    private void DeleteButton(string action)
+    {
+        var delete = GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20));
+        if (!delete)
+            return;
+        _entriesList.Remove(action);
+        _entriesToDelete.Add(action);
     }
 
     private void Generate()
     {
-        var generate = GUILayout.Button("Generate new actions enum");
+        var generate = GUILayout.Button("Generate");
         if (generate)
             OnGenerate();
     }
 
-    private const string FilePath = @"Assets\Scripts\Planner\Actions\EActionType.cs";
-    //simple writing in file
+    private void Reset()
+    {
+        var reset = GUILayout.Button("Reset");
+        if (reset)
+            Init();
+    }
+
+    private const string EnumFilePath = @"Assets\Scripts\Planner\ActionStuff\Actions\EActionType.cs";
     private void OnGenerate()
     {
-        var fileContent = File.ReadAllText(FilePath);
+        GenerateEnum();
+        foreach (var entry in _entriesList)
+            GenerateFactory(entry);
+        foreach (var entry in _entriesList)
+            GenerateAction(entry);
+        
+    }
+
+    private void GenerateEnum()
+    {
+        var fileContent = File.ReadAllText(EnumFilePath);
         var newEnumVals = new StringBuilder("EActionType\n\t{\n");
 
         for (int i = 0; i < _entriesList.Count; i++)
@@ -93,29 +119,37 @@ public class ActionEditor : EditorWindow
         newEnumVals.Append("\t}");
 
         var pattern = @"EActionType\s*{(.|\n)*?}";
-        var regex = new Regex(pattern);
-//        Debug.Log("reg: " + regex.IsMatch());
-
-        File.WriteAllText(FilePath, regex.Replace(fileContent, newEnumVals.ToString()));
-        AssetDatabase.ImportAsset(FilePath);
+        ReplaceInFile(pattern, EnumFilePath, fileContent, newEnumVals.ToString());
     }
 
-    //text template implementation
-//    private void OnGenerate()
-//    {
-//        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt");
-//        var newEnumVals = new StringBuilder("{");
-//
-//        for (int i = 0; i < _entriesList.Count; i++)
-//        {
-//            var entry = i < _entriesList.Count - 1 ? "\"" + _entriesList[i] + "\", " : "\"" + _entriesList[i] + "\"";
-//            newEnumVals.Append(entry);
-//        }
-//        newEnumVals.Append("}");
-//
-//        var pattern = "{.*}";
-//        var regex = new Regex(pattern);
-//
-//        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.tt", regex.Replace(fileContent, newEnumVals.ToString()));
-//    }
+    private const string FactoriesFolderPath = @"Assets\Scripts\Planner\ActionStuff\Factories\";
+    private const string TemplatesPath = @"Assets\Scripts\Planner\ActionStuff\Templates\";
+    private const string ActionFactoryTemplate = "ActionFactoryTemplate.cs";
+    private const string PlannerActionTemplate = "PlannerActionTemplate.cs";
+    private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate;
+    private const string ActionTemplatePath = TemplatesPath + PlannerActionTemplate;
+    private const string ActionPostfix = "PlannerAction";
+    private const string FactoryPostfix = "ActionFactory";
+    private void GenerateFactory(string action)
+    {
+        var factoryName = action + FactoryPostfix;
+        if (File.Exists(FactoriesFolderPath + factoryName))
+            return;
+
+        var templateContent = File.ReadAllText(FactoryTemplatePath);
+        var pattern = ActionFactoryTemplate;
+        ReplaceInFile(pattern, FactoriesFolderPath + factoryName + ".txt", templateContent, factoryName);
+    }
+
+    private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
+    {
+        var regex = new Regex(pattern);
+        File.WriteAllText(filePath, regex.Replace(templateContent, replacement));
+        AssetDatabase.ImportAsset(filePath);
+    }
+
+    private void GenerateAction(string action)
+    {
+        
+    }
 }

@@ -9,9 +9,9 @@ public class InternalPlannerAction : PlannerAction
     {
     }
 
-    public override string Name
+    public override EActionType Type
     {
-        get { return "InternalAction"; }
+        get { return EActionType.Internal; }
     }
 
     public override bool Perform(Actor machine)

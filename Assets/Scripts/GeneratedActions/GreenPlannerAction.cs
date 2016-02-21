@@ -13,9 +13,9 @@ public class GreenPlannerAction : PlannerAction
         TargetPosition = position;
     }
 
-    public override string Name
+    public override EActionType Type
     {
-        get { return TargetName + "GreenAction"; }
+        get { return EActionType.Green;}
     }
 
     public override bool Perform(Actor machine)

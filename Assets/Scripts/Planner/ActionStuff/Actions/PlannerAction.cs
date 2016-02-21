@@ -7,7 +7,7 @@ namespace GOAP
         //probably goal changes can be int
         private readonly Dictionary<EGoal, float> _goalChanges;
 
-        public abstract string Name { get; }
+        public abstract EActionType Type { get; }
 
         public int Duration { get; private set; }
         public byte ActionEfficiency { get; private set; }
@@ -27,7 +27,7 @@ namespace GOAP
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode();
+            return Type.ToString().GetHashCode();
         }
 
         public abstract bool Perform(Actor machine);

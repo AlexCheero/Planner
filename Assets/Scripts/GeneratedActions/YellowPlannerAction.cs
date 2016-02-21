@@ -13,9 +13,9 @@ public class YellowPlannerAction : PlannerAction
         TargetPosition = position;
     }
 
-    public override string Name
+    public override EActionType Type
     {
-        get { return TargetName + "YellowAction"; }
+        get { return EActionType.Yellow;}
     }
 
     public override bool Perform(Actor machine)

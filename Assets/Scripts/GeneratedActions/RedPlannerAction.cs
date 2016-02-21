@@ -13,9 +13,10 @@ public class RedPlannerAction : PlannerAction
         TargetPosition = position;
     }
 
-    public override string Name
+
+    public override EActionType Type
     {
-        get { return TargetName + "RedAction"; }
+        get { return EActionType.Red; }
     }
 
     public override bool Perform(Actor machine)

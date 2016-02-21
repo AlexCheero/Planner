@@ -16,7 +16,7 @@ namespace GOAP
         {
             Goals = goals;
             _knowledge = knowledge;
-            _actions = AbstractActionBoard.Instance.GetActions(_knowledge);
+            _actions = ActionBoard.Instance.GetActions(_knowledge);
             Discontentment = 0;
             for (var i = 0; i < Goals.Length; i++)
             {
@@ -82,7 +82,7 @@ namespace GOAP
             }
 
             action.AffectOnKnowledge(ref _knowledge, /*action.ActionEfficiency*/255);
-            _actions = AbstractActionBoard.Instance.GetActions(_knowledge);
+            _actions = ActionBoard.Instance.GetActions(_knowledge);
         }
     }
 }
