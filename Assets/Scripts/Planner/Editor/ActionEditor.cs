@@ -78,10 +78,11 @@ public class ActionEditor : EditorWindow
             OnGenerate();
     }
 
+    private const string FilePath = @"Assets\Scripts\Planner\Actions\EActionType.cs";
     //simple writing in file
     private void OnGenerate()
     {
-        var fileContent = File.ReadAllText(@"Assets\Scripts\Planner\Actions\EActionType.cs");
+        var fileContent = File.ReadAllText(FilePath);
         var newEnumVals = new StringBuilder("EActionType\n\t{\n");
 
         for (int i = 0; i < _entriesList.Count; i++)
@@ -95,7 +96,8 @@ public class ActionEditor : EditorWindow
         var regex = new Regex(pattern);
 //        Debug.Log("reg: " + regex.IsMatch());
 
-        File.WriteAllText(@"Assets\Scripts\Planner\Actions\EActionType.cs", regex.Replace(fileContent, newEnumVals.ToString()));
+        File.WriteAllText(FilePath, regex.Replace(fileContent, newEnumVals.ToString()));
+        AssetDatabase.ImportAsset(FilePath);
     }
 
     //text template implementation
