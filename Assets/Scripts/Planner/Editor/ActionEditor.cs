@@ -39,7 +39,7 @@ public class ActionEditor : EditorWindow
         DrawEntries();
         AddEntry();
         Generate();
-        Reset();
+        Reinit();
 
         EditorGUILayout.EndVertical();
     }
@@ -88,9 +88,9 @@ public class ActionEditor : EditorWindow
             OnGenerate();
     }
 
-    private void Reset()
+    private void Reinit()
     {
-        var reset = GUILayout.Button("Reset");
+        var reset = GUILayout.Button("Reinit");
         if (reset)
             Init();
     }
