@@ -68,18 +68,35 @@ namespace GOAPEditor
 
         private void GenerateEnum()
         {
-            var fileContent = File.ReadAllText(EnumFilePath);
-            var newEnumVals = new StringBuilder("EActionType\n\t{\n");
+            RewriteFile(EnumFilePath, "EActionType");
+        }
+
+        private void RewriteActionBoard(string action)
+        {
+            RewriteFile(ActionBoardPath, "_factories = new List<IActionFactory>", "ActionFactory.Instance", 3);
+        }
+
+        private void RewriteFile(string path, string tag, string append = "", int indentCount = 2)
+        {
+            var fileContent = File.ReadAllText(path);
+            var newFactories = new StringBuilder(tag + "\n\t{\n");
 
             for (int i = 0; i < EntriesList.Count; i++)
             {
-                var entry = i < EntriesList.Count - 1 ? EntriesList[i] + ",\n" : EntriesList[i] + "\n";
-                newEnumVals.Append("\t\t" + entry);
+                var factory = EntriesList[i] + append;
+                if (i < EntriesList.Count - 1)
+                    factory += ",\n";
+                else
+                    factory += "\n";
+                var indent = "";
+                for (int j = 0; j < indentCount; j++)
+                    indent += "\t";
+                newFactories.Append(indent + factory);
             }
-            newEnumVals.Append("\t}");
+            newFactories.Append("\t}");
 
-            var pattern = @"EActionType\s*{(.|\n)*?}";
-            ReplaceInFile(pattern, EnumFilePath, fileContent, newEnumVals.ToString());
+            var pattern = tag + @"\s*{(.|\n)*?}";
+            ReplaceInFile(pattern, path, fileContent, newFactories.ToString());
         }
 
         private void GenerateFactory(string action)
@@ -92,26 +109,6 @@ namespace GOAPEditor
             var templateContent = File.ReadAllText(FactoryTemplatePath);
             var pattern = ActionFactoryTemplate;
             ReplaceInFile(pattern, fullPathWithExtension, templateContent, factoryName);
-        }
-
-        private void RewriteActionBoard(string action)
-        {
-            var fileContent = File.ReadAllText(ActionBoardPath);
-            var newFactories = new StringBuilder("_factories = new List<IActionFactory>\n\t{\n");
-
-            for (int i = 0; i < EntriesList.Count; i++)
-            {
-                var factory = EntriesList[i] + "ActionFactory.Instance";
-                if (i < EntriesList.Count - 1)
-                    factory += ",\n";
-                else
-                    factory += "\n";
-                newFactories.Append("\t\t" + factory);
-            }
-            newFactories.Append("\t}");
-
-            var pattern = @"_factories = new List<IActionFactory>\s*{(.|\n)*?}";
-            ReplaceInFile(pattern, ActionBoardPath, fileContent, newFactories.ToString());
         }
 
         private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
