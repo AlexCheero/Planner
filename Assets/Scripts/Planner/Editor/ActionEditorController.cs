@@ -79,7 +79,12 @@ namespace GOAPEditor
         private void RewriteFile(string path, string tag, string append = "", int indentCount = 2)
         {
             var fileContent = File.ReadAllText(path);
-            var newFactories = new StringBuilder(tag + "\n\t{\n");
+            
+            var outerIndent = "";
+            var innerIndent = "";
+            MakeIndents(indentCount, ref outerIndent, ref innerIndent);
+
+            var newFactories = new StringBuilder(tag + "\n" + outerIndent + "{\n");
 
             for (int i = 0; i < EntriesList.Count; i++)
             {
@@ -88,15 +93,29 @@ namespace GOAPEditor
                     factory += ",\n";
                 else
                     factory += "\n";
-                var indent = "";
-                for (int j = 0; j < indentCount; j++)
-                    indent += "\t";
-                newFactories.Append(indent + factory);
+                newFactories.Append(innerIndent + factory);
             }
-            newFactories.Append("\t}");
+            newFactories.Append(outerIndent + "}");
 
             var pattern = tag + @"\s*{(.|\n)*?}";
             ReplaceInFile(pattern, path, fileContent, newFactories.ToString());
+        }
+
+        private void MakeIndents(int indentCount, ref string outerIndent, ref string innerIndent)
+        {
+            outerIndent = "";
+            innerIndent = "";
+
+            if (indentCount <= 0)
+                return;
+
+            for (int i = 0; i < indentCount - 1; i++)
+            {
+                outerIndent += "\t";
+                innerIndent += "\t";
+            }
+
+            innerIndent += "\t";
         }
 
         private void GenerateFactory(string action)
@@ -134,8 +153,14 @@ namespace GOAPEditor
         {
             foreach (var entry in _entriesToDelete)
             {
-                File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".cs");
-                File.Delete(GeneratedActionsFolderPath + entry + ActionPostfix + ".cs");
+                var factoryPath = FactoriesFolderPath + entry + FactoryPostfix;
+                var actionPath = GeneratedActionsFolderPath + entry + ActionPostfix;
+
+                File.Delete(factoryPath + ".cs");
+                File.Delete(factoryPath + ".meta");
+
+                File.Delete(actionPath + ".cs");
+                File.Delete(actionPath + ".meta");
             }
             _entriesToDelete.Clear();
             AssetDatabase.Refresh();
