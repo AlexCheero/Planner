@@ -120,14 +120,23 @@ namespace GOAPEditor
 
         private void GenerateFactory(string action)
         {
-            var factoryName = action + FactoryPostfix;
-            var fullPathWithExtension = FactoriesFolderPath + factoryName + ".cs";
+            GenerateNewFile(action, FactoryPostfix, FactoriesFolderPath, FactoryTemplatePath, ActionFactoryTemplate);
+        }
+
+        private void GenerateAction(string action)
+        {
+            GenerateNewFile(action, ActionPostfix, GeneratedActionsFolderPath, ActionTemplatePath, PlannerActionTemplate);
+        }
+
+        private void GenerateNewFile(string action, string postfix, string targetFolderPath, string templatePath, string pattern)
+        {
+            var fileName = action + postfix;
+            var fullPathWithExtension = targetFolderPath + fileName + ".cs";
             if (File.Exists(fullPathWithExtension))
                 return;
 
-            var templateContent = File.ReadAllText(FactoryTemplatePath);
-            var pattern = ActionFactoryTemplate;
-            ReplaceInFile(pattern, fullPathWithExtension, templateContent, factoryName);
+            var templateContent = File.ReadAllText(templatePath);
+            ReplaceInFile(pattern, fullPathWithExtension, templateContent, fileName);
         }
 
         private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
@@ -135,18 +144,6 @@ namespace GOAPEditor
             var regex = new Regex(pattern);
             File.WriteAllText(filePath, regex.Replace(templateContent, replacement));
             AssetDatabase.ImportAsset(filePath);
-        }
-
-        private void GenerateAction(string action)
-        {
-            var actionName = action + ActionPostfix;
-            var fullPathWithExtension = GeneratedActionsFolderPath + actionName + ".cs";
-            if (File.Exists(fullPathWithExtension))
-                return;
-
-            var templateContent = File.ReadAllText(ActionTemplatePath);
-            var pattern = PlannerActionTemplate;
-            ReplaceInFile(pattern, fullPathWithExtension, templateContent, actionName);
         }
 
         private void DeleteFiles()
