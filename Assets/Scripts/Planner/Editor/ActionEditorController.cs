@@ -42,15 +42,28 @@ namespace GOAPEditor
         }
 
         private const string ActionStuffPath = @"Assets\Scripts\Planner\ActionStuff\";
-        private const string EnumFilePath = ActionStuffPath + @"Actions\EActionType.cs";
+        private const string ActionsPath = ActionStuffPath + @"Actions\";
+        private const string ActionBoardPath = ActionsPath + "ActionBoard.cs";
+        private const string EnumFilePath = ActionsPath + @"EActionType.cs";
+        private const string FactoriesFolderPath = ActionStuffPath + @"Factories\";
+        private const string GeneratedActionsFolderPath = @"Assets\Scripts\GeneratedActions\";
+        private const string TemplatesPath = ActionStuffPath + @"Templates\";
+        private const string ActionFactoryTemplate = "ActionFactoryTemplate";
+        private const string PlannerActionTemplate = "PlannerActionTemplate";
+        private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate + ".cs";
+        private const string ActionTemplatePath = TemplatesPath + PlannerActionTemplate + ".cs";
+        private const string ActionPostfix = "PlannerAction";
+        private const string FactoryPostfix = "ActionFactory";
         public void OnGenerate()
         {
             DeleteFiles();
             GenerateEnum();
             foreach (var entry in EntriesList)
+            {
                 GenerateFactory(entry);
-            foreach (var entry in EntriesList)
                 GenerateAction(entry);
+                RewriteActionBoard(entry);
+            }
         }
 
         private void GenerateEnum()
@@ -69,15 +82,6 @@ namespace GOAPEditor
             ReplaceInFile(pattern, EnumFilePath, fileContent, newEnumVals.ToString());
         }
 
-        private const string FactoriesFolderPath = ActionStuffPath + @"Factories\";
-        private const string ActionsFolderPath = @"Assets\Scripts\GeneratedActions\";
-        private const string TemplatesPath = ActionStuffPath + @"Templates\";
-        private const string ActionFactoryTemplate = "ActionFactoryTemplate";
-        private const string PlannerActionTemplate = "PlannerActionTemplate";
-        private const string FactoryTemplatePath = TemplatesPath + ActionFactoryTemplate + ".cs";
-        private const string ActionTemplatePath = TemplatesPath + PlannerActionTemplate + ".cs";
-        private const string ActionPostfix = "PlannerAction";
-        private const string FactoryPostfix = "ActionFactory";
         private void GenerateFactory(string action)
         {
             var factoryName = action + FactoryPostfix;
@@ -88,8 +92,26 @@ namespace GOAPEditor
             var templateContent = File.ReadAllText(FactoryTemplatePath);
             var pattern = ActionFactoryTemplate;
             ReplaceInFile(pattern, fullPathWithExtension, templateContent, factoryName);
+        }
 
-            //rewrite ActionBoard
+        private void RewriteActionBoard(string action)
+        {
+            var fileContent = File.ReadAllText(ActionBoardPath);
+            var newFactories = new StringBuilder("_factories = new List<IActionFactory>\n\t{\n");
+
+            for (int i = 0; i < EntriesList.Count; i++)
+            {
+                var factory = EntriesList[i] + "ActionFactory.Instance";
+                if (i < EntriesList.Count - 1)
+                    factory += ",\n";
+                else
+                    factory += "\n";
+                newFactories.Append("\t\t" + factory);
+            }
+            newFactories.Append("\t}");
+
+            var pattern = @"_factories = new List<IActionFactory>\s*{(.|\n)*?}";
+            ReplaceInFile(pattern, ActionBoardPath, fileContent, newFactories.ToString());
         }
 
         private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
@@ -102,7 +124,7 @@ namespace GOAPEditor
         private void GenerateAction(string action)
         {
             var actionName = action + ActionPostfix;
-            var fullPathWithExtension = ActionsFolderPath + actionName + ".cs";
+            var fullPathWithExtension = GeneratedActionsFolderPath + actionName + ".cs";
             if (File.Exists(fullPathWithExtension))
                 return;
 
@@ -116,7 +138,7 @@ namespace GOAPEditor
             foreach (var entry in _entriesToDelete)
             {
                 File.Delete(FactoriesFolderPath + entry + FactoryPostfix + ".cs");
-                File.Delete(ActionsFolderPath + entry + ActionPostfix + ".cs");
+                File.Delete(GeneratedActionsFolderPath + entry + ActionPostfix + ".cs");
             }
             _entriesToDelete.Clear();
             AssetDatabase.Refresh();

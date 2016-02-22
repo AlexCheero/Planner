@@ -11,7 +11,7 @@ namespace GOAP
             get { return _instance ?? (_instance = new ActionBoard()); }
         }
 
-        private List<IActionFactory> _factories = new List<IActionFactory>()
+        private List<IActionFactory> _factories = new List<IActionFactory>
         {
             InternalActionFactory.Instance,
             GreenActionFactory.Instance,
