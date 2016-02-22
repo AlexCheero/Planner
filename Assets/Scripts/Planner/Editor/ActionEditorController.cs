@@ -58,11 +58,11 @@ namespace GOAPEditor
         {
             DeleteFiles();
             GenerateEnum();
+            RewriteActionBoard();
             foreach (var entry in EntriesList)
             {
                 GenerateFactory(entry);
                 GenerateAction(entry);
-                RewriteActionBoard(entry);
             }
         }
 
@@ -71,7 +71,7 @@ namespace GOAPEditor
             RewriteFile(EnumFilePath, "EActionType");
         }
 
-        private void RewriteActionBoard(string action)
+        private void RewriteActionBoard()
         {
             RewriteFile(ActionBoardPath, "_factories = new List<IActionFactory>", "ActionFactory.Instance", 3);
         }
