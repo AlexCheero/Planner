@@ -72,7 +72,7 @@ namespace GOAPEditor
             newFactories.Append(outerIndent + "}");
 
             var pattern = tag + @"\s*{(.|\n)*?}";
-            ReplaceInFile(pattern, path, fileContent, newFactories.ToString());
+            WriteFile(pattern, path, fileContent, newFactories.ToString());
         }
 
         private void MakeIndents(int indentCount, ref string outerIndent, ref string innerIndent)
@@ -94,26 +94,26 @@ namespace GOAPEditor
 
         private void GenerateFactory(string action)
         {
-            GenerateNewFile(action, FactoryPostfix, FactoriesFolderPath, FactoryTemplatePath, ActionFactoryTemplate);
+            GenerateNewFile(action + FactoryPostfix, FactoriesFolderPath, FactoryTemplatePath, ActionFactoryTemplate);
         }
 
         private void GenerateAction(string action)
         {
-            GenerateNewFile(action, ActionPostfix, GeneratedActionsFolderPath, ActionTemplatePath, PlannerActionTemplate);
+            GenerateNewFile(action + ActionPostfix, GeneratedActionsFolderPath, ActionTemplatePath, PlannerActionTemplate);
         }
 
-        private void GenerateNewFile(string action, string postfix, string targetFolderPath, string templatePath, string pattern)
+        private void GenerateNewFile(string actionWithPostfix, string targetFolderPath, string templatePath, string pattern)
         {
-            var fileName = action + postfix;
+            var fileName = actionWithPostfix;
             var fullPathWithExtension = targetFolderPath + fileName + ".cs";
             if (File.Exists(fullPathWithExtension))
                 return;
 
             var templateContent = File.ReadAllText(templatePath);
-            ReplaceInFile(pattern, fullPathWithExtension, templateContent, fileName);
+            WriteFile(pattern, fullPathWithExtension, templateContent, fileName);
         }
 
-        private static void ReplaceInFile(string pattern, string filePath, string templateContent, string replacement)
+        private void WriteFile(string pattern, string filePath, string templateContent, string replacement)
         {
             var regex = new Regex(pattern);
             File.WriteAllText(filePath, regex.Replace(templateContent, replacement));
@@ -135,6 +135,14 @@ namespace GOAPEditor
             }
             _entriesToDelete.Clear();
             AssetDatabase.Refresh();
+        }
+
+        private struct FileGenData
+        {
+            public string Pattern;
+            public string FilePath;
+            public string TemplateContent;
+            public string Replacement;
         }
     }
 }
