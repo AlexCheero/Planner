@@ -13,7 +13,17 @@ namespace GOAP
             get { throw new System.NotImplementedException(); }
         }
 
-        public override bool Perform(Actor machine)
+        public override void StartAction(Actor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Perform(Actor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool IsComplete()
         {
             throw new System.NotImplementedException();
         }

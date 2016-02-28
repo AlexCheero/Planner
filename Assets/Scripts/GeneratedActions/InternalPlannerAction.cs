@@ -15,9 +15,18 @@ namespace GOAP
             get { return EActionType.Internal; }
         }
 
-        public override bool Perform(Actor machine)
+        public override void StartAction(Actor actor)
         {
-            Debug.Log("Internal!");
+            Debug.Log("Start Internal!");
+        }
+
+        public override void Perform(Actor actor)
+        {
+            Debug.Log("Performing Internal!");
+        }
+
+        public override bool IsComplete()
+        {
             return true;
         }
 

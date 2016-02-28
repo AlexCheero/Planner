@@ -22,10 +22,13 @@ namespace GOAP
             if (!_actionsSetted || _actionSequence.Length == 0)
                 return;
 
-            if (_actionSequence[_actionIndex].Perform(_actor))
+            /*if (_actionSequence[_actionIndex].Perform(_actor))
+            {
                 _actionIndex++;
+                return;
+            }*/
 
-            if (_actionIndex < _actionSequence.Length)
+            if (_actionIndex >= _actionSequence.Length)
                 return;
 
             _actionsSetted = false;

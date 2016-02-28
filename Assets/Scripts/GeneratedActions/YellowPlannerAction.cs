@@ -8,6 +8,8 @@ namespace GOAP
         public Vector3 TargetPosition;
         public string TargetName = "";
 
+        private NavMeshAgent _navAgent;
+
         public YellowPlannerAction(Vector3 position, int duration, byte efficiency)
             : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
         {
@@ -19,12 +21,17 @@ namespace GOAP
             get { return EActionType.Yellow; }
         }
 
-        public override bool Perform(Actor machine)
+        public override void StartAction(Actor actor)
         {
-            var navAgent = machine.GetComponent<NavMeshAgent>();
-            navAgent.SetDestination(TargetPosition);
+            _navAgent = actor.GetComponent<NavMeshAgent>();
+            _navAgent.SetDestination(TargetPosition);
+        }
 
-            return Vector3.Distance(navAgent.transform.position, TargetPosition) <= 0.5f;
+        public override void Perform(Actor actor) { }
+
+        public override bool IsComplete()
+        {
+            return Vector3.Distance(_navAgent.transform.position, TargetPosition) <= 0.5f;
         }
 
         public override void AffectOnKnowledge(ref Dictionary<string, object> knowledge, float efficiency)
