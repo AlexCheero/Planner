@@ -181,7 +181,6 @@ GameObject:
   - 114: {fileID: 11402594}
   - 114: {fileID: 11450346}
   - 114: {fileID: 11476508}
-  - 114: {fileID: 11406288}
   - 114: {fileID: 11437596}
   - 114: {fileID: 11462674}
   m_Layer: 0
@@ -2407,17 +2406,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
---- !u!114 &11406288
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 113348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddc7c95503ea6c1479de2c7237745d06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11437596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2473,6 +2461,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxDepth: 5
   _maxAllowableDiscontentment: 100
+  _goals:
+  - _type: 0
+    _value: 20
+    _priorityPower: 2
 --- !u!136 &13654204
 CapsuleCollider:
   m_ObjectHideFlags: 1

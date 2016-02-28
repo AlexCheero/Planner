@@ -11,6 +11,8 @@ namespace GOAP
         private int _maxDepth;
         [SerializeField]
         private float _maxAllowableDiscontentment;
+        [SerializeField]
+        private Goal[] _goals;
 
         private ActionPerformer _actionPerformer;
 
@@ -49,14 +51,7 @@ namespace GOAP
         private Actor _actor;
         private WorldModel GetInitialWorldModel()
         {
-            return new WorldModel(GetGoals(),
-                _actor ? _actor.GetInitialKnowledge() : new Dictionary<string, object>());
-        }
-
-        private Goal[] GetGoals()
-        {
-            //still the state machine is better to choose only one main goal
-            return new[] {new Goal(EGoal.Goal, 20)};
+            return new WorldModel(_goals, _actor ? _actor.GetInitialKnowledge() : new Dictionary<string, object>());
         }
 
         private PlannerAction[] _bestActionSequence;

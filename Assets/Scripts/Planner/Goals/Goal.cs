@@ -3,36 +3,42 @@ using UnityEngine;
 
 namespace GOAP
 {
+    [System.Serializable]
     public class Goal
     {
-        public readonly EGoal Type;
+        [SerializeField]
+        private EGoal _type;
+        [SerializeField]
         private float _value;
+        [SerializeField]
+        private int _priorityPower;
+
+        private float  _previousValue;
+        private float _changeSinceLastTime;
+        private float _timeSinceLastChange;
+
+        private float _basicChangeRate;
+        private float _basicRateShare;
+        private float _dynamicRateShare;
+
         public float Value
         {
             get { return _value; }
             set { _value = Mathf.Max(0, value); }
         }
 
-        private float _previousValue;
-        private float _changeSinceLastTime;
-        private float _timeSinceLastChange;
-
-        private readonly int _priorityPower;
-
-        private float _basicChangeRate;
-        public float BasicRateShare;
-        public float DynamicRateShare;
+        public EGoal Type { get { return _type; } }
 
         public Goal(EGoal type, float value, int priorityPow = 2)
         {
-            Type = type;
+            _type = type;
             _previousValue = Value = value;
             _priorityPower = priorityPow;
         }
 
         public Goal(Goal goal)
         {
-            Type = goal.Type;
+            _type = goal._type;
             _previousValue = Value = goal.Value;
             _priorityPower = goal._priorityPower;
         }
@@ -50,7 +56,7 @@ namespace GOAP
         public float GetChangeOverTime()
         {
             var rateSinceLastTime = _changeSinceLastTime / _timeSinceLastChange;
-            _basicChangeRate = BasicRateShare * _basicChangeRate + DynamicRateShare * rateSinceLastTime;
+            _basicChangeRate = _basicRateShare * _basicChangeRate + _dynamicRateShare * rateSinceLastTime;
 
             return _basicChangeRate;
         }

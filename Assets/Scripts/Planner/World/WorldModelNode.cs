@@ -1,5 +1,7 @@
 ﻿namespace GOAP
 {
+    //it looks like these class were intended to use for implementation of following plan mechanism, with tree structure of plan
+    //(different variations of happenings)
     public class WorldModelNode
     {
         public int[] ActionIndexes;
