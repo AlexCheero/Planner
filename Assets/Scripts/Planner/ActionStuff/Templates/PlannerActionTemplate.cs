@@ -15,7 +15,7 @@ namespace GOAP
 
         public override void StartAction(Actor actor)
         {
-            throw new System.NotImplementedException();
+            base.StartAction(actor);
         }
 
         public override void Perform(Actor actor)

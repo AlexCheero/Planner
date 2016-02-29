@@ -12,6 +12,8 @@ namespace GOAP
         public int Duration { get; private set; }
         public byte ActionEfficiency { get; private set; }
 
+        public bool IsStarted { get; private set; }
+
         protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte actionEfficiency = 77)//77 for 30%
         {
             _goalChanges = changes;
@@ -30,7 +32,10 @@ namespace GOAP
             return Type.ToString().GetHashCode();
         }
 
-        public abstract void StartAction(Actor actor);
+        public virtual void StartAction(Actor actor)
+        {
+            IsStarted = true;
+        }
 
         public abstract void Perform(Actor actor);
 

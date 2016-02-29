@@ -22,15 +22,26 @@ namespace GOAP
             if (!_actionsSetted || _actionSequence.Length == 0)
                 return;
 
-            /*if (_actionSequence[_actionIndex].Perform(_actor))
-            {
-                _actionIndex++;
-                return;
-            }*/
-
             if (_actionIndex >= _actionSequence.Length)
-                return;
+                Replan();
+            else
+                UpdateCurrentAction();
+        }
 
+        private void UpdateCurrentAction()
+        {
+            var currAction = _actionSequence[_actionIndex];
+
+            if (!currAction.IsStarted)
+                currAction.StartAction(_actor);
+            else if (currAction.IsComplete())
+                _actionIndex++;
+            else
+                currAction.Perform(_actor);
+        }
+
+        private void Replan()
+        {
             _actionsSetted = false;
             _actionIndex = 0;
             _planner.PlanActions();

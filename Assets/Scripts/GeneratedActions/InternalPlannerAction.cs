@@ -17,6 +17,7 @@ namespace GOAP
 
         public override void StartAction(Actor actor)
         {
+            base.StartAction(actor);
             Debug.Log("Start Internal!");
         }
 

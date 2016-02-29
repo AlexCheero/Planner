@@ -23,6 +23,7 @@ namespace GOAP
 
         public override void StartAction(Actor actor)
         {
+            base.StartAction(actor);
             _navAgent = actor.GetComponent<NavMeshAgent>();
             _navAgent.SetDestination(TargetPosition);
         }
