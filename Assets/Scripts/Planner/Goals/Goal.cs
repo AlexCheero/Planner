@@ -12,14 +12,16 @@ namespace GOAP
         private float _value;
         [SerializeField]
         private int _priorityPower;
+        [SerializeField]
+        private float _basicRateShare;
 
         private float  _previousValue;
         private float _changeSinceLastTime;
         private float _timeSinceLastChange;
-
         private float _basicChangeRate;
-        private float _basicRateShare;
-        private float _dynamicRateShare;
+
+        private float BasicRateShare { get { return _basicRateShare = Mathf.Clamp01(_basicRateShare); } }
+        private float DynamicRateShare { get { return 1 - BasicRateShare; } }
 
         public float Value
         {
@@ -56,7 +58,7 @@ namespace GOAP
         public float GetChangeOverTime()
         {
             var rateSinceLastTime = _changeSinceLastTime / _timeSinceLastChange;
-            _basicChangeRate = _basicRateShare * _basicChangeRate + _dynamicRateShare * rateSinceLastTime;
+            _basicChangeRate = BasicRateShare * _basicChangeRate + DynamicRateShare * rateSinceLastTime;
 
             return _basicChangeRate;
         }

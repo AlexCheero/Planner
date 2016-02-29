@@ -2465,6 +2465,7 @@ MonoBehaviour:
   - _type: 0
     _value: 20
     _priorityPower: 2
+    _basicRateShare: 0.9
 --- !u!136 &13654204
 CapsuleCollider:
   m_ObjectHideFlags: 1
