@@ -33,8 +33,12 @@ namespace GOAPEditor
             _entriesToDelete = entriesToDelete;
 
             DeleteFiles();
+            GenerateFiles();
+        }
 
-            var datas = new List<FileGenData> { GenerateEnum(), RewriteActionBoard() };
+        private void GenerateFiles()
+        {
+            var datas = new List<FileGenData> {GenerateEnum(), RewriteActionBoard()};
             foreach (var entry in _entriesList)
             {
                 var factory = GenerateFactory(entry);
@@ -44,7 +48,8 @@ namespace GOAPEditor
                 var action = GenerateAction(entry);
                 if (action.FilePath != null && action.Content != null)
                 {
-                    action.Content = RewriteContent(action.Content, ActionType, new List<string> { "get { return EActionType." + entry + "; }" }, "", 3);
+                    action.Content = RewriteContent(action.Content, ActionType,
+                        new List<string> {"get { return EActionType." + entry + "; }"}, "", 3);
                     datas.Add(action);
                 }
             }
