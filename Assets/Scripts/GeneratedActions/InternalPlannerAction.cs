@@ -5,7 +5,7 @@ namespace GOAP
 {
     public class InternalPlannerAction : PlannerAction
     {
-        public InternalPlannerAction(int duration, byte efficiency)
+        public InternalPlannerAction(int duration, byte efficiency = 255)
             : base(new Dictionary<EGoal, float> { { EGoal.Goal, 0 } }, duration, efficiency)
         {
         }

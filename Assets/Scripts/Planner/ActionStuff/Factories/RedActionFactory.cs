@@ -17,7 +17,7 @@ namespace GOAP
             object stayed;
             object position;
             return knowledge.TryGetValue("yellowed ", out stayed) && (bool)stayed && knowledge.TryGetValue("red position ", out position)
-                ? new[] { new RedPlannerAction((Vector3)position, 0, 255) }
+                ? new[] { new RedPlannerAction((Vector3)position, 0) }
                 : null;
         }
     }

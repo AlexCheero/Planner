@@ -4,7 +4,7 @@ namespace GOAP
 {
     public class PlannerActionTemplate : PlannerAction
     {
-        public PlannerActionTemplate(Dictionary<EGoal, float> changes, int duration, byte actionEfficiency = 77) : base(changes, duration, actionEfficiency)
+        public PlannerActionTemplate(Dictionary<EGoal, float> changes, int duration, byte efficiency = 255) : base(changes, duration, efficiency)
         {
         }
 

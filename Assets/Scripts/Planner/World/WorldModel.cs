@@ -73,7 +73,7 @@ namespace GOAP
         public void ApplyAction(PlannerAction action)
         {
             Discontentment = 0;
-            var floatEfficiency = 1f;//(action.ActionEfficiency / 255);
+            var floatEfficiency = 1f;//(action.Efficiency / 255);
             for (var i = 0; i < Goals.Length; i++)
             {
                 var goal = Goals[i];
@@ -81,7 +81,7 @@ namespace GOAP
                 Discontentment += goal.GetDiscontentment() /** action.Duration*/;//todo think about how to properly use duration
             }
 
-            action.AffectOnKnowledge(ref _knowledge, /*action.ActionEfficiency*/255);
+            action.AffectOnKnowledge(ref _knowledge, /*action.Efficiency*/255);
             _actions = ActionBoard.Instance.GetActions(_knowledge);
         }
     }

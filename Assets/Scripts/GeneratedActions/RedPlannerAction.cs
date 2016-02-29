@@ -10,7 +10,7 @@ namespace GOAP
 
         private NavMeshAgent _navAgent;
 
-        public RedPlannerAction(Vector3 position, int duration, byte efficiency)
+        public RedPlannerAction(Vector3 position, int duration, byte efficiency = 255)
             : base(new Dictionary<EGoal, float> { { EGoal.Goal, -10 } }, duration, efficiency)
         {
             TargetPosition = position;

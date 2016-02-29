@@ -9,15 +9,17 @@ namespace GOAP
 
         public abstract EActionType Type { get; }
 
+        //Duration and Efficiency are calculated in action factory depending on knowledge.
+        //this factors influence on new knowledge generation, of next step worl model
         public int Duration { get; private set; }
-        public byte ActionEfficiency { get; private set; }
+        public byte Efficiency { get; private set; }
 
         public bool IsStarted { get; private set; }
 
-        protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte actionEfficiency = 77)//77 for 30%
+        protected PlannerAction(Dictionary<EGoal, float> changes, int duration, byte efficiency = 255)
         {
             _goalChanges = changes;
-            ActionEfficiency = actionEfficiency;
+            Efficiency = efficiency;
             Duration = duration;
         }
 
