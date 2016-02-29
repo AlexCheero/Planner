@@ -55,6 +55,7 @@ namespace GOAP
             return GetDiscontentment(Value);
         }
 
+        //this should be used with actions duration
         public float GetChangeOverTime()
         {
             var rateSinceLastTime = _changeSinceLastTime / _timeSinceLastChange;

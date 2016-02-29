@@ -4,8 +4,6 @@ namespace GOAP
 {
     public class ActionPerformer : MonoBehaviour
     {
-        public delegate bool State(ActionPerformer machine);
-
         private PlannerAction[] _actionSequence;
         private Planner _planner;
         private Actor _actor;
