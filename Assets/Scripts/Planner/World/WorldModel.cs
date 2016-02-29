@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GOAP
 {
@@ -25,9 +26,8 @@ namespace GOAP
             }
         }
 
-        public bool Equals(WorldModel otherModel)
+        public bool ApproxEquals(WorldModel otherModel)
         {
-            //todo make approximate equality method
             if (otherModel == null)
                 return false;
             if (Goals.Length != otherModel.Goals.Length || _actions.Count != otherModel._actions.Count)
@@ -35,7 +35,7 @@ namespace GOAP
             if (!_knowledge.Equals(otherModel._knowledge))
                 return false;
 
-            return Discontentment == otherModel.Discontentment;
+            return Math.Abs(Discontentment - otherModel.Discontentment) < Discontentment * 0.1f;
         }
 
         public override int GetHashCode()
