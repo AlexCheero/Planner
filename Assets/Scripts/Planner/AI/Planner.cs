@@ -14,11 +14,11 @@ namespace GOAP
         [SerializeField]
         private Goal[] _goals;
 
-        private ActionPerformer _actionPerformer;
+        private Performer _performer;
 
         void Start()
         {
-            _actionPerformer = GetComponent<ActionPerformer>();
+            _performer = GetComponent<Performer>();
             _table = new WMTranspositionTable();
             _actor = GetComponent<Actor>();
 
@@ -44,7 +44,7 @@ namespace GOAP
             if (!_planReady)
                 return;
 
-            _actionPerformer.SetActions(_bestActionSequence);
+            _performer.SetActions(_bestActionSequence);
             _planReady = false;
         }
 

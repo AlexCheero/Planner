@@ -2,7 +2,7 @@
 
 namespace GOAP
 {
-    public class ActionPerformer : MonoBehaviour
+    public class Performer : MonoBehaviour
     {
         private PlannerAction[] _actionSequence;
         private Planner _planner;
