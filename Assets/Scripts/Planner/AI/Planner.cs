@@ -14,11 +14,11 @@ namespace GOAP
         [SerializeField]
         private Goal[] _goals;
 
-        private ActionPerformer _actionPerformer;
+        private Performer _performer;
 
         void Start()
         {
-            _actionPerformer = GetComponent<ActionPerformer>();
+            _performer = GetComponent<Performer>();
             _table = new WMTranspositionTable();
             _actor = GetComponent<Actor>();
 
@@ -44,14 +44,14 @@ namespace GOAP
             if (!_planReady)
                 return;
 
-            _actionPerformer.SetActions(_bestActionSequence);
+            _performer.SetPlan(_bestActionSequence, _bestModelsSequence);
             _planReady = false;
         }
 
         private Actor _actor;
-        private WorldModel GetInitialWorldModel()
+        public WorldModel GetRealWorldModel()
         {
-            return new WorldModel(_goals, _actor ? _actor.GetInitialKnowledge() : new Dictionary<string, object>());
+            return new WorldModel(_goals, _actor.GetInitialKnowledge());
         }
 
         private PlannerAction[] _bestActionSequence;
@@ -62,7 +62,7 @@ namespace GOAP
         {
             //todo think about how to quantize time for planning
             _planning = true;
-            var model = GetInitialWorldModel();
+            var model = GetRealWorldModel();
             var maxDiscontentment = model.Goals.Select(goal => goal.GetDiscontentment(_maxAllowableDiscontentment)).Max();
             _table.Clear();
             _table.Add(model, 0);
