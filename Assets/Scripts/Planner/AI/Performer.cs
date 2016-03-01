@@ -4,7 +4,8 @@ namespace GOAP
 {
     public class Performer : MonoBehaviour
     {
-        private PlannerAction[] _actionSequence;
+        private PlannerAction[] _actions;
+        private WorldModel[] _models;
         private Planner _planner;
         private Actor _actor;
 
@@ -17,10 +18,10 @@ namespace GOAP
         private int _actionIndex = 0;
         void Update()
         {
-            if (!_actionsSetted || _actionSequence.Length == 0)
+            if (!_actionsSetted || _actions.Length == 0)
                 return;
 
-            if (_actionIndex >= _actionSequence.Length)
+            if (_actionIndex >= _actions.Length)
                 Replan();
             else
                 UpdateCurrentAction();
@@ -28,7 +29,7 @@ namespace GOAP
 
         private void UpdateCurrentAction()
         {
-            var currAction = _actionSequence[_actionIndex];
+            var currAction = _actions[_actionIndex];
 
             if (!currAction.IsStarted)
                 currAction.StartAction(_actor);
@@ -46,9 +47,10 @@ namespace GOAP
         }
 
         private bool _actionsSetted;
-        public void SetActions(PlannerAction[] actions)
+        public void SetPlan(PlannerAction[] actions, WorldModel[] models)
         {
-            _actionSequence = actions;
+            _actions = actions;
+            _models = models;
             _actionIndex = 0;
             _actionsSetted = true;
         }
