@@ -15,13 +15,13 @@ namespace GOAP
             _actor = GetComponent<Actor>();
         }
 
-        private int _actionIndex = 0;
+        private int _planIndex = 0;
         void Update()
         {
-            if (!_actionsSetted || _actions.Length == 0)
+            if (!_planSetted || _actions.Length == 0)
                 return;
 
-            if (_actionIndex >= _actions.Length)
+            if (_planIndex >= _actions.Length || !CheckPlan())
                 Replan();
             else
                 UpdateCurrentAction();
@@ -29,30 +29,54 @@ namespace GOAP
 
         private void UpdateCurrentAction()
         {
-            var currAction = _actions[_actionIndex];
+            var currAction = _actions[_planIndex];
 
             if (!currAction.IsStarted)
                 currAction.StartAction(_actor);
             else if (currAction.IsComplete())
-                _actionIndex++;
+                _planIndex++;
             else
                 currAction.Perform(_actor);
         }
 
         private void Replan()
         {
-            _actionsSetted = false;
-            _actionIndex = 0;
+            _planSetted = false;
+            _planIndex = 0;
             _planner.PlanActions();
         }
 
-        private bool _actionsSetted;
+        private bool CheckPlan()
+        {
+            var currModel = _models[_planIndex];
+            var realModel = _planner.GetRealWorldModel();
+
+            Debug.Log("check plan curr: " + currModel + ", real: " + realModel + ", index: " + _planIndex);
+            return realModel.ApproxEquals(currModel);
+        }
+
+        private bool _planSetted;
         public void SetPlan(PlannerAction[] actions, WorldModel[] models)
         {
+            if (actions.Length == 0)
+            {
+                Debug.LogWarning("zero plan");
+                Replan();
+                return;
+            }
+
+            if (actions.Length != models.Length - 1)
+            {
+                Debug.LogError("wrong actions (" + actions.Length + ") and models (" + models.Length +
+                               ") sizes: models count must be exactly one unit more");
+                Replan();
+                return;
+            }
+
             _actions = actions;
             _models = models;
-            _actionIndex = 0;
-            _actionsSetted = true;
+            _planIndex = 0;
+            _planSetted = true;
         }
     }
 }
