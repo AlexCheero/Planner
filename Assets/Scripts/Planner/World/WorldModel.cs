@@ -8,8 +8,8 @@ namespace GOAP
         //todo choose only few the most important goals
         public readonly Goal[] Goals;
         private int _actionIndex = 0;
-        private List<PlannerAction> _actions;
-        private Dictionary<string, object> _knowledge;
+        public List<PlannerAction> _actions;
+        public Dictionary<string, object> _knowledge;
 
         public float Discontentment { get; private set; }
 
@@ -32,8 +32,10 @@ namespace GOAP
                 return false;
             if (Goals.Length != otherModel.Goals.Length || _actions.Count != otherModel._actions.Count)
                 return false;
-            if (!_knowledge.Equals(otherModel._knowledge))
+            //this is not fits into conception of approximate equality
+            if (!_knowledge.CheckEquality(otherModel._knowledge))
                 return false;
+
 
             return Math.Abs(Discontentment - otherModel.Discontentment) < Discontentment * 0.1f;
         }

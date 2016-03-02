@@ -21,7 +21,7 @@ namespace GOAP
             if (!_planSetted || _actions.Length == 0)
                 return;
 
-            if (_planIndex >= _actions.Length || !CheckPlan())
+            if (_planIndex >= _actions.Length/* || !CheckPlan()*/)
                 Replan();
             else
                 UpdateCurrentAction();
@@ -51,7 +51,26 @@ namespace GOAP
             var currModel = _models[_planIndex];
             var realModel = _planner.GetRealWorldModel();
 
-            Debug.Log("check plan curr: " + currModel + ", real: " + realModel + ", index: " + _planIndex);
+//            Debug.Log("check plan curr: " + currModel + ", real: " + realModel + ", index: " + _planIndex);
+//            Debug.Log("goals cur: " + currModel.Goals.Length + ", real: " + realModel.Goals.Length);
+//            Debug.Log("actions cur: " + currModel._actions.Count + ", real: " + realModel._actions.Count);
+//            Debug.Log("knowl: " + currModel._knowledge.CheckEquality(realModel._knowledge));
+//            Debug.Log("disc cur: " + currModel.Discontentment + ", real: " + realModel.Discontentment);
+
+//            var currKnowl = currModel._knowledge;
+//            var realKnowl = realModel._knowledge;
+//            Debug.Log("count curr: " + currKnowl.Count + ", real: " + realKnowl.Count);
+//            
+//            var currVal = "";
+//            foreach (var pair in currKnowl)
+//                currVal += "key: " + pair.Key + " val: " + pair.Value + "\n";
+//            Debug.Log("curr data:\n" + currVal);
+//
+//            var realVal = "";
+//            foreach (var pair in realKnowl)
+//                realVal += "key: " + pair.Key + " val: " + pair.Value + "\n";
+//            Debug.Log("real data:\n" + realVal);
+
             return realModel.ApproxEquals(currModel);
         }
 

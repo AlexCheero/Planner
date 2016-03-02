@@ -33,5 +33,24 @@ namespace GOAP
             }
         }
 
+        public static bool CheckEquality(this IDictionary<string, object> dict, IDictionary<string, object> other)
+        {
+            if (dict.Count != other.Count)
+                return false;
+
+            foreach (var pair in dict)
+            {
+                if (!other.Keys.Contains(pair.Key) || !other[pair.Key].Equals(pair.Value))
+                {
+//                    Debug.Log("not count: " + (!other.Keys.Contains(pair.Key)) + " " + (other[pair.Key] != pair.Value));
+//                    Debug.Log("key: " + pair.Key + ", val: " + pair.Value + ", otherVal: " + other[pair.Key] +
+//                              ", equality: " + (other[pair.Key].Equals(pair.Value)));
+//                    Debug.Log("type val: " + pair.Value.GetType() + ", other: " + other[pair.Key].GetType());
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
