@@ -23,7 +23,7 @@ namespace GOAP
                 if (keys.Length <= 1)
                     return value;
                 keys = keys.Skip(1).ToArray();
-                tempDict = value as Dictionary<string, object>;
+                tempDict = value as IDictionary<string, object>;
                 if (tempDict != null)
                     continue;
 #if UNITY_EDITOR
