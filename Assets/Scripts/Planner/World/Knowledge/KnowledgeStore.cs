@@ -52,20 +52,5 @@ namespace GOAP
 
             return keyBuilder.ToString();
         }
-
-        //internal classes
-        private interface IKnowlObj { }
-
-        private class KnowledgeObject<T> : IKnowlObj
-        {
-            internal T Value;
-            internal float Dispersion;
-
-            internal KnowledgeObject (T value, float dispersion = -1)
-            {
-                Value = value;
-                Dispersion = dispersion;
-            }
-        }
     }
 }
