@@ -12,21 +12,21 @@ namespace GOAP
             _knowledge = new Dictionary<string, IKnowlObj>();
         }
 
-        public void Add<T>(string[] keyPath, T value, float dispersion = -1, bool rewrite = false)
+        public void Add<T>(string[] keyPath, KnowledgeObject<T> value, bool rewrite = false)
         {
             var key = MakeKey(keyPath);
             if (_knowledge.ContainsKey(key))
             {
                 if (rewrite)
-                    ((KnowledgeObject<T>) _knowledge[key]).Value = value;
+                    _knowledge[key] = value;
             }
             else
-                _knowledge.Add(key, new KnowledgeObject<T>(value));
+                _knowledge.Add(key, value);
         }
 
-        public void Add<T>(string key, T value, float dispersion = -1, bool rewrite = false)
+        public void Add<T>(string key, KnowledgeObject<T> value, bool rewrite = false)
         {
-            Add(new[] { key }, value, dispersion, rewrite);
+            Add(new[] { key }, value, rewrite);
         }
 
         public bool TryGetKnowledge<T>(string[] keyPath, ref T knowlValue)
@@ -39,7 +39,7 @@ namespace GOAP
             return true;
         }
 
-        public bool ApproxEquals(KnowledgeStore otherKnowledge)
+        public bool ApproxEquals(KnowledgeStore otherKnowledge, int importance = 2)
         {
             return false;
         }

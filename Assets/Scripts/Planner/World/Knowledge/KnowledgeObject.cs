@@ -14,5 +14,10 @@ namespace GOAP
             Dispersion = dispersion;
             Importance = importance;
         }
+
+        internal bool ApproxEquals(KnowledgeObject<T> otherKnowl)
+        {
+            return false;
+        }
     }
 }
