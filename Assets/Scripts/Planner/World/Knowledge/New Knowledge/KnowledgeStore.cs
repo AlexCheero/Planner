@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace GOAP
 {
     internal class KnowledgeStore
     {
-        private Dictionary<string, IKnowlObj> _knowledge;
+        private readonly Dictionary<string, IKnowlObj> _knowledge;
 
         public KnowledgeStore()
         {
@@ -24,23 +25,30 @@ namespace GOAP
                 _knowledge.Add(key, value);
         }
 
-        public void Add<T>(string key, KnowledgeObject<T> value, bool rewrite = false)
-        {
-            Add(new[] { key }, value, rewrite);
-        }
-
         public bool TryGetKnowledge<T>(string[] keyPath, ref T knowlValue)
         {
             var key = MakeKey(keyPath);
             if (!_knowledge.ContainsKey(key))
                 return false;
 
+#if UNITY_EDITOR
+            var knowl = _knowledge[key] as KnowledgeObject<T>;
+            if (knowl == null)
+            {
+                Debug.LogError("trying to get wrong knowlege type");
+                return false;
+            }
+#endif
             knowlValue = ((KnowledgeObject<T>)_knowledge[key]).Value;
             return true;
         }
 
-        public bool ApproxEquals(KnowledgeStore otherKnowledge, int importance = 2)
+        public bool ApproxEquals(KnowledgeStore otherKnowledge, int importance = 2, params string[] subDirectory)
         {
+            foreach (var knowl in _knowledge)
+            {
+
+            }
             return false;
         }
 
