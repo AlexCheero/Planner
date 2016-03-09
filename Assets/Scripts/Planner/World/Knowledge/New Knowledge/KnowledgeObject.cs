@@ -2,7 +2,7 @@ namespace GOAP
 {
     internal interface IKnowlObj
     {
-        int Importance { get; }
+        uint Importance { get; }
         bool ApproxEquals(IKnowlObj otherKnowl);
     }
 
@@ -10,14 +10,24 @@ namespace GOAP
     {
         internal T Value;
 
-        public int Importance { get; private set; }
+        public uint Importance { get; private set; }
 
-        internal KnowledgeObject(T value, int importance = 2)
+        internal KnowledgeObject(T value, uint importance = 2)
         {
             Value = value;
             Importance = importance;
         }
 
-        public abstract bool ApproxEquals(IKnowlObj otherKnowl);
+        public bool ApproxEquals(IKnowlObj otherKnowl)
+        {
+            return TypeEquals(otherKnowl) && CheckApproximateEquality(otherKnowl);
+        }
+
+        private bool TypeEquals(IKnowlObj other)
+        {
+            return other.GetType() == GetType();
+        }
+
+        protected abstract bool CheckApproximateEquality(IKnowlObj other);
     }
 }

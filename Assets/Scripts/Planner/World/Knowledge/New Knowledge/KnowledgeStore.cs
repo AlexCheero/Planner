@@ -13,6 +13,12 @@ namespace GOAP
             _knowledge = new Dictionary<string, IKnowlObj>();
         }
 
+        public IKnowlObj this[string key]
+        {
+            get { return _knowledge[key]; }
+            set { _knowledge[key] = value; }
+        }
+
         public void Add<T>(string[] keyPath, KnowledgeObject<T> value, bool rewrite = false)
         {
             var key = MakeKey(keyPath);
@@ -45,11 +51,17 @@ namespace GOAP
 
         public bool ApproxEquals(KnowledgeStore otherKnowledge, int importance = 2, params string[] subDirectory)
         {
+            var subDir = MakeKey(subDirectory);
             foreach (var knowl in _knowledge)
             {
+                if (knowl.Value.Importance < importance || !knowl.Key.Contains(subDir))
+                    continue;
 
+                if (knowl.Value.ApproxEquals(otherKnowledge[knowl.Key]))
+                    return false;
             }
-            return false;
+
+            return true;
         }
 
         private string MakeKey(string[] keyPath)
